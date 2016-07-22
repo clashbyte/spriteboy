@@ -1024,6 +1024,10 @@ namespace SpriteBoy.Controls {
 			G.DrawString(Text, Font, new SolidBrush(ForeColor), new RectangleF(2, 2, w, h), f);
 		}
 
+		protected override void OnTextChanged(EventArgs e) {
+			base.OnTextChanged(e);
+			Invalidate();
+		}
 	}
 
 	[DefaultEvent("TextChanged")]

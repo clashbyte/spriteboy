@@ -13,7 +13,7 @@ namespace SpriteBoy.Forms.Dialogs {
 	/// <summary>
 	/// Окно выбора имени нового файла
 	/// </summary>
-	public partial class CreateItemDialog : Form {
+	public partial class RenameItemDialog : Form {
 
 		/// <summary>
 		/// Иконка
@@ -49,7 +49,7 @@ namespace SpriteBoy.Forms.Dialogs {
 		/// </summary>
 		public string SpecifiedName {
 			get;
-			private set;
+			set;
 		}
 
 		/// <summary>
@@ -75,12 +75,13 @@ namespace SpriteBoy.Forms.Dialogs {
 		/// <summary>
 		/// Создание окна
 		/// </summary>
-		public CreateItemDialog(string title) {
+		public RenameItemDialog(string title) {
 			InitializeComponent();
 			Text = title;
-			createButton.Enabled = false;
+			renameButton.Enabled = false;
 			existingNames = new string[0];
 			hasError = false;
+			nameBox.Text = SpecifiedName;
 		}
 
 		/// <summary>
@@ -107,7 +108,7 @@ namespace SpriteBoy.Forms.Dialogs {
 			string txt = nameBox.Text;
 			hasError = false;
 			if (txt=="") {
-				createButton.Enabled = false;
+				renameButton.Enabled = false;
 				Invalidate();
 				return;
 			}
@@ -120,19 +121,19 @@ namespace SpriteBoy.Forms.Dialogs {
 			if (Extension!=null) {
 				txt += Extension.ToLower();
 			}
-			if(existingNames.Contains(txt) && !hasError){
+			if(existingNames.Contains(txt) && !hasError && txt!=SpecifiedName){
 				hasError = true;
 				errorText = ControlStrings.FileNameExists;
 			}
 
-			createButton.Enabled = !hasError;
+			renameButton.Enabled = !hasError;
 			Invalidate();
 		}
 
 		/// <summary>
-		/// Кнопка "Создать" нажата
+		/// Кнопка "Переименовать" нажата
 		/// </summary>
-		private void createButton_Click(object sender, EventArgs e) {
+		private void renameButton_Click(object sender, EventArgs e) {
 			if (hasError || nameBox.Text == "") {
 				return;
 			}

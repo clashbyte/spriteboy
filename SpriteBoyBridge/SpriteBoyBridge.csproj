@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>6e83e7a5</NuGetPackageImportStamp>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +69,12 @@
     <Compile Include="Files\ProjectFileDriver.cs" />
     <Compile Include="Events\Data\PreviewReadyEvent.cs" />
     <Compile Include="Events\Forms\EditorCloseEventArgs.cs" />
+    <Compile Include="Forms\Dialogs\RenameItemDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Dialogs\RenameItemDialog.Designer.cs">
+      <DependentUpon>RenameItemDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Dialogs\CreateItemDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +142,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Common\MainForm.ru-RU.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Dialogs\RenameItemDialog.resx">
+      <DependentUpon>RenameItemDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Dialogs\RenameItemDialog.ru-RU.resx">
+      <DependentUpon>RenameItemDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Dialogs\CreateItemDialog.resx">
       <DependentUpon>CreateItemDialog.cs</DependentUpon>
