@@ -1,6 +1,7 @@
 ﻿using SpriteBoy.Data.Attributes;
 using SpriteBoy.Forms;
 using SpriteBoy.Forms.Common;
+using SpriteBoy.Forms.Dialogs;
 using SpriteBoy.Forms.Editors;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 
 namespace SpriteBoy.Data.Editing {
 
@@ -95,6 +97,16 @@ namespace SpriteBoy.Data.Editing {
 		bool saved;
 
 		/// <summary>
+		/// Закрыт ли редактор
+		/// </summary>
+		protected bool closed;
+
+		/// <summary>
+		/// Сохраняется ли файл
+		/// </summary>
+		protected bool saving;
+
+		/// <summary>
 		/// Создание из файла
 		/// </summary>
 		/// <param name="file">Путь до файла</param>
@@ -176,7 +188,30 @@ namespace SpriteBoy.Data.Editing {
 		/// Событие изменения файла проекта
 		/// </summary>
 		public virtual void ProjectEntryEvent(Project.Entry en, Project.FileEvent ev) {
-
+			if (en == File) {
+				switch (ev) {
+					case Project.FileEvent.Created:
+					case Project.FileEvent.Modified:
+						if (!saving) {
+							MainForm.FocusEditor(this);
+							DialogResult dr = MessageDialog.Show(ControlStrings.TabReloadTitle, ControlStrings.TabReloadText, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+							if (dr == DialogResult.Yes) {
+								Load();
+								Saved = true;
+							} else {
+								Saved = false;
+							}
+						}
+						break;
+					case Project.FileEvent.Renamed:
+						UpdateTitle();
+						break;
+					case Project.FileEvent.Deleted:
+						MainForm.CloseEditor(this, true);
+						closed = true;
+						break;
+				}
+			}
 		}
 
 		/// <summary>
@@ -185,6 +220,11 @@ namespace SpriteBoy.Data.Editing {
 		public virtual void ProjectDirEvent(Project.Dir dr, Project.FileEvent ev) {
 
 		}
+
+		/// <summary>
+		/// Обновление тайтла при изменении файла
+		/// </summary>
+		protected abstract void UpdateTitle();
 
 		/// <summary>
 		/// Ассоциация расширений с редактором

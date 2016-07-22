@@ -186,6 +186,12 @@
   <data name="InspectorEmptyMessage" xml:space="preserve">
     <value>Files not found</value>
   </data>
+  <data name="ProjectNotFoundText" xml:space="preserve">
+    <value>Unable to load project: %PROJECT%Please, create new or locate it's folder if it was moved.</value>
+  </data>
+  <data name="ProjectNotFoundTitle" xml:space="preserve">
+    <value>Project not found</value>
+  </data>
   <data name="TabCloseText" xml:space="preserve">
     <value>Would you like to save changes before closing?</value>
   </data>

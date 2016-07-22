@@ -186,6 +186,12 @@
   <data name="InspectorEmptyMessage" xml:space="preserve">
     <value>Папка пуста</value>
   </data>
+  <data name="ProjectNotFoundText" xml:space="preserve">
+    <value>Невозможно загрузить проект: %PROJECT%Пожауйста, создайте новый проект, или укажите новое расположение, если проект был перемещён.</value>
+  </data>
+  <data name="ProjectNotFoundTitle" xml:space="preserve">
+    <value>Проект не найден</value>
+  </data>
   <data name="TabCloseText" xml:space="preserve">
     <value>Сохранить внесённые изменения перед закрытием?</value>
   </data>

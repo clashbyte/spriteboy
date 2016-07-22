@@ -81,7 +81,11 @@ namespace SpriteBoy.Forms.Dialogs {
 			renameButton.Enabled = false;
 			existingNames = new string[0];
 			hasError = false;
+		}
+
+		protected override void OnShown(EventArgs e) {
 			nameBox.Text = SpecifiedName;
+			base.OnShown(e);
 		}
 
 		/// <summary>
@@ -121,7 +125,7 @@ namespace SpriteBoy.Forms.Dialogs {
 			if (Extension!=null) {
 				txt += Extension.ToLower();
 			}
-			if(existingNames.Contains(txt) && !hasError && txt!=SpecifiedName){
+			if(existingNames.Contains(txt) && !hasError && txt != SpecifiedName.ToLower()){
 				hasError = true;
 				errorText = ControlStrings.FileNameExists;
 			}

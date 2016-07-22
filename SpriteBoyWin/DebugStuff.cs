@@ -17,11 +17,14 @@ namespace SpriteBoy {
 
 
 			// Открытие тестового проекта
-			Project.Open("D:\\NewEngine\\Project\\MyGame.sbproject");
+			Project.Open(System.IO.Path.GetFullPath("..\\..\\..\\Project\\MyGame.sbproject"));
 
 			// Открытие тестового файла
-			MainForm.OpenEditor(Project.GetEntry("sky/skytest — копия (3).sbsky"));
-			MainForm.OpenEditor(Project.GetEntry("sky/skytest — копия (2).sbsky"));
+			if (Project.Opened) {
+				MainForm.OpenEditor(Project.GetEntry("sky/skytest — копия (3).sbsky"));
+				MainForm.OpenEditor(Project.GetEntry("sky/skytest — копия (2).sbsky"));
+			}
+			
 
 
 		}

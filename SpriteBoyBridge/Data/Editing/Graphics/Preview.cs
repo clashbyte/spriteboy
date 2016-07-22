@@ -308,8 +308,8 @@ namespace SpriteBoy.Data.Editing.Graphics {
 							if (bmp!=null) {
 								bmp = CropTransparent((Bitmap)bmp);
 								p.BuildImages(bmp);
+								readyQueue.Enqueue(p);
 							}
-							readyQueue.Enqueue(p);
 						}
 
 						// Уменьшение квоты загрузки

@@ -21,7 +21,10 @@ namespace SpriteBoy.Components.Previews {
 		/// <param name="filename">Имя файла</param>
 		/// <returns>Изображение</returns>
 		public override Image Generate(string filename) {
-			return Image.FromFile(filename);
+			if (System.IO.File.Exists(filename)) {
+				return Image.FromFile(filename);
+			}
+			return null;
 		}
 
 		/// <summary>

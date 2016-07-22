@@ -62,7 +62,7 @@ namespace SpriteBoy.Forms.Common {
 			NSDirectoryInspector.Entry en = projectInspector.SelectedEntry;
 			bool free = false;
 			if (en != null) {
-				free = Project.LegalFile(en.Tag);
+				free = Project.OperableFile(en.Tag);
 			}
 			if (e.Button == System.Windows.Forms.MouseButtons.Right) {
 
@@ -96,6 +96,27 @@ namespace SpriteBoy.Forms.Common {
 				if (en != null) {
 					// Смена имени
 					cm.Items.Add(new ToolStripMenuItem(ControlStrings.InspectorContextRename, ShadowImage.CompiledFromImage(InspectorIcons.MenuRename, 16, 1), (sndr, args) => {
+						string[] used;
+						string ext = "";
+						if (en.IsDirectory) {
+							used = (en.Tag as Project.Dir).UsedNames;
+						}else{
+							used = (en.Tag as Project.Entry).Parent.UsedNames;
+							ext = System.IO.Path.GetExtension((en.Tag as Project.Entry).Name);
+						}
+
+						RenameItemDialog rd = new RenameItemDialog(en.Name);
+						rd.SpecifiedName = en.Name;
+						rd.Extension = ext;
+						rd.ExistingNames = used;
+						needProjectRescan = false;
+						if (rd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+							if (en.IsDirectory) {
+								Project.RenameItem(en.Tag as Project.Dir, rd.SpecifiedName);
+							} else {
+								Project.RenameItem(en.Tag as Project.Entry, rd.SpecifiedName);
+							}
+						}
 
 					}) {
 						Enabled = free
@@ -148,7 +169,7 @@ namespace SpriteBoy.Forms.Common {
 			} else if (e.Button == System.Windows.Forms.MouseButtons.Left) {
 				bool removable = false;
 				if (projectInspector.SelectedEntry != null) {
-					removable = Project.LegalFile(projectInspector.SelectedEntry.Tag);
+					removable = Project.OperableFile(projectInspector.SelectedEntry.Tag);
 				}
 				projectRemove.Enabled = removable;
 			}

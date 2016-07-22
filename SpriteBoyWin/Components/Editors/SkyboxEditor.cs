@@ -14,6 +14,8 @@ using SpriteBoy.Files;
 using System.IO;
 using System.Windows.Forms;
 using SpriteBoy.Forms.Editors;
+using SpriteBoy.Forms.Common;
+using SpriteBoy.Controls;
 
 namespace SpriteBoy.Components.Editors {
 	
@@ -59,34 +61,42 @@ namespace SpriteBoy.Components.Editors {
 		/// </summary>
 		Entity wireGuides;
 
+		/// <summary>
+		/// Принудительная перезагрузка текстур
+		/// </summary>
+		bool forceTextureReload;
+
 
 		/// <summary>
 		/// Загрузка и инициализация
 		/// </summary>
 		protected override void Load() {
 
-			// Создание сцены
-			scene = new Scene();
+			// Инициализация графики
+			if (scene == null) {
+				// Создание сцены
+				scene = new Scene();
 
-			// Камера
-			cam = new Camera();
-			scene.Camera = cam;
+				// Камера
+				cam = new Camera();
+				scene.Camera = cam;
 
-			// Создание скайбокса
-			sky = new Skybox();
-			scene.Sky = sky;
+				// Создание скайбокса
+				sky = new Skybox();
+				scene.Sky = sky;
 
-			// Направляющие
-			WireCubeComponent c = new WireCubeComponent();
-			c.WireColor = Color.Lime;
-			c.WireWidth = 3f;
-			wireGuides = new Entity();
-			wireGuides.AddComponent(c);
-			wireGuides.Position = Vec3.Zero;
-			scene.Entities.Add(wireGuides);
-
+				// Направляющие
+				WireCubeComponent c = new WireCubeComponent();
+				c.WireColor = Color.Lime;
+				c.WireWidth = 3f;
+				wireGuides = new Entity();
+				wireGuides.AddComponent(c);
+				wireGuides.Position = Vec3.Zero;
+				scene.Entities.Add(wireGuides);
+			}
+			
 			// Загрузка данных
-			Title = System.IO.Path.GetFileNameWithoutExtension(File.Name) + " - " + Form.Text;
+			UpdateTitle();
 
 			ChunkedFile cf = new ChunkedFile(File.FullPath);
 			if (cf.Root.Name == "Skybox") {
@@ -149,10 +159,10 @@ namespace SpriteBoy.Components.Editors {
 			cf.Root.Children.Add(editorChunk);
 
 			// Сохранение
+			saving = true;
 			cf.Save(File.FullPath);
-			if (File.Icon!=null) {
-				File.Icon.Refresh();
-			}
+			Project.Notify(File);
+			saving = false;
 			Saved = true;
 		}
 
@@ -163,6 +173,35 @@ namespace SpriteBoy.Components.Editors {
 
 		public override void LostFocus() {
 			
+		}
+
+		/// <summary>
+		/// Обновление файловой системы
+		/// </summary>
+		/// <param name="en">Файл</param>
+		/// <param name="ev">Событие</param>
+		public override void ProjectEntryEvent(Project.Entry en, Project.FileEvent ev) {
+			base.ProjectEntryEvent(en, ev);
+			if (closed) {
+				return;
+			}
+
+			// Просмотр на изменение текстур
+			SkyboxForm fr = Form as SkyboxForm;
+			NSFileDropControl[] drops = new NSFileDropControl[]{
+				fr.frontSkyTexture, fr.rightSkyTexture, fr.backSkyTexture, fr.leftSkyTexture, fr.topSkyTexture, fr.bottomSkyTexture
+			};
+			forceTextureReload = true;
+			foreach (NSFileDropControl fc in drops) {
+				if (fc.File == en) {
+					if (ev == Project.FileEvent.Deleted) {
+						fc.File = null;
+					}else{
+						fc.File = en;
+					}
+				}
+			}
+			forceTextureReload = false;
 		}
 
 		/// <summary>
@@ -179,6 +218,13 @@ namespace SpriteBoy.Components.Editors {
 			(Form as SkyboxForm).canvas.MakeCurrent();
 			scene.Render();
 			(Form as SkyboxForm).canvas.Swap();
+		}
+
+		/// <summary>
+		/// Обновление заголовка
+		/// </summary>
+		protected override void UpdateTitle() {
+			Title = System.IO.Path.GetFileNameWithoutExtension(File.Name) + " - " + Form.Text;
 		}
 
 		/// <summary>
@@ -202,7 +248,7 @@ namespace SpriteBoy.Components.Editors {
 			if (file!=null) {
 				bool needTex = true;
 				if (sky[side]!=null) {
-					if (sky[side].Link == file.ProjectPath) {
+					if (sky[side].Link == file.ProjectPath && !forceTextureReload) {
 						needTex = false;
 					}
 				}

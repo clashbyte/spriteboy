@@ -16,11 +16,6 @@ namespace SpriteBoy.Data.Editing {
 	public static class Project {
 
 		/// <summary>
-		/// Позволить ли удаление файлов
-		/// </summary>
-		const bool ALLOW_REMOVING = false;
-
-		/// <summary>
 		/// Основная директория проекта
 		/// </summary>
 		public static Dir BaseDir { get; private set; }
@@ -56,7 +51,10 @@ namespace SpriteBoy.Data.Editing {
 			if (Opened) {
 				Close();
 			}
-			
+			if (!File.Exists(projf)) {
+				MessageDialog.Show(ControlStrings.ProjectNotFoundTitle, ControlStrings.ProjectNotFoundText.Replace("%PROJECT%", "\n\n"+Path.GetFileNameWithoutExtension(projf)+"\n\n"), System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
+				return;
+			}
 
 			// Открытие каталогов
 			Folder = Path.GetDirectoryName(projf);
@@ -75,17 +73,212 @@ namespace SpriteBoy.Data.Editing {
 			Opened = false;
 		}
 
+
+		/// <summary>
+		/// Сохранение состояния всех файлов и папок
+		/// </summary>
+		public static void CacheState() {
+			if (!Opened) {
+				return;
+			}
+			System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+			sw.Start();
+			RecursiveSaveDirState(BaseDir);
+			sw.Stop();
+			System.Diagnostics.Debug.WriteLine("[Project] Project caching took "+sw.ElapsedMilliseconds+"ms.");
+		}
+
+		/// <summary>
+		/// Проверка состояния файлов и папок - после разворота приложения
+		/// </summary>
+		public static void ValidateState() {
+			if (!Opened) {
+				return;
+			}
+			System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+			sw.Start();
+			try {
+
+				RecursiveValidateDirState(BaseDir);
+			} catch (Exception e) {
+				MessageDialog.Show("error", e.ToString());
+			}
+			sw.Stop();
+			System.Diagnostics.Debug.WriteLine("[Project] Project validation took " + sw.ElapsedMilliseconds + "ms.");
+		}
+
+		/// <summary>
+		/// Сохранение состояния папки
+		/// </summary>
+		static void RecursiveSaveDirState(Dir dir) {
+
+			// Сохранение самой папки
+			dir.creationTime = Directory.GetCreationTime(dir.FullPath);
+			dir.writeTime = Directory.GetLastWriteTime(dir.FullPath);
+
+			// Сохранение файлов
+			foreach (Entry e in dir.Entries) {
+				e.creationTime = File.GetCreationTime(e.FullPath);
+				e.writeTime = File.GetLastWriteTime(e.FullPath);
+			}
+
+			// Сохранение вложенных папок
+			foreach (Dir d in dir.Dirs) {
+				RecursiveSaveDirState(d);
+			}
+		}
+
+		/// <summary>
+		/// Сверка состояния папки
+		/// </summary>
+		static void RecursiveValidateDirState(Dir dir) {
+
+			// Сверяем папки
+			List<Dir> allDirs = new List<Dir>();
+			string[] incDirs = Directory.GetDirectories(dir.FullPath, "*", SearchOption.TopDirectoryOnly);
+			string[] lowerDirs = new string[incDirs.Length];
+			bool[] foundDirs = new bool[lowerDirs.Length];
+			for (int i = 0; i < incDirs.Length; i++) {
+				lowerDirs[i] = Path.GetFileName(incDirs[i]).ToLower();
+			}
+			
+			// Проверяем старые папки на удаление
+			foreach (Dir d in dir.Dirs) {
+				string name = d.ShortName.ToLower();
+				if (lowerDirs.Contains(name)) {
+					foundDirs[Array.IndexOf<string>(lowerDirs, name)] = true;
+					allDirs.Add(d);
+					RecursiveValidateDirState(d);
+				} else {
+					RecursiveNotify(d, FileEvent.Deleted);
+				}
+			}
+
+			// Проверка новых директорий
+			for (int i = 0; i < foundDirs.Length; i++) {
+				if (!foundDirs[i] && lowerDirs[i] != "." && lowerDirs[i] != "..") {
+					Dir d = new Dir();
+					d.Parent = dir;
+					d.Name = d.Parent != BaseDir ? d.Parent.Name + "/" + Path.GetFileName(incDirs[i]) : Path.GetFileName(incDirs[i]);
+					allDirs.Add(d);
+					RecursiveValidateDirState(d);
+				}
+			}
+
+			// Сохранение директорий
+			allDirs.Sort((a, b) => {
+				return a.ShortName.CompareTo(b.ShortName);
+			});
+			dir.Dirs = allDirs.ToArray();
+
+			// Проверка файлов
+			List<Entry> allEntries = new List<Entry>();
+			string[] incFiles = Directory.GetFiles(dir.FullPath, "*", SearchOption.TopDirectoryOnly);
+			string[] lowerFiles = new string[incFiles.Length];
+			bool[] foundFiles = new bool[lowerFiles.Length];
+			for (int i = 0; i < incFiles.Length; i++) {
+				lowerFiles[i] = Path.GetFileName(incFiles[i]).ToLower();
+			}
+
+			// Проверяем старые файлы на удаление
+			foreach (Entry e in dir.Entries) {
+				string name = e.Name.ToLower();
+				if (lowerFiles.Contains(name)) {
+					foundFiles[Array.IndexOf<string>(lowerFiles, name)] = true;
+					allEntries.Add(e);
+
+					DateTime fcrTime = File.GetCreationTime(e.FullPath);
+					DateTime fwrTime = File.GetLastWriteTime(e.FullPath);
+					if (fcrTime > e.creationTime || fwrTime > e.writeTime) {
+						MainForm.ProjectEntryEvent(e, FileEvent.Modified);
+					}
+				} else {
+					e.Deleted = true;
+					MainForm.ProjectEntryEvent(e, FileEvent.Deleted);
+				}
+			}
+
+			// Проверка новых файлов
+			for (int i = 0; i < foundFiles.Length; i++) {
+				if (!foundFiles[i] && ((File.GetAttributes(incFiles[i]) & FileAttributes.Hidden) != FileAttributes.Hidden)) {
+					Entry e = new Entry();
+					e.Name = incFiles[i];
+					e.Parent = dir;
+					allEntries.Add(e);
+					MainForm.ProjectEntryEvent(e, FileEvent.Created);
+				}
+			}
+
+			// Сохранение файлов
+			allEntries.Sort((a, b) => {
+				return a.Name.CompareTo(b.Name);
+			});
+			dir.Entries = allEntries.ToArray();
+
+			// Проверка директории
+			DateTime crTime = Directory.GetCreationTime(dir.FullPath);
+			DateTime wrTime = Directory.GetLastWriteTime(dir.FullPath);
+			if (crTime > dir.creationTime) {
+				MainForm.ProjectDirEvent(dir, FileEvent.Created);
+			}else if(wrTime > dir.writeTime){
+				MainForm.ProjectDirEvent(dir, FileEvent.Modified);
+			}
+		}
+
+		/// <summary>
+		/// Нотификация директории
+		/// </summary>
+		/// <param name="dir">Директория</param>
+		/// <param name="ev">Тип события</param>
+		static void RecursiveNotify(Dir dir, FileEvent ev) {
+
+			// Подпапки
+			foreach (Dir d in dir.Dirs) {
+				RecursiveNotify(d, ev);
+			}
+			
+			// Файлы
+			foreach (Entry e in dir.Entries) {
+				MainForm.ProjectEntryEvent(e, ev);
+				if (ev == FileEvent.Deleted) {
+					e.Deleted = true;
+				}
+			}
+
+			// Сама папка
+			MainForm.ProjectDirEvent(dir, ev);
+			if (ev == FileEvent.Deleted) {
+				dir.Deleted = true;
+			}
+		}
+
 		/// <summary>
 		/// Создание нового файла
 		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="parent"></param>
+		/// <param name="name">Имя файла</param>
+		/// <param name="parent">Родительский каталог</param>
 		/// <returns></returns>
-		public static bool CreateEntry(string name, Project.Dir parent) {
+		public static Entry CreateEntry(string name, Project.Dir parent) {
 
+			// Поиск похожего
+			List<Entry> fl = new List<Entry>(parent.Entries);
+			foreach (Entry f in fl) {
+				if (f.Name.ToLower() == name.ToLower()) {
+					return null;
+				}
+			}
 			
-
-			return true;
+			// Создание файла
+			Entry e = new Entry();
+			e.Name = name;
+			e.Parent = parent;
+			fl.Add(e);
+			fl.Sort((a, b) => {
+				return a.Name.CompareTo(b.Name);
+			});
+			parent.Entries = fl.ToArray();
+			MainForm.ProjectEntryEvent(e, FileEvent.Created);
+			return e;
 		}
 
 		/// <summary>
@@ -113,7 +306,6 @@ namespace SpriteBoy.Data.Editing {
 
 			// Создание настоящей папки
 			Directory.CreateDirectory(dir.FullPath);
-
 			MainForm.ProjectDirEvent(dir, FileEvent.Created);
 			return dir;
 		}
@@ -129,10 +321,12 @@ namespace SpriteBoy.Data.Editing {
 				return false;
 			}
 			if (newName != e.Name) {
-				
+				string oldfull = e.FullPath;
+				e.Name = newName;
+				e.Icon = Preview.Get(e.FullPath);
+				File.Move(oldfull, e.FullPath);
+				MainForm.ProjectEntryEvent(e, FileEvent.Renamed);
 			}
-
-			MainForm.ProjectEntryEvent(e, FileEvent.Renamed);
 			return true;
 		}
 
@@ -147,11 +341,32 @@ namespace SpriteBoy.Data.Editing {
 				return false;
 			}
 			if (newName != d.ShortName) {
+				string oldfull = d.FullPath;
+				d.Name = d.Parent == BaseDir ? newName : d.Parent.Name + "/" + newName;
+				Directory.Move(oldfull, d.FullPath);
+				RecursiveRenameNotify(d);
+			}
+			return true;
+		}
 
+		/// <summary>
+		/// Рекурсивное переименовывание
+		/// </summary>
+		/// <param name="dir">Директория</param>
+		static void RecursiveRenameNotify(Dir dir) {
+
+			// Обновление вложенных директорий
+			foreach (Dir d in dir.Dirs) {
+				RecursiveRenameNotify(d);
 			}
 
-			MainForm.ProjectDirEvent(d, FileEvent.Renamed);
-			return true;
+			// Обновление файлов
+			foreach (Entry e in dir.Entries) {
+				MainForm.ProjectEntryEvent(e, FileEvent.Renamed);
+			}
+
+			// Оповещение для данной директории
+			MainForm.ProjectDirEvent(dir, FileEvent.Renamed);
 		}
 
 		/// <summary>
@@ -161,9 +376,7 @@ namespace SpriteBoy.Data.Editing {
 		public static bool DeleteEntry(Project.Entry e) {
 
 			// Удаление записи
-			if (ALLOW_REMOVING) {
-				File.Delete(e.FullPath);
-			}
+			File.Delete(e.FullPath);
 			e.Deleted = true;
 			List<Project.Entry> files = new List<Entry>(e.Parent.Entries);
 			if (files.Contains(e)) {
@@ -210,9 +423,7 @@ namespace SpriteBoy.Data.Editing {
 				en.Deleted = true;
 
 				// Удаление файла
-				if (ALLOW_REMOVING) {
-					File.Delete(en.FullPath);
-				}
+				File.Delete(en.FullPath);
 				MainForm.ProjectEntryEvent(en, FileEvent.Deleted);
 			}
 
@@ -223,9 +434,7 @@ namespace SpriteBoy.Data.Editing {
 
 			// Удаление директории
 			d.Deleted = true;
-			if (ALLOW_REMOVING) {
-				Directory.Delete(d.Name);
-			}
+			Directory.Delete(d.Name);
 			MainForm.ProjectDirEvent(d, FileEvent.Deleted);
 		}
 
@@ -234,7 +443,7 @@ namespace SpriteBoy.Data.Editing {
 		/// </summary>
 		/// <param name="d"></param>
 		/// <returns></returns>
-		public static bool LegalFile(object d) {
+		public static bool OperableFile(object d) {
 			if (d is Project.Entry) {
 				Project.Entry e = d as Project.Entry;
 				if (e.Name.EndsWith(".sbproject")) {
@@ -312,6 +521,14 @@ namespace SpriteBoy.Data.Editing {
 		}
 
 		/// <summary>
+		/// Оповещение изменений файла
+		/// </summary>
+		/// <param name="e">Изменённый файл</param>
+		public static void Notify(Entry e) {
+			MainForm.ProjectEntryEvent(e, FileEvent.Modified);
+		}
+
+		/// <summary>
 		/// Открытие папки рекурсивно
 		/// </summary>
 		/// <returns>Директория</returns>
@@ -331,6 +548,9 @@ namespace SpriteBoy.Data.Editing {
 				dr.Parent = dir;
 				dirList.Add(dr);
 			}
+			dirList.Sort((a, b) => {
+				return a.ShortName.CompareTo(b.ShortName);
+			});
 			dir.Dirs = dirList.ToArray();
 
 			// Открытие файлов
@@ -430,6 +650,24 @@ namespace SpriteBoy.Data.Editing {
 				}
 			}
 
+			/// <summary>
+			/// Конструктор
+			/// </summary>
+			public Dir() {
+				Entries = new Entry[0];
+				Dirs = new Dir[0];
+			}
+
+			/// <summary>
+			/// Время создания директории
+			/// </summary>
+			internal DateTime creationTime;
+
+			/// <summary>
+			/// Время последней записи в директории
+			/// </summary>
+			internal DateTime writeTime;
+
 		}
 
 		/// <summary>
@@ -483,6 +721,16 @@ namespace SpriteBoy.Data.Editing {
 					return Path.Combine(Project.Folder, ProjectPath).Replace('\\', '/');
 				}
 			}
+
+			/// <summary>
+			/// Время создания файла
+			/// </summary>
+			internal DateTime creationTime;
+
+			/// <summary>
+			/// Время последней записи в файл
+			/// </summary>
+			internal DateTime writeTime;
 		}
 
 		/// <summary>

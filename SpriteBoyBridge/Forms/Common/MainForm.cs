@@ -108,7 +108,7 @@ namespace SpriteBoy.Forms.Common {
 		/// Открытие редактора для файла
 		/// </summary>
 		/// <param name="e">Файл</param>
-		public static void OpenEditor(Project.Entry e) {
+		public static Editor OpenEditor(Project.Entry e) {
 			if (W != null) {
 				bool found = false;
 				if (Editors != null) {
@@ -141,11 +141,33 @@ namespace SpriteBoy.Forms.Common {
 						List<BaseForm> edlist = Editors != null ? Editors.ToList() : new List<BaseForm>();
 						edlist.Add(ed.Form);
 						Editors = edlist.ToArray();
+
+						return ed;
 					} else {
 						MessageDialog.Show(ControlStrings.EditorNotFoundTitle, ControlStrings.EditorNotFoundText.Replace("%FILE%", "\n\n" + e.Name + "\n\n"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 					}
 				}
 			}
+			return null;
+		}
+
+		/// <summary>
+		/// Фокус на указанный редактор
+		/// </summary>
+		/// <param name="e">Редактор</param>
+		/// <returns>True если фокус успешен</returns>
+		public static bool FocusEditor(Editor e) {
+			if (W == null) {
+				return false;
+			}
+			if (Editors != null) {
+				if (!Editors.Contains(e.Form)) {
+					return false;
+				}
+			}
+
+			W.projectTabs.SelectedTab = e.Form.Tag as TabPage;
+			return true;
 		}
 
 		/// <summary>
@@ -166,7 +188,7 @@ namespace SpriteBoy.Forms.Common {
 			if (close) {
 				TabPage tp = null;
 				foreach (TabPage t in W.projectTabs.TabPages) {
-					if (tp.Tag == (object)e.Form) {
+					if (t.Tag == (object)e.Form) {
 						tp = t;
 						break;
 					}
