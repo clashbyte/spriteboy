@@ -127,18 +127,9 @@ namespace SpriteBoy.Forms.Common {
 				if (en != null) {
 					// Удаление
 					cm.Items.Add(new ToolStripMenuItem(ControlStrings.InspectorContextDelete, ShadowImage.CompiledFromImage(InspectorIcons.MenuDelete, 16, 1), (sndr, args) => {
-						if (en.IsDirectory) {
-							if (Project.DeleteDir(en.Tag as Project.Dir)) {
-								projectInspector.SelectedEntry = null;
-								projectInspector.Entries.Remove(en);
-							}
-						} else {
-							if (Project.DeleteEntry(en.Tag as Project.Entry)) {
-								projectInspector.SelectedEntry = null;
-								projectInspector.Entries.Remove(en);
-							}
+						if (en != null) {
+							RemoveEntry(en);
 						}
-						projectRemove.Enabled = false;
 					}) {
 						Enabled = free
 					});
@@ -194,18 +185,7 @@ namespace SpriteBoy.Forms.Common {
 		private void projectRemove_Click(object sender, EventArgs e) {
 			NSDirectoryInspector.Entry en = projectInspector.SelectedEntry;
 			if (en != null) {
-				if (en.IsDirectory) {
-					if (Project.DeleteDir(en.Tag as Project.Dir)) {
-						projectInspector.SelectedEntry = null;
-						projectInspector.Entries.Remove(en);
-					}
-				} else {
-					if (Project.DeleteEntry(en.Tag as Project.Entry)) {
-						projectInspector.SelectedEntry = null;
-						projectInspector.Entries.Remove(en);
-					}
-				}
-				projectRemove.Enabled = false;
+				RemoveEntry(en);
 			}
 		}
 
@@ -245,6 +225,31 @@ namespace SpriteBoy.Forms.Common {
 
 		}
 
+		/// <summary>
+		/// Удаление записи
+		/// </summary>
+		/// <param name="en">Элемент в инспекторе</param>
+		void RemoveEntry(NSDirectoryInspector.Entry en) {
+			if (en.IsDirectory) {
+				if (MessageDialog.Show(ControlStrings.DeleteFolderTitle, ControlStrings.DeleteFolderText.Replace("%FOLDER%", "\n" + en.Name), System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+					localFileEvent = true;
+					Project.DeleteDir(en.Tag as Project.Dir);
+					projectInspector.SelectedEntry = null;
+					projectInspector.Entries.Remove(en);
+					localFileEvent = false;
+					projectRemove.Enabled = false;
+				}
+			} else {
+				if (MessageDialog.Show(ControlStrings.DeleteFileTitle, ControlStrings.DeleteFileText.Replace("%FILE%", "\n" + en.Name), System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+					localFileEvent = true;
+					Project.DeleteEntry(en.Tag as Project.Entry);
+					projectInspector.SelectedEntry = null;
+					projectInspector.Entries.Remove(en);
+					localFileEvent = false;
+					projectRemove.Enabled = false;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Заполнение менеджера проекта

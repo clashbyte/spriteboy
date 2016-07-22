@@ -159,21 +159,21 @@ namespace SpriteBoy.Data.Editing {
 		/// </summary>
 		/// <returns>True если файл удалён</returns>
 		public static bool DeleteEntry(Project.Entry e) {
-			if (MessageDialog.Show(ControlStrings.DeleteFileTitle, ControlStrings.DeleteFileText.Replace("%FILE%", "\n"+e.Name), System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
-				if (ALLOW_REMOVING) {
-					File.Delete(e.FullPath);
-				}
-				e.Deleted = true;
-				List<Project.Entry> files = new List<Entry>(e.Parent.Entries);
-				if (files.Contains(e)) {
-					files.Remove(e);
-				}
-				e.Parent.Entries = files.ToArray();
 
-				MainForm.ProjectEntryEvent(e, FileEvent.Deleted);
-				return true;
+			// Удаление записи
+			if (ALLOW_REMOVING) {
+				File.Delete(e.FullPath);
 			}
-			return false;
+			e.Deleted = true;
+			List<Project.Entry> files = new List<Entry>(e.Parent.Entries);
+			if (files.Contains(e)) {
+				files.Remove(e);
+			}
+			e.Parent.Entries = files.ToArray();
+
+			// Событие окна
+			MainForm.ProjectEntryEvent(e, FileEvent.Deleted);
+			return true;
 		}
 
 		/// <summary>
@@ -182,19 +182,20 @@ namespace SpriteBoy.Data.Editing {
 		/// <param name="d">Директория</param>
 		/// <returns>True если директория удалена</returns>
 		public static bool DeleteDir(Project.Dir d) {
+
+			// Нельзя удалить корневую папку проекта
 			if (d == BaseDir) {
 				return false;
 			}
-			if (MessageDialog.Show(ControlStrings.DeleteFolderTitle, ControlStrings.DeleteFolderText.Replace("%FOLDER%", "\n" + d.ShortName), System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
-				DeleteDirRecursive(d);
-				List<Project.Dir> dirs = new List<Dir>(d.Parent.Dirs);
-				if (dirs.Contains(d)) {
-					dirs.Remove(d);
-				}
-				d.Parent.Dirs = dirs.ToArray();
-				return true;
+
+			// Рекурсивное удаление папки
+			DeleteDirRecursive(d);
+			List<Project.Dir> dirs = new List<Dir>(d.Parent.Dirs);
+			if (dirs.Contains(d)) {
+				dirs.Remove(d);
 			}
-			return false;
+			d.Parent.Dirs = dirs.ToArray();
+			return true;
 		}
 
 		/// <summary>

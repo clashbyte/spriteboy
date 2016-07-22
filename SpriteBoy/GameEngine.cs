@@ -6,7 +6,9 @@ using System.Text;
 
 namespace SpriteBoy {
 	
-	
+	/// <summary>
+	/// Основные функции и хуки движка
+	/// </summary>
 	public class GameEngine {
 
 		/// <summary>

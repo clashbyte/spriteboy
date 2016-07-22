@@ -20,6 +20,21 @@ namespace SpriteBoy.Engine {
 		Texture[] textures;
 
 		/// <summary>
+		/// Вершины
+		/// </summary>
+		static float[] vertices;
+
+		/// <summary>
+		/// Текстурные координаты
+		/// </summary>
+		static float[] coords;
+
+		/// <summary>
+		/// Индексы
+		/// </summary>
+		static ushort[] indices;
+
+		/// <summary>
 		/// Матрицы для каждой стороны
 		/// </summary>
 		static Matrix4[] matrices;
@@ -59,6 +74,39 @@ namespace SpriteBoy.Engine {
 		/// </summary>
 		public void Render() {
 
+			// Создание массивов
+			if (vertices == null || coords == null || indices == null) {
+
+				// Вершины
+				vertices = new float[] {
+					-5f,  5f, -5f,
+					 5f,  5f, -5f,
+					-5f, -5f, -5f,
+					 5f, -5f, -5f
+				};
+
+				// Текстурные координаты
+				coords = new float[] {
+					0f, 0f,
+					1f, 0f,
+					0f, 1f,
+					1f, 1f
+				};
+
+				// Индексы
+				indices = new ushort[] {
+					0, 1, 2,
+					1, 3, 2
+				};
+			}
+
+			// Установка данных
+			GL.EnableClientState(ArrayCap.VertexArray);
+			GL.EnableClientState(ArrayCap.TextureCoordArray);
+
+			GL.VertexPointer(3, VertexPointerType.Float, 0, vertices);
+			GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, coords);
+
 			// Отрисовка сторон
 			GL.Color3(Color.White);
 			for (int i = 0; i < 6; i++) {
@@ -66,22 +114,14 @@ namespace SpriteBoy.Engine {
 					textures[i].Bind();
 					GL.PushMatrix();
 					GL.MultMatrix(ref matrices[i]);
-
-					GL.Begin(PrimitiveType.Quads);
-					GL.TexCoord2(0, 0);
-					GL.Vertex3(-5, 5, -5);
-					GL.TexCoord2(1, 0);
-					GL.Vertex3(5, 5, -5);
-					GL.TexCoord2(1, 1);
-					GL.Vertex3(5, -5, -5);
-					GL.TexCoord2(0, 1);
-					GL.Vertex3(-5, -5, -5);
-					GL.End();
-
+					GL.DrawElements(BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedShort, indices);
 					GL.PopMatrix();
 				}
 			}
-			
+
+			// Отключение массивов
+			GL.DisableClientState(ArrayCap.VertexArray);
+			GL.DisableClientState(ArrayCap.TextureCoordArray);
 		}
 
 		/// <summary>

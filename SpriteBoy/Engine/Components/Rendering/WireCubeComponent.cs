@@ -164,13 +164,13 @@ namespace SpriteBoy.Engine.Components.Rendering {
 				};
 			}
 
-
+			// Отрисовка куба, без текстуры
 			GL.BindTexture(TextureTarget.Texture2D, 0);
 			GL.LineWidth(WireWidth);
 			GL.Color3(WireColor);
 			GL.EnableClientState(ArrayCap.VertexArray);
 			GL.VertexPointer(3, VertexPointerType.Float, 0, vertexArray);
-			GL.DrawElements(PrimitiveType.Lines, indexArray.Length, DrawElementsType.UnsignedShort, indexArray);
+			GL.DrawElements(BeginMode.Lines, indexArray.Length, DrawElementsType.UnsignedShort, indexArray);
 			GL.DisableClientState(ArrayCap.VertexArray);
 		}
 	}
