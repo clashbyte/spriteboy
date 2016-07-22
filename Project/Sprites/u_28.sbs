@@ -1,0 +1,43 @@
+[MAIN]
+Health = 99
+Solid = 0
+Breakable = 0
+Sound = 
+AnimCdr = 12
+BreakCdr = 0
+[ANIM1]
+Path = dog_001.png
+Delay = 2
+[ANIM2]
+Path = dog_002.png
+Delay = 2
+[ANIM3]
+Path = dog_003.png
+Delay = 2
+[ANIM4]
+Path = dog_004.png
+Delay = 2
+[ANIM5]
+Path = dog_005.png
+Delay = 2
+[ANIM6]
+Path = dog_006.png
+Delay = 2
+[ANIM7]
+Path = dog_007.png
+Delay = 2
+[ANIM8]
+Path = dog_008.png
+Delay = 2
+[ANIM9]
+Path = dog_009.png
+Delay = 2
+[ANIM10]
+Path = dog_010.png
+Delay = 2
+[ANIM11]
+Path = dog_011.png
+Delay = 2
+[ANIM12]
+Path = dog_012.png
+Delay = 2

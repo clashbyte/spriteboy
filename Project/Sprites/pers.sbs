@@ -1,0 +1,35 @@
+[MAIN]
+Health = 1
+Solid = 0
+Breakable = 1
+Sound = 
+AnimCdr = 9
+BreakCdr = 0
+Scale	= 1.05
+[ANIM1]
+Path = anim01.png
+Delay = 30
+[ANIM2]
+Path = anim02.png
+Delay = 6
+[ANIM3]
+Path = anim03.png
+Delay = 6
+[ANIM4]
+Path = anim04.png
+Delay = 6
+[ANIM5]
+Path = anim05.png
+Delay = 6
+[ANIM6]
+Path = anim06.png
+Delay = 6
+[ANIM7]
+Path = anim07.png
+Delay = 6
+[ANIM8]
+Path = anim08.png
+Delay = 6
+[ANIM9]
+Path = anim09.png
+Delay = 6

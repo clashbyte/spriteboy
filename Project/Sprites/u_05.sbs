@@ -1,0 +1,13 @@
+[MAIN]
+Health = 99
+Solid = 0
+Breakable = 0
+Sound = 
+AnimCdr = 2
+BreakCdr = 0
+[ANIM1]
+Path = pers_016.png
+Delay = 180
+[ANIM2]
+Path = pers_016a.png
+Delay = 10

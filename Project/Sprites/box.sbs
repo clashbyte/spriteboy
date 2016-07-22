@@ -1,0 +1,10 @@
+[MAIN]
+Health = 99
+Solid = 0
+Breakable = 0
+Sound = 
+AnimCdr = 1
+BreakCdr = 0
+[ANIM1]
+Path = x_sprite_logo01.png
+Delay = 1
