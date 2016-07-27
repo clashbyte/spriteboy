@@ -144,7 +144,7 @@ namespace SpriteBoy.Forms.Common {
 
 						return ed;
 					} else {
-						MessageDialog.Show(ControlStrings.EditorNotFoundTitle, ControlStrings.EditorNotFoundText.Replace("%FILE%", "\n\n" + e.Name + "\n\n"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+						MessageDialog.Show(ControlStrings.EditorNotFoundTitle, ControlStrings.EditorNotFoundText.Replace("%FILE%", e.Name), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 					}
 				}
 			}

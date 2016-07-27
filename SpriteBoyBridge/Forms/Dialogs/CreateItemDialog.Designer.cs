@@ -25,11 +25,11 @@
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateItemDialog));
 			this.buttonPanel = new System.Windows.Forms.Panel();
-			this.nameBox = new SpriteBoy.Controls.NSTextBox();
-			this.label = new SpriteBoy.Controls.NSLabel();
 			this.createButton = new SpriteBoy.Controls.NSButton();
 			this.cancelButton = new SpriteBoy.Controls.NSButton();
 			this.nsSeperator1 = new SpriteBoy.Controls.NSSeperator();
+			this.nameBox = new SpriteBoy.Controls.NSTextBox();
+			this.label = new SpriteBoy.Controls.NSLabel();
 			this.buttonPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -40,6 +40,23 @@
 			this.buttonPanel.Controls.Add(this.nsSeperator1);
 			resources.ApplyResources(this.buttonPanel, "buttonPanel");
 			this.buttonPanel.Name = "buttonPanel";
+			// 
+			// createButton
+			// 
+			resources.ApplyResources(this.createButton, "createButton");
+			this.createButton.Name = "createButton";
+			this.createButton.Click += new System.EventHandler(this.createButton_Click);
+			// 
+			// cancelButton
+			// 
+			resources.ApplyResources(this.cancelButton, "cancelButton");
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+			// 
+			// nsSeperator1
+			// 
+			resources.ApplyResources(this.nsSeperator1, "nsSeperator1");
+			this.nsSeperator1.Name = "nsSeperator1";
 			// 
 			// nameBox
 			// 
@@ -63,23 +80,6 @@
 			this.label.ForeColor = System.Drawing.Color.White;
 			this.label.Name = "label";
 			this.label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// createButton
-			// 
-			resources.ApplyResources(this.createButton, "createButton");
-			this.createButton.Name = "createButton";
-			this.createButton.Click += new System.EventHandler(this.createButton_Click);
-			// 
-			// cancelButton
-			// 
-			resources.ApplyResources(this.cancelButton, "cancelButton");
-			this.cancelButton.Name = "cancelButton";
-			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-			// 
-			// nsSeperator1
-			// 
-			resources.ApplyResources(this.nsSeperator1, "nsSeperator1");
-			this.nsSeperator1.Name = "nsSeperator1";
 			// 
 			// CreateItemDialog
 			// 

@@ -140,7 +140,23 @@ namespace SpriteBoy.Forms.Common {
 
 				// Вставка
 				ToolStripMenuItem ps = new ToolStripMenuItem(ControlStrings.InspectorContextPaste, ShadowImage.CompiledFromImage(InspectorIcons.MenuPaste, 16, 1), (sndr, args) => {
+					Project.Dir bd = (Project.Dir)projectInspector.Tag;
+					localFileEvent = true;
+					needProjectRescan = false;
+					if (copyingDir != null) {
 
+
+					} else if(copyingEntry != null) {
+						Project.Entry ce = Project.CopyEntry(copyingEntry, bd);
+						NSDirectoryInspector.Entry fen = new NSDirectoryInspector.Entry();
+						fen.IsDirectory = false;
+						fen.Name = System.IO.Path.GetFileNameWithoutExtension(ce.Name);
+						fen.Icon = ce.Icon;
+						fen.Tag = (object)ce;
+						projectInspector.Entries.Add(fen);
+						projectInspector.SelectedEntry = fen;
+					}
+					localFileEvent = false;
 				});
 				ps.Enabled = copyingDir != null || copyingEntry != null;
 				cm.Items.Add(ps);
@@ -238,7 +254,25 @@ namespace SpriteBoy.Forms.Common {
 				col.Add(new ToolStripSeparator());
 				foreach (Editor.FileCreator fc in Editor.CreatableList) {
 					col.Add(fc.Name, ShadowImage.CompiledFromImage(fc.Icon, 16, 1), (sndr, args) => {
-
+						Project.Dir cd = projectInspector.Tag as Project.Dir;
+						Editor.FileCreator f = fc;
+						if (cd != null) {
+							CreateItemDialog dlg = new CreateItemDialog(fc.Name);
+							dlg.Extension = f.Extension;
+							dlg.ExistingNames = cd.UsedNames;
+							if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+								localFileEvent = true;
+								Project.Entry ce = Project.CreateEntry(dlg.SpecifiedName, cd);
+								NSDirectoryInspector.Entry en = new NSDirectoryInspector.Entry();
+								en.IsDirectory = false;
+								en.Name = System.IO.Path.GetFileNameWithoutExtension(dlg.SpecifiedName);
+								en.Icon = ce.Icon;
+								en.Tag = (object)ce;
+								projectInspector.Entries.Add(en);
+								projectInspector.SelectedEntry = en;
+								localFileEvent = false;
+							}
+						}
 					});
 				}
 			}
@@ -252,7 +286,7 @@ namespace SpriteBoy.Forms.Common {
 		/// <param name="en">Элемент в инспекторе</param>
 		void RemoveEntry(NSDirectoryInspector.Entry en) {
 			if (en.IsDirectory) {
-				if (MessageDialog.Show(ControlStrings.DeleteFolderTitle, ControlStrings.DeleteFolderText.Replace("%FOLDER%", "\n" + en.Name), System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+				if (MessageDialog.Show(ControlStrings.DeleteFolderTitle, ControlStrings.DeleteFolderText.Replace("%FOLDER%", en.Name), System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
 					localFileEvent = true;
 					Project.DeleteDir(en.Tag as Project.Dir);
 					projectInspector.SelectedEntry = null;
@@ -261,7 +295,7 @@ namespace SpriteBoy.Forms.Common {
 					projectRemove.Enabled = false;
 				}
 			} else {
-				if (MessageDialog.Show(ControlStrings.DeleteFileTitle, ControlStrings.DeleteFileText.Replace("%FILE%", "\n" + en.Name), System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+				if (MessageDialog.Show(ControlStrings.DeleteFileTitle, ControlStrings.DeleteFileText.Replace("%FILE%", en.Name), System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
 					localFileEvent = true;
 					Project.DeleteEntry(en.Tag as Project.Entry);
 					projectInspector.SelectedEntry = null;

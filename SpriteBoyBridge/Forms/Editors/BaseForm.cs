@@ -82,7 +82,7 @@ namespace SpriteBoy.Forms.Editors {
 		/// </summary>
 		public BaseForm() {
 			InitializeComponent();
-			
+			BackColor = Color.FromArgb(50, 50, 50);
 		}
 
 		/// <summary>

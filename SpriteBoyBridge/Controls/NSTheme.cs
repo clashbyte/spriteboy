@@ -1674,7 +1674,7 @@ namespace SpriteBoy.Controls {
 
 			this.Scroller.ScrollLeft += new EventHandler(Scroller_ScrollLeft);
 			this.Scroller.ScrollRight += new EventHandler(Scroller_ScrollRight);
-			this.Scroller.TabClose += new EventHandler(Scroller_TabList);
+			this.Scroller.TabList += new EventHandler(Scroller_TabList);
 		}
 
 		protected override void OnControlAdded(ControlEventArgs e) {
@@ -1764,8 +1764,10 @@ namespace SpriteBoy.Controls {
 				}
 
 				Font labelFont = Font;
+				string label = "";
 				BaseForm frm = TabPages[I].Tag as BaseForm;
 				if (frm!=null) {
+					label = frm.FileEditor.Title;
 					frm.DrawIcon(G, iconSize.X, iconSize.Y);
 					R1.X += iconSize.Width + 8;
 					R1.Width -= iconSize.Width + 8;
@@ -1782,7 +1784,6 @@ namespace SpriteBoy.Controls {
 				R2.Y += 1;
 				R2.X += 1;
 
-				string label = TP1.Text;
 				SizeF strz = G.MeasureString(label, labelFont);
 				if (strz.Width > R1.Width) {
 					for (int ln = label.Length - 1; ln > 0; ln--) {
@@ -2005,7 +2006,9 @@ namespace SpriteBoy.Controls {
 			foreach (TabPage t in TabPages) {
 				BaseForm frm = (BaseForm)t.Tag;
 				if (frm!=null) {
-					cm.Items.Add(frm.FileEditor.Title, frm.Icon);
+					cm.Items.Add(frm.FileEditor.Title, frm.Icon, (sn, ev) => {
+						SelectedTab = t;
+					});
 				}
 			}
 			
@@ -2108,7 +2111,7 @@ namespace SpriteBoy.Controls {
 			if (!design) {
 				info = Utilities.CreateWindowsWindowInfo(Handle);
 				context = new GraphicsContext(
-					new GraphicsMode(new ColorFormat(32), 16),
+					new GraphicsMode(new ColorFormat(32), 16, 0, 0),
 					info,
 					2, 4,
 					GraphicsContextFlags.Default
@@ -2525,7 +2528,7 @@ namespace SpriteBoy.Controls {
 
 		#endregion
 
-		public event EventHandler TabClose;
+		public event EventHandler TabList;
 		public event EventHandler ScrollLeft;
 		public event EventHandler ScrollRight;
 
@@ -2549,8 +2552,8 @@ namespace SpriteBoy.Controls {
 
 
 		private void CloseButton_Click(Object sender, System.EventArgs e) {
-			if (TabClose != null)
-				TabClose(this, EventArgs.Empty);
+			if (TabList != null)
+				TabList(this, EventArgs.Empty);
 		}
 
 
@@ -2669,6 +2672,7 @@ namespace SpriteBoy.Controls {
 		private Entry clickedEntry;
 		private bool dragStarted;
 		string empltyMessage;
+		bool heightOverflow;
 
 		private Pen P1;
 		private Pen P2;
@@ -2698,7 +2702,7 @@ namespace SpriteBoy.Controls {
 			G.Clear(Color.FromArgb(40, 40, 40));
 			G.SmoothingMode = SmoothingMode.AntiAlias;
 
-			if (Entries.Count>0) {
+			if (Entries.Count > 0) {
 				float delta = (float)ItemWidth / (float)ItemSize;
 				int skip = (int)Math.Floor((float)offset / (float)ItemHeight) * ItemsStride;
 				if (ItemHeight == 0) {
@@ -2728,29 +2732,31 @@ namespace SpriteBoy.Controls {
 					if (en.IsDirectory) {
 						Preview.FolderIcon.SmallIcon.Draw(G, iconRect);
 					} else {
-						en.Icon.SmallIcon.Draw(G, iconRect);
-						if (en.Icon.Ready && en.Icon.ProxyBullet && en.Icon.Proxy != null) {
-							Rectangle bulletBox = new Rectangle(
-								iconRect.Right - 23,
-								iconRect.Bottom - 23,
-								24, 24
-							);
-							Rectangle bulletRect = new Rectangle(
-								bulletBox.X + 4,
-								bulletBox.Y + 4,
-								bulletBox.Width - 8,
-								bulletBox.Height - 8
-							);
+						if (en.Icon != null) {
+							en.Icon.SmallIcon.Draw(G, iconRect);
+							if (en.Icon.Ready && en.Icon.ProxyBullet && en.Icon.Proxy != null) {
+								Rectangle bulletBox = new Rectangle(
+									iconRect.Right - 23,
+									iconRect.Bottom - 23,
+									24, 24
+								);
+								Rectangle bulletRect = new Rectangle(
+									bulletBox.X + 4,
+									bulletBox.Y + 4,
+									bulletBox.Width - 8,
+									bulletBox.Height - 8
+								);
 
-							GraphicsPath bgp1 = ThemeModule.CreateRoundIncomplete(bulletBox, 3, new ThemeModule.Corners() {
-								BottomLeft = true,
-								BottomRight = true,
-								TopLeft = true,
-								TopRight = true
-							});
-							G.FillPath(new SolidBrush(Color.FromArgb(128, 0, 0, 0)), bgp1);
+								GraphicsPath bgp1 = ThemeModule.CreateRoundIncomplete(bulletBox, 3, new ThemeModule.Corners() {
+									BottomLeft = true,
+									BottomRight = true,
+									TopLeft = true,
+									TopRight = true
+								});
+								G.FillPath(new SolidBrush(Color.FromArgb(128, 0, 0, 0)), bgp1);
 
-							en.Icon.Proxy.BulletIcon.Draw(G, bulletRect, 2f);
+								en.Icon.Proxy.BulletIcon.Draw(G, bulletRect, 2f);
+							}
 						}
 					}
 
@@ -2779,6 +2785,7 @@ namespace SpriteBoy.Controls {
 						}
 					}
 				}
+
 			} else {
 
 				// Строка что файлов нет
@@ -2789,9 +2796,6 @@ namespace SpriteBoy.Controls {
 				G.DrawString(txt, Font, Brushes.DarkGray, txtp.X, txtp.Y);
 
 			}
-
-			
-
 
 
 			G.FillRectangle(B1, 0, 0, 2, AreaHeight);
@@ -2935,11 +2939,14 @@ namespace SpriteBoy.Controls {
 
 		void CheckScroll() {
 			float height = (int)Math.Ceiling((float)Entries.Count / (float)ItemsStride) * ItemHeight;
-			if (height > Height) {
-				//scroller.Maximum = (int)height;
-				//scroller.Value = 0;
-			} else {
-				scroller.Maximum = 1;
+			if (heightOverflow != (height > Height)) {
+				heightOverflow = (height > Height);
+				if (heightOverflow) {
+					scroller.Maximum = (int)height;
+					scroller.Value = 0;
+				} else {
+					scroller.Maximum = 1;
+				}
 			}
 		}
 

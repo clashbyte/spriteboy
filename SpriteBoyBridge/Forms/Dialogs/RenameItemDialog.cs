@@ -122,10 +122,14 @@ namespace SpriteBoy.Forms.Dialogs {
 				hasError = true;
 				errorText = ControlStrings.FileNameIncorrect;
 			}
+
+			string sn = SpecifiedName.ToLower();
 			if (Extension!=null) {
 				txt += Extension.ToLower();
+				sn += Extension.ToLower();
 			}
-			if(existingNames.Contains(txt) && !hasError && txt != SpecifiedName.ToLower()){
+
+			if(existingNames.Contains(txt) && !hasError && txt != sn){
 				hasError = true;
 				errorText = ControlStrings.FileNameExists;
 			}
@@ -165,6 +169,35 @@ namespace SpriteBoy.Forms.Dialogs {
 			if (!selfExit) {
 				DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			}
+		}
+
+		/// <summary>
+		/// Обработка нажатия абстрактной клавиши
+		/// </summary>
+		/// <param name="msg"></param>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+			if (keyData.HasFlag(Keys.Enter)) {
+				if (renameButton.Enabled) {
+					if (hasError || nameBox.Text == "") {
+						return false;
+					}
+					DialogResult = System.Windows.Forms.DialogResult.OK;
+					string txt = nameBox.Text;
+					if (Extension != null) {
+						txt += Extension;
+					}
+					SpecifiedName = txt;
+					selfExit = true;
+					Close();
+				}
+			} else if (keyData.HasFlag(Keys.Escape)) {
+				Close();
+			} else {
+				return base.ProcessCmdKey(ref msg, keyData);
+			}
+			return false;
 		}
 	}
 }

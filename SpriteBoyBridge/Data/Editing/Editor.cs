@@ -167,22 +167,22 @@ namespace SpriteBoy.Data.Editing {
 		/// <summary>
 		/// Обновление кадра
 		/// </summary>
-		public abstract void Update();
+		public virtual void Update() { }
 
 		/// <summary>
 		/// Отрисовка кадра
 		/// </summary>
-		public abstract void Render();
+		public virtual void Render() { }
 
 		/// <summary>
 		/// Получил фокус
 		/// </summary>
-		public abstract void GotFocus();
+		public virtual void GotFocus() { }
 
 		/// <summary>
 		/// Потерял фокус
 		/// </summary>
-		public abstract void LostFocus();
+		public virtual void LostFocus() { }
 
 		/// <summary>
 		/// Событие изменения файла проекта
@@ -224,7 +224,9 @@ namespace SpriteBoy.Data.Editing {
 		/// <summary>
 		/// Обновление тайтла при изменении файла
 		/// </summary>
-		protected abstract void UpdateTitle();
+		protected void UpdateTitle() {
+			Title = System.IO.Path.GetFileNameWithoutExtension(File.Name) + " - " + Form.Text;
+		}
 
 		/// <summary>
 		/// Ассоциация расширений с редактором

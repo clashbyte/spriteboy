@@ -31,6 +31,11 @@ namespace SpriteBoy.Forms.Editors {
 		bool mouseLook = false;
 
 		/// <summary>
+		/// Клавиша мыши, которой начат просмотр
+		/// </summary>
+		MouseButtons mouseButton;
+
+		/// <summary>
 		/// Место клика
 		/// </summary>
 		Point clickOrigin = Point.Empty;
@@ -57,15 +62,20 @@ namespace SpriteBoy.Forms.Editors {
 		}
 
 		void canvas_MouseDown(object sender, MouseEventArgs e) {
-			mouseLook = true;
-			canvas.LockMouse = true;
-			Cursor.Hide();
+			if (!mouseLook) {
+				mouseLook = true;
+				mouseButton = e.Button;
+				canvas.LockMouse = true;
+				Cursor.Hide();
+			}
 		}
 
 		private void canvas_MouseUp(object sender, MouseEventArgs e) {
-			mouseLook = false;
-			canvas.LockMouse = false;
-			Cursor.Show();
+			if (mouseLook && mouseButton == e.Button) {
+				mouseLook = false;
+				canvas.LockMouse = false;
+				Cursor.Show();
+			}
 		}
 
 		void canvas_MouseMove(object sender, MouseEventArgs e) {

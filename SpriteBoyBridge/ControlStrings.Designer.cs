@@ -61,7 +61,8 @@ namespace SpriteBoy {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure want to delete file?%FILE%.
+        ///   Looks up a localized string similar to Are you sure want to delete file?
+        ///%FILE%.
         /// </summary>
         internal static string DeleteFileText {
             get {
@@ -79,7 +80,8 @@ namespace SpriteBoy {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure want to delete folder?%FOLDER%.
+        ///   Looks up a localized string similar to Are you sure want to delete folder?
+        ///%FOLDER%.
         /// </summary>
         internal static string DeleteFolderText {
             get {
@@ -160,7 +162,11 @@ namespace SpriteBoy {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SpriteBoy can&apos;t find special editor for file:%FILE%Please, use specialized software to edit this type of file..
+        ///   Looks up a localized string similar to SpriteBoy can&apos;t find special editor for file:
+        ///
+        ///%FILE%
+        ///
+        ///Please, use specialized software to edit this type of file..
         /// </summary>
         internal static string EditorNotFoundText {
             get {
@@ -268,7 +274,11 @@ namespace SpriteBoy {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to load project: %PROJECT%Please, create new or locate it&apos;s folder if it was moved..
+        ///   Looks up a localized string similar to Unable to load project: 
+        ///
+        ///%PROJECT%
+        ///
+        ///Please, create new or locate it&apos;s folder if it was moved..
         /// </summary>
         internal static string ProjectNotFoundText {
             get {

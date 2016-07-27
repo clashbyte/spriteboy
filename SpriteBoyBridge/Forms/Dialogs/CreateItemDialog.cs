@@ -161,5 +161,57 @@ namespace SpriteBoy.Forms.Dialogs {
 				DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			}
 		}
+
+		/// <summary>
+		/// Нажатие клавиши
+		/// </summary>
+		private void nameBox_KeyDown(object sender, KeyEventArgs e) {
+			if (e.KeyCode == Keys.Enter) {
+				if (createButton.Enabled) {
+					if (hasError || nameBox.Text == "") {
+						return;
+					}
+					DialogResult = System.Windows.Forms.DialogResult.OK;
+					string txt = nameBox.Text;
+					if (Extension != null) {
+						txt += Extension;
+					}
+					SpecifiedName = txt;
+					selfExit = true;
+					Close();
+				}
+			}else if(e.KeyCode == Keys.Escape) {
+				Close();
+			}
+		}
+
+		/// <summary>
+		/// Обработка нажатия абстрактной клавиши
+		/// </summary>
+		/// <param name="msg"></param>
+		/// <param name="keyData"></param>
+		/// <returns></returns>
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+			if (keyData.HasFlag(Keys.Enter)) {
+				if (createButton.Enabled) {
+					if (hasError || nameBox.Text == "") {
+						return false;
+					}
+					DialogResult = System.Windows.Forms.DialogResult.OK;
+					string txt = nameBox.Text;
+					if (Extension != null) {
+						txt += Extension;
+					}
+					SpecifiedName = txt;
+					selfExit = true;
+					Close();
+				}
+			} else if(keyData.HasFlag(Keys.Escape)) {
+				Close();
+			} else {
+				return base.ProcessCmdKey(ref msg, keyData);
+			}
+			return false;
+		}
 	}
 }

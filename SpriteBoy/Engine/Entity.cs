@@ -240,6 +240,46 @@ namespace SpriteBoy.Engine {
 		}
 
 		/// <summary>
+		/// Перевод точки из глобальной позиции в локальную
+		/// </summary>
+		/// <param name="point">Позиция</param>
+		/// <returns>Позиция в локальных координатах</returns>
+		public Vec3 PointToLocal(Vec3 point) {
+			Vector3 v = Vector3.TransformPosition(new Vector3(point.X, point.Y, -point.Z), invmat);
+			return new Vec3(v.X, v.Y, -v.Z);
+		}
+
+		/// <summary>
+		/// Перевод точки из локальной позиции в глобальную
+		/// </summary>
+		/// <param name="point">Позиция</param>
+		/// <returns>Позиция в глобальных координатах</returns>
+		public Vec3 PointToWorld(Vec3 point) {
+			Vector3 v = Vector3.TransformPosition(new Vector3(point.X, point.Y, -point.Z), mat);
+			return new Vec3(v.X, v.Y, -v.Z);
+		}
+
+		/// <summary>
+		/// Перевод вектора из глобального направления в локальное
+		/// </summary>
+		/// <param name="vec">Вектор</param>
+		/// <returns>Вектор в локальном направлении</returns>
+		public Vec3 VectorToLocal(Vec3 vec) {
+			Vector3 v = Vector3.TransformVector(new Vector3(vec.X, vec.Y, -vec.Z), invmat);
+			return new Vec3(v.X, v.Y, -v.Z);
+		}
+
+		/// <summary>
+		/// Перевод вектора из локального направления в глобальное
+		/// </summary>
+		/// <param name="vec">Вектор</param>
+		/// <returns>Вектор в глобальном направлении</returns>
+		public Vec3 VectorToWorld(Vec3 vec) {
+			Vector3 v = Vector3.TransformVector(new Vector3(vec.X, vec.Y, -vec.Z), mat);
+			return new Vec3(v.X, v.Y, -v.Z);
+		}
+
+		/// <summary>
 		/// Перестройка матрицы
 		/// </summary>
 		protected virtual void RebuildMatrix() {

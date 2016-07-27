@@ -117,29 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AppCreatingUIState" xml:space="preserve">
-    <value>Инициализация интерфейса...</value>
+  <data name="nsLabel1.Text" xml:space="preserve">
+    <value>Before using model, it must be converted into native SpriteBoy model format. Converter will process your model and try to preserve all the animation and geometry data, and also textures (for legacy .S3D format).</value>
   </data>
-  <data name="AppEditorRegisterState" xml:space="preserve">
-    <value>Поиск редакторов...</value>
-  </data>
-  <data name="AppPluginAddingLabel" xml:space="preserve">
-    <value>Загрузка плагина:
-%PLUGIN%...</value>
-  </data>
-  <data name="AppPluginRegisterState" xml:space="preserve">
-    <value>Поиск плагинов...</value>
-  </data>
-  <data name="AppPreviewRegisterState" xml:space="preserve">
-    <value>Регистрация предпросмотра...</value>
-  </data>
-  <data name="AppReadyState" xml:space="preserve">
-    <value>Готово!</value>
-  </data>
-  <data name="AppStartupState" xml:space="preserve">
-    <value>Программа запускается...</value>
-  </data>
-  <data name="SkyFileVisualName" xml:space="preserve">
-    <value>Объект неба</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGySURBVDhPhZPLK0RhGMbH0j2ESaawsbBTSspCSlH+ABZE
+        rEjYKVuxcYuVpZJLWdiMXJNLLmXJjmSnkIWMYWaO3/Odt6GGPPWb97zv83zf+eacmcBfSiQSdfF4fJsa
+        hhob/y/COTAJx9AErWx06nneBNeZFvtdhLII3bBgx0ZJMT+HWzIZNkoVgQJ4J/RCnaPmUUOwyKYr1Eso
+        tXiqMPPhkYVOXN/DIfSZv8S4woV/E4FMSG4g0Xebra+4Rl9ibaqi0Wi1v+xbLGiTR82Ga2hw4Z8iF8SY
+        4XvuU6fh2V/uebFYrJ2+C06UgT2YhWK3mMAAzRYMgntN1CI2m9QGXOs5zEcikXLz0mEYdqFfd1fojFKm
+        gEQfYgPd5c78KSg0W34V6LV+qHEPjfoJYzACp9DJ6TrkSfRPoFNO0x5QW2BZGzz5EV/0YUqu3anTn35L
+        J6Okmb+uj1ff8kU/JFPiBD02Tgq/0Wyt3dDHlXlO9AMyWdzL9RE8mOVEX09Jo47ChTbQr28c3hTgiKuU
+        NaOCeTGzBXkS/TxsgmZBdxSJQSWsEz6jNts4KWa1LNDD0yu3v3cg8AU/PnQnCz3ajQAAAABJRU5ErkJg
+        gg==
+</value>
   </data>
 </root>

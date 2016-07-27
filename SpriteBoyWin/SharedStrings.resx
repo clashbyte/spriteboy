@@ -124,7 +124,8 @@
     <value>Registering associated editors...</value>
   </data>
   <data name="AppPluginAddingLabel" xml:space="preserve">
-    <value>Loading plugin %PLUGIN%...</value>
+    <value>Loading plugin:
+%PLUGIN%...</value>
   </data>
   <data name="AppPluginRegisterState" xml:space="preserve">
     <value>Scanning for plugins...</value>

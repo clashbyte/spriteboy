@@ -138,7 +138,7 @@
     <value>createButton</value>
   </data>
   <data name="&gt;&gt;createButton.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSButton, SpriteBoyBridge, Version=1.0.6046.32142, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSButton, SpriteBoyBridge, Version=1.0.6048.30758, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;createButton.Parent" xml:space="preserve">
     <value>buttonPanel</value>
@@ -162,7 +162,7 @@
     <value>cancelButton</value>
   </data>
   <data name="&gt;&gt;cancelButton.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSButton, SpriteBoyBridge, Version=1.0.6046.32142, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSButton, SpriteBoyBridge, Version=1.0.6048.30758, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;cancelButton.Parent" xml:space="preserve">
     <value>buttonPanel</value>
@@ -190,7 +190,7 @@
     <value>nsSeperator1</value>
   </data>
   <data name="&gt;&gt;nsSeperator1.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSSeperator, SpriteBoyBridge, Version=1.0.6046.32142, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSSeperator, SpriteBoyBridge, Version=1.0.6048.30758, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;nsSeperator1.Parent" xml:space="preserve">
     <value>buttonPanel</value>
@@ -235,7 +235,7 @@
     <value>nameBox</value>
   </data>
   <data name="&gt;&gt;nameBox.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSTextBox, SpriteBoyBridge, Version=1.0.6046.32142, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSTextBox, SpriteBoyBridge, Version=1.0.6048.30758, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;nameBox.Parent" xml:space="preserve">
     <value>$this</value>
@@ -262,7 +262,7 @@
     <value>label</value>
   </data>
   <data name="&gt;&gt;label.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6046.32142, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6048.30758, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;label.Parent" xml:space="preserve">
     <value>$this</value>
@@ -275,9 +275,6 @@
   </metadata>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>384, 150</value>
-  </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>

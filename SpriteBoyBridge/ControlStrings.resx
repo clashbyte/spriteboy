@@ -118,13 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DeleteFileText" xml:space="preserve">
-    <value>Are you sure want to delete file?%FILE%</value>
+    <value>Are you sure want to delete file?
+%FILE%</value>
   </data>
   <data name="DeleteFileTitle" xml:space="preserve">
     <value>Delete file</value>
   </data>
   <data name="DeleteFolderText" xml:space="preserve">
-    <value>Are you sure want to delete folder?%FOLDER%</value>
+    <value>Are you sure want to delete folder?
+%FOLDER%</value>
   </data>
   <data name="DeleteFolderTitle" xml:space="preserve">
     <value>Delete folder</value>
@@ -151,7 +153,11 @@
     <value>Yes</value>
   </data>
   <data name="EditorNotFoundText" xml:space="preserve">
-    <value>SpriteBoy can't find special editor for file:%FILE%Please, use specialized software to edit this type of file.</value>
+    <value>SpriteBoy can't find special editor for file:
+
+%FILE%
+
+Please, use specialized software to edit this type of file.</value>
   </data>
   <data name="EditorNotFoundTitle" xml:space="preserve">
     <value>Unable to open file</value>
@@ -187,7 +193,11 @@
     <value>Files not found</value>
   </data>
   <data name="ProjectNotFoundText" xml:space="preserve">
-    <value>Unable to load project: %PROJECT%Please, create new or locate it's folder if it was moved.</value>
+    <value>Unable to load project: 
+
+%PROJECT%
+
+Please, create new or locate it's folder if it was moved.</value>
   </data>
   <data name="ProjectNotFoundTitle" xml:space="preserve">
     <value>Project not found</value>

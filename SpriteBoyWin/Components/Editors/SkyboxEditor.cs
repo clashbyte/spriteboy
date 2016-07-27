@@ -167,14 +167,6 @@ namespace SpriteBoy.Components.Editors {
 		}
 
 
-		public override void GotFocus() {
-			
-		}
-
-		public override void LostFocus() {
-			
-		}
-
 		/// <summary>
 		/// Обновление файловой системы
 		/// </summary>
@@ -205,26 +197,12 @@ namespace SpriteBoy.Components.Editors {
 		}
 
 		/// <summary>
-		/// Обновление объектов сцены
-		/// </summary>
-		public override void Update() {
-			
-		}
-
-		/// <summary>
 		/// Рендер сцены
 		/// </summary>
 		public override void Render() {
 			(Form as SkyboxForm).canvas.MakeCurrent();
 			scene.Render();
 			(Form as SkyboxForm).canvas.Swap();
-		}
-
-		/// <summary>
-		/// Обновление заголовка
-		/// </summary>
-		protected override void UpdateTitle() {
-			Title = System.IO.Path.GetFileNameWithoutExtension(File.Name) + " - " + Form.Text;
 		}
 
 		/// <summary>
@@ -253,7 +231,10 @@ namespace SpriteBoy.Components.Editors {
 					}
 				}
 				if (needTex) {
-					sky[side] = new Texture(file.ProjectPath, Texture.LoadingMode.Queued);
+					sky[side] = new Texture(file.ProjectPath, Texture.LoadingMode.Queued) {
+						WrapHorizontal = Texture.WrapMode.Clamp,
+						WrapVertical = Texture.WrapMode.Clamp
+					};
 				}
 			} else {
 				sky[side] = null;

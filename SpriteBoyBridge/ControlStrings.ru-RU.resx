@@ -118,13 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DeleteFileText" xml:space="preserve">
-    <value>Вы действительно хотите удалить файл?%FILE%</value>
+    <value>Вы действительно хотите удалить файл?
+%FILE%</value>
   </data>
   <data name="DeleteFileTitle" xml:space="preserve">
     <value>Удаление файла</value>
   </data>
   <data name="DeleteFolderText" xml:space="preserve">
-    <value>Вы действительно хотите удалить папку?%FOLDER%</value>
+    <value>Вы действительно хотите удалить папку?
+%FOLDER%</value>
   </data>
   <data name="DeleteFolderTitle" xml:space="preserve">
     <value>Удаление папки</value>
@@ -151,7 +153,11 @@
     <value>Да</value>
   </data>
   <data name="EditorNotFoundText" xml:space="preserve">
-    <value>SpriteBoy не может найти встроенный редактор для файла:%FILE%Пожалуйста, используйте специализированное ПО для редактирования файлов этого типа.</value>
+    <value>SpriteBoy не может найти встроенный редактор для файла:
+
+%FILE%
+
+Пожалуйста, используйте специализированное ПО для редактирования файлов этого типа.</value>
   </data>
   <data name="EditorNotFoundTitle" xml:space="preserve">
     <value>Невозможно открыть файл</value>
@@ -187,7 +193,11 @@
     <value>Папка пуста</value>
   </data>
   <data name="ProjectNotFoundText" xml:space="preserve">
-    <value>Невозможно загрузить проект: %PROJECT%Пожауйста, создайте новый проект, или укажите новое расположение, если проект был перемещён.</value>
+    <value>Невозможно загрузить проект: 
+
+%PROJECT%
+
+Пожауйста, создайте новый проект, или укажите новое расположение, если проект был перемещён.</value>
   </data>
   <data name="ProjectNotFoundTitle" xml:space="preserve">
     <value>Проект не найден</value>

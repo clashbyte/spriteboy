@@ -53,6 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Editors\ImageEditor.cs" />
+    <Compile Include="Components\Editors\ModelConverter.cs" />
     <Compile Include="Components\Editors\SkyboxEditor.cs" />
     <Compile Include="Components\Previews\GenericPreviewGenerator.cs" />
     <Compile Include="Components\Previews\ImagePreviewGenerator.cs" />
@@ -67,6 +69,18 @@
     </Compile>
     <Compile Include="Forms\DashboardForm.Designer.cs">
       <DependentUpon>DashboardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\ImageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\ImageForm.Designer.cs">
+      <DependentUpon>ImageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\ModelConverterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\ModelConverterForm.Designer.cs">
+      <DependentUpon>ModelConverterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Editors\MapForm.cs">
       <SubType>Form</SubType>
@@ -112,8 +126,14 @@
     <EmbeddedResource Include="Forms\DashboardForm.resx">
       <DependentUpon>DashboardForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\ImageForm.resx">
+      <DependentUpon>ImageForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\MapForm.resx">
       <DependentUpon>MapForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\ModelConverterForm.resx">
+      <DependentUpon>ModelConverterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\SkyboxForm.resx">
       <DependentUpon>SkyboxForm.cs</DependentUpon>

@@ -80,7 +80,6 @@ namespace SpriteBoy.Forms.Specialized {
 		private void checkTimer_Tick(object sender, EventArgs e) {
 			if (label!=stateLabel.Text) {
 				stateLabel.Text = label;
-				stateLabel.Invalidate();
 			}
 			if (closeFlag) {
 				form.Close();
