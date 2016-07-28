@@ -144,8 +144,13 @@ namespace SpriteBoy.Forms.Common {
 					localFileEvent = true;
 					needProjectRescan = false;
 					if (copyingDir != null) {
-
-
+						Project.Dir cd = Project.CopyDir(copyingDir, bd);
+						NSDirectoryInspector.Entry fen = new NSDirectoryInspector.Entry();
+						fen.IsDirectory = true;
+						fen.Name = cd.ShortName;
+						fen.Tag = (object)cd;
+						projectInspector.Entries.Add(fen);
+						projectInspector.SelectedEntry = fen;
 					} else if(copyingEntry != null) {
 						Project.Entry ce = Project.CopyEntry(copyingEntry, bd);
 						NSDirectoryInspector.Entry fen = new NSDirectoryInspector.Entry();

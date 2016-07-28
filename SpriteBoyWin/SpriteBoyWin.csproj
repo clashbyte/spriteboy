@@ -222,6 +222,7 @@
     <None Include="Resources\insp_sprite.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Components\Converters\" />
     <Folder Include="Forms\Common\" />
   </ItemGroup>
   <ItemGroup>

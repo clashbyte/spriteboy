@@ -231,6 +231,22 @@ namespace SpriteBoy.Data.Editing {
 		}
 
 		/// <summary>
+		/// Копирование директории
+		/// </summary>
+		/// <param name="dr">Директория для копирования</param>
+		/// <param name="parent">Новая родительская директория</param>
+		/// <returns>Скопированная директория</returns>
+		public static Dir CopyDir(Dir dr, Dir parent) {
+
+			// Создание диалога
+			DirectoryCopyDialog cd = new DirectoryCopyDialog(dr, parent);
+			cd.ShowDialog();
+
+			// Возврат скопированной папки
+			return cd.CopiedDir;
+		}
+
+		/// <summary>
 		/// Удаление файла
 		/// </summary>
 		/// <returns>True если файл удалён</returns>
@@ -565,7 +581,9 @@ namespace SpriteBoy.Data.Editing {
 				en.Deleted = true;
 
 				// Удаление файла
-				File.Delete(en.FullPath);
+				try {
+					File.Delete(en.FullPath);
+				} catch (Exception) { }
 				MainForm.ProjectEntryEvent(en, FileEvent.Deleted);
 			}
 
@@ -576,7 +594,10 @@ namespace SpriteBoy.Data.Editing {
 
 			// Удаление директории
 			d.Deleted = true;
-			Directory.Delete(d.FullPath);
+			try {
+				Directory.Delete(d.FullPath);
+			} catch (Exception) {
+			}
 			MainForm.ProjectDirEvent(d, FileEvent.Deleted);
 		}
 

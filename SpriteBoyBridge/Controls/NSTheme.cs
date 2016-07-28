@@ -927,7 +927,8 @@ namespace SpriteBoy.Controls {
 			G.SetClip(GP1);
 			G.FillRectangle(GB1, R1);
 
-			I1 = Convert.ToInt32((_Value - _Minimum) / (_Maximum - _Minimum) * (Width - 3));
+			I1 = (int)Math.Round((float)(_Value - _Minimum) / (float)(_Maximum - _Minimum) * (float)(Width-3));
+			System.Diagnostics.Debug.WriteLine("Data: {0}, min {1}, max {2}", I1, _Minimum, _Maximum);
 
 			if (I1 > 1) {
 				GP3 = ThemeModule.CreateRound(1, 1, I1, Height - 3, 7);
