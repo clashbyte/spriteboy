@@ -13,7 +13,7 @@ namespace SpriteBoy.Forms.Common {
 	/// <summary>
 	/// Части формы, отвечающие за события окна
 	/// </summary>
-	public partial class MainForm  {
+	partial class MainForm  {
 
 		/// <summary>
 		/// Нужен ли рескан проекта при запуске

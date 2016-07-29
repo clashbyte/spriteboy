@@ -28,13 +28,13 @@
 			this.toolLook = new SpriteBoy.Controls.NSRadioIconicButton();
 			this.nsTabControl1 = new SpriteBoy.Controls.NSTabControl();
 			this.paramsTab = new System.Windows.Forms.TabPage();
-			this.utilPanel = new System.Windows.Forms.Panel();
-			this.filteringCombo = new SpriteBoy.Controls.NSComboBox();
-			this.nsLabel1 = new SpriteBoy.Controls.NSLabel();
-			this.nsLabel2 = new SpriteBoy.Controls.NSLabel();
-			this.wrapUCombo = new SpriteBoy.Controls.NSComboBox();
 			this.nsLabel3 = new SpriteBoy.Controls.NSLabel();
 			this.wrapVCombo = new SpriteBoy.Controls.NSComboBox();
+			this.nsLabel2 = new SpriteBoy.Controls.NSLabel();
+			this.wrapUCombo = new SpriteBoy.Controls.NSComboBox();
+			this.nsLabel1 = new SpriteBoy.Controls.NSLabel();
+			this.filteringCombo = new SpriteBoy.Controls.NSComboBox();
+			this.utilPanel = new System.Windows.Forms.Panel();
 			this.toolPanel.SuspendLayout();
 			this.nsTabControl1.SuspendLayout();
 			this.paramsTab.SuspendLayout();
@@ -94,39 +94,27 @@
 			this.paramsTab.TabIndex = 2;
 			this.paramsTab.Text = "Parameters";
 			// 
-			// utilPanel
+			// nsLabel3
 			// 
-			this.utilPanel.Dock = System.Windows.Forms.DockStyle.Top;
-			this.utilPanel.Location = new System.Drawing.Point(0, 0);
-			this.utilPanel.Name = "utilPanel";
-			this.utilPanel.Size = new System.Drawing.Size(719, 25);
-			this.utilPanel.TabIndex = 7;
+			this.nsLabel3.Font = new System.Drawing.Font("Tahoma", 8.25F);
+			this.nsLabel3.ForeColor = System.Drawing.Color.White;
+			this.nsLabel3.Location = new System.Drawing.Point(6, 60);
+			this.nsLabel3.Name = "nsLabel3";
+			this.nsLabel3.Size = new System.Drawing.Size(133, 21);
+			this.nsLabel3.TabIndex = 5;
+			this.nsLabel3.Text = "Vertical wrapping";
+			this.nsLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// filteringCombo
+			// wrapVCombo
 			// 
-			this.filteringCombo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-			this.filteringCombo.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.filteringCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.filteringCombo.ForeColor = System.Drawing.Color.White;
-			this.filteringCombo.FormattingEnabled = true;
-			this.filteringCombo.Items.AddRange(new object[] {
-            "Pixelated",
-            "Smooth"});
-			this.filteringCombo.Location = new System.Drawing.Point(145, 6);
-			this.filteringCombo.Name = "filteringCombo";
-			this.filteringCombo.Size = new System.Drawing.Size(200, 21);
-			this.filteringCombo.TabIndex = 0;
-			// 
-			// nsLabel1
-			// 
-			this.nsLabel1.Font = new System.Drawing.Font("Tahoma", 8.25F);
-			this.nsLabel1.ForeColor = System.Drawing.Color.White;
-			this.nsLabel1.Location = new System.Drawing.Point(6, 6);
-			this.nsLabel1.Name = "nsLabel1";
-			this.nsLabel1.Size = new System.Drawing.Size(133, 21);
-			this.nsLabel1.TabIndex = 1;
-			this.nsLabel1.Text = "Filtering";
-			this.nsLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.wrapVCombo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+			this.wrapVCombo.ForeColor = System.Drawing.Color.White;
+			this.wrapVCombo.Items = "";
+			this.wrapVCombo.Location = new System.Drawing.Point(145, 60);
+			this.wrapVCombo.Name = "wrapVCombo";
+			this.wrapVCombo.SelectedIndex = 0;
+			this.wrapVCombo.Size = new System.Drawing.Size(200, 21);
+			this.wrapVCombo.TabIndex = 4;
 			// 
 			// nsLabel2
 			// 
@@ -142,45 +130,43 @@
 			// wrapUCombo
 			// 
 			this.wrapUCombo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-			this.wrapUCombo.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.wrapUCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.wrapUCombo.ForeColor = System.Drawing.Color.White;
-			this.wrapUCombo.FormattingEnabled = true;
-			this.wrapUCombo.Items.AddRange(new object[] {
-            "Clamp to border",
-            "Repeat",
-            "Mirrored repeat"});
+			this.wrapUCombo.Items = "";
 			this.wrapUCombo.Location = new System.Drawing.Point(145, 33);
 			this.wrapUCombo.Name = "wrapUCombo";
+			this.wrapUCombo.SelectedIndex = 0;
 			this.wrapUCombo.Size = new System.Drawing.Size(200, 21);
 			this.wrapUCombo.TabIndex = 2;
 			// 
-			// nsLabel3
+			// nsLabel1
 			// 
-			this.nsLabel3.Font = new System.Drawing.Font("Tahoma", 8.25F);
-			this.nsLabel3.ForeColor = System.Drawing.Color.White;
-			this.nsLabel3.Location = new System.Drawing.Point(6, 60);
-			this.nsLabel3.Name = "nsLabel3";
-			this.nsLabel3.Size = new System.Drawing.Size(133, 21);
-			this.nsLabel3.TabIndex = 5;
-			this.nsLabel3.Text = "Vertical wrapping";
-			this.nsLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.nsLabel1.Font = new System.Drawing.Font("Tahoma", 8.25F);
+			this.nsLabel1.ForeColor = System.Drawing.Color.White;
+			this.nsLabel1.Location = new System.Drawing.Point(6, 6);
+			this.nsLabel1.Name = "nsLabel1";
+			this.nsLabel1.Size = new System.Drawing.Size(133, 21);
+			this.nsLabel1.TabIndex = 1;
+			this.nsLabel1.Text = "Filtering";
+			this.nsLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// wrapVCombo
+			// filteringCombo
 			// 
-			this.wrapVCombo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-			this.wrapVCombo.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.wrapVCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.wrapVCombo.ForeColor = System.Drawing.Color.White;
-			this.wrapVCombo.FormattingEnabled = true;
-			this.wrapVCombo.Items.AddRange(new object[] {
-            "Clamp to border",
-            "Repeat",
-            "Mirrored repeat"});
-			this.wrapVCombo.Location = new System.Drawing.Point(145, 60);
-			this.wrapVCombo.Name = "wrapVCombo";
-			this.wrapVCombo.Size = new System.Drawing.Size(200, 21);
-			this.wrapVCombo.TabIndex = 4;
+			this.filteringCombo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+			this.filteringCombo.ForeColor = System.Drawing.Color.White;
+			this.filteringCombo.Items = "";
+			this.filteringCombo.Location = new System.Drawing.Point(145, 6);
+			this.filteringCombo.Name = "filteringCombo";
+			this.filteringCombo.SelectedIndex = 0;
+			this.filteringCombo.Size = new System.Drawing.Size(200, 21);
+			this.filteringCombo.TabIndex = 0;
+			// 
+			// utilPanel
+			// 
+			this.utilPanel.Dock = System.Windows.Forms.DockStyle.Top;
+			this.utilPanel.Location = new System.Drawing.Point(0, 0);
+			this.utilPanel.Name = "utilPanel";
+			this.utilPanel.Size = new System.Drawing.Size(719, 25);
+			this.utilPanel.TabIndex = 7;
 			// 
 			// ImageForm
 			// 

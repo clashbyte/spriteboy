@@ -35,7 +35,8 @@ namespace SpriteBoy.Forms.Common {
 			this.projectActPanel = new System.Windows.Forms.Panel();
 			this.projectAdd = new SpriteBoy.Controls.NSIconicButton();
 			this.projectRemove = new SpriteBoy.Controls.NSIconicButton();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.projectFileInfoPanel = new System.Windows.Forms.Panel();
+			this.projectFileInfo = new SpriteBoy.Controls.NSFileInfo();
 			this.frameTimer = new System.Windows.Forms.Timer(this.components);
 			this.nsMenuStrip1 = new SpriteBoy.Controls.NSMenuStrip();
 			this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +46,7 @@ namespace SpriteBoy.Forms.Common {
 			this.workSplit.SuspendLayout();
 			this.projectDirPanel.SuspendLayout();
 			this.projectActPanel.SuspendLayout();
+			this.projectFileInfoPanel.SuspendLayout();
 			this.nsMenuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -65,7 +67,7 @@ namespace SpriteBoy.Forms.Common {
 			this.workSplit.Panel2.Controls.Add(this.projectInspector);
 			this.workSplit.Panel2.Controls.Add(this.projectDirPanel);
 			this.workSplit.Panel2.Controls.Add(this.projectActPanel);
-			this.workSplit.Panel2.Controls.Add(this.panel1);
+			this.workSplit.Panel2.Controls.Add(this.projectFileInfoPanel);
 			this.workSplit.TabStop = false;
 			// 
 			// projectTabs
@@ -84,6 +86,7 @@ namespace SpriteBoy.Forms.Common {
 			this.projectInspector.Name = "projectInspector";
 			this.projectInspector.Offset = 0;
 			this.projectInspector.SelectedEntry = null;
+			this.projectInspector.SelectionChanged += new SpriteBoy.Controls.NSDirectoryInspector.SelectionChangedEventHandler(this.projectInspector_SelectionChanged);
 			this.projectInspector.MouseClick += new System.Windows.Forms.MouseEventHandler(this.projectInspector_MouseClick);
 			this.projectInspector.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.projectInspector_MouseDoubleClick);
 			this.projectInspector.MouseDown += new System.Windows.Forms.MouseEventHandler(this.projectInspector_MouseDown);
@@ -158,10 +161,17 @@ namespace SpriteBoy.Forms.Common {
 			this.projectRemove.Name = "projectRemove";
 			this.projectRemove.Click += new System.EventHandler(this.projectRemove_Click);
 			// 
-			// panel1
+			// projectFileInfoPanel
 			// 
-			resources.ApplyResources(this.panel1, "panel1");
-			this.panel1.Name = "panel1";
+			this.projectFileInfoPanel.Controls.Add(this.projectFileInfo);
+			resources.ApplyResources(this.projectFileInfoPanel, "projectFileInfoPanel");
+			this.projectFileInfoPanel.Name = "projectFileInfoPanel";
+			// 
+			// projectFileInfo
+			// 
+			resources.ApplyResources(this.projectFileInfo, "projectFileInfo");
+			this.projectFileInfo.File = null;
+			this.projectFileInfo.Name = "projectFileInfo";
 			// 
 			// frameTimer
 			// 
@@ -199,6 +209,7 @@ namespace SpriteBoy.Forms.Common {
 			this.workSplit.ResumeLayout(false);
 			this.projectDirPanel.ResumeLayout(false);
 			this.projectActPanel.ResumeLayout(false);
+			this.projectFileInfoPanel.ResumeLayout(false);
 			this.nsMenuStrip1.ResumeLayout(false);
 			this.nsMenuStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -215,12 +226,13 @@ namespace SpriteBoy.Forms.Common {
 		private NSTextBox projectDir;
 		private NSIconicButton projectDirUp;
 		private NSDirectoryInspector projectInspector;
-		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Panel projectFileInfoPanel;
 		private NSMenuStrip nsMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem;
 		private System.Windows.Forms.Timer frameTimer;
 		private NSIconicButton projectAdd;
 		private NSIconicButton projectRemove;
+		private NSFileInfo projectFileInfo;
 
 
 

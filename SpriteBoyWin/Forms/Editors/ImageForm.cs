@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpriteBoy.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,8 +14,17 @@ namespace SpriteBoy.Forms.Editors {
 	/// Редактор изображений
 	/// </summary>
 	public partial class ImageForm : BaseForm {
+
+		NSGraphicsCanvas canvas;
+
 		public ImageForm() {
 			InitializeComponent();
+			filteringCombo.Items = SharedStrings.TextureFiltering;
+			wrapUCombo.Items = SharedStrings.TextureWrapMode;
+			wrapVCombo.Items = SharedStrings.TextureWrapMode;
+			canvas = new NSGraphicsCanvas();
 		}
+
+
 	}
 }

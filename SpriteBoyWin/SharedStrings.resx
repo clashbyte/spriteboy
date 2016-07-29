@@ -142,4 +142,13 @@
   <data name="SkyFileVisualName" xml:space="preserve">
     <value>Skybox</value>
   </data>
+  <data name="TextureFiltering" xml:space="preserve">
+    <value>None (rough pixels)
+Bilinear (smooth)</value>
+  </data>
+  <data name="TextureWrapMode" xml:space="preserve">
+    <value>Clamp
+Repeat
+Mirrored repeat</value>
+  </data>
 </root>

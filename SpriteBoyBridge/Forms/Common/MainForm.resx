@@ -151,7 +151,7 @@
     <value>projectTabs</value>
   </data>
   <data name="&gt;&gt;projectTabs.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSProjectControl, SpriteBoyBridge, Version=1.0.6045.30416, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSProjectControl, SpriteBoyBridge, Version=1.0.6053.40325, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;projectTabs.Parent" xml:space="preserve">
     <value>workSplit.Panel1</value>
@@ -184,7 +184,7 @@
     <value>0, 54</value>
   </data>
   <data name="projectInspector.Size" type="System.Drawing.Size, System.Drawing">
-    <value>237, 400</value>
+    <value>237, 432</value>
   </data>
   <data name="projectInspector.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -196,7 +196,7 @@
     <value>projectInspector</value>
   </data>
   <data name="&gt;&gt;projectInspector.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSDirectoryInspector, SpriteBoyBridge, Version=1.0.6045.30416, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSDirectoryInspector, SpriteBoyBridge, Version=1.0.6053.40325, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;projectInspector.Parent" xml:space="preserve">
     <value>workSplit.Panel2</value>
@@ -220,7 +220,7 @@
     <value>projectDir</value>
   </data>
   <data name="&gt;&gt;projectDir.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSTextBox, SpriteBoyBridge, Version=1.0.6045.30416, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSTextBox, SpriteBoyBridge, Version=1.0.6053.40325, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;projectDir.Parent" xml:space="preserve">
     <value>projectDirPanel</value>
@@ -252,7 +252,7 @@
     <value>projectDirUp</value>
   </data>
   <data name="&gt;&gt;projectDirUp.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSIconicButton, SpriteBoyBridge, Version=1.0.6045.30416, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSIconicButton, SpriteBoyBridge, Version=1.0.6053.40325, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;projectDirUp.Parent" xml:space="preserve">
     <value>projectDirPanel</value>
@@ -313,7 +313,7 @@
     <value>projectAdd</value>
   </data>
   <data name="&gt;&gt;projectAdd.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSIconicButton, SpriteBoyBridge, Version=1.0.6045.30416, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSIconicButton, SpriteBoyBridge, Version=1.0.6053.40325, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;projectAdd.Parent" xml:space="preserve">
     <value>projectActPanel</value>
@@ -351,7 +351,7 @@
     <value>projectRemove</value>
   </data>
   <data name="&gt;&gt;projectRemove.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSIconicButton, SpriteBoyBridge, Version=1.0.6045.30416, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSIconicButton, SpriteBoyBridge, Version=1.0.6053.40325, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;projectRemove.Parent" xml:space="preserve">
     <value>projectActPanel</value>
@@ -383,28 +383,52 @@
   <data name="&gt;&gt;projectActPanel.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="panel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="projectFileInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="projectFileInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="projectFileInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>237, 90</value>
+  </data>
+  <data name="projectFileInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;projectFileInfo.Name" xml:space="preserve">
+    <value>projectFileInfo</value>
+  </data>
+  <data name="&gt;&gt;projectFileInfo.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSFileInfo, SpriteBoyBridge, Version=1.0.6053.40325, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;projectFileInfo.Parent" xml:space="preserve">
+    <value>projectFileInfoPanel</value>
+  </data>
+  <data name="&gt;&gt;projectFileInfo.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="projectFileInfoPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Bottom</value>
   </data>
-  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 454</value>
+  <data name="projectFileInfoPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 486</value>
   </data>
-  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>237, 122</value>
+  <data name="projectFileInfoPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>237, 90</value>
   </data>
-  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+  <data name="projectFileInfoPanel.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
-  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
-    <value>panel1</value>
+  <data name="&gt;&gt;projectFileInfoPanel.Name" xml:space="preserve">
+    <value>projectFileInfoPanel</value>
   </data>
-  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+  <data name="&gt;&gt;projectFileInfoPanel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;projectFileInfoPanel.Parent" xml:space="preserve">
     <value>workSplit.Panel2</value>
   </data>
-  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;projectFileInfoPanel.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
   <data name="&gt;&gt;workSplit.Panel2.Name" xml:space="preserve">
@@ -471,7 +495,7 @@
     <value>nsMenuStrip1</value>
   </data>
   <data name="&gt;&gt;nsMenuStrip1.Type" xml:space="preserve">
-    <value>SpriteBoy.Controls.NSMenuStrip, SpriteBoyBridge, Version=1.0.6045.30416, Culture=neutral, PublicKeyToken=null</value>
+    <value>SpriteBoy.Controls.NSMenuStrip, SpriteBoyBridge, Version=1.0.6053.40325, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;nsMenuStrip1.Parent" xml:space="preserve">
     <value>$this</value>

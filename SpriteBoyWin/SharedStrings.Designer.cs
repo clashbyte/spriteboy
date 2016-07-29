@@ -132,5 +132,26 @@ namespace SpriteBoy {
                 return ResourceManager.GetString("SkyFileVisualName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None (rough pixels)
+        ///Bilinear (smooth).
+        /// </summary>
+        internal static string TextureFiltering {
+            get {
+                return ResourceManager.GetString("TextureFiltering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clamp
+        ///Repeat
+        ///Mirrored repeat.
+        /// </summary>
+        internal static string TextureWrapMode {
+            get {
+                return ResourceManager.GetString("TextureWrapMode", resourceCulture);
+            }
+        }
     }
 }

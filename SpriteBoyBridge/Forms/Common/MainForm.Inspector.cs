@@ -14,7 +14,7 @@ namespace SpriteBoy.Forms.Common {
 	/// <summary>
 	/// Часть формы, отвечающая за работу с инспектором
 	/// </summary>
-	public partial class MainForm {
+	partial class MainForm {
 
 		/// <summary>
 		/// Копированная папка
@@ -53,6 +53,13 @@ namespace SpriteBoy.Forms.Common {
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Смена выбранного элемента инспектора
+		/// </summary>
+		private void projectInspector_SelectionChanged(object sender) {
+			projectFileInfo.File = projectInspector.SelectedEntry;
 		}
 
 		/// <summary>
@@ -348,6 +355,5 @@ namespace SpriteBoy.Forms.Common {
 
 			W.projectRemove.Enabled = false;
 		}
-
 	}
 }

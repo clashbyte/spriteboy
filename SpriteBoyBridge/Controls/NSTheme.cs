@@ -1414,14 +1414,80 @@ namespace SpriteBoy.Controls {
 
 	}
 
-	public class NSComboBox : ComboBox {
+	public class NSComboBox : Control {
+
+		/// <summary>
+		/// Выбранный элемент
+		/// </summary>
+		public int SelectedIndex {
+			get {
+				return selected;
+			}
+			set {
+				selected = value;
+				if (items!=null) {
+					if (selected<0) {
+						selected = 0;
+					}else if(selected >= items.Length){
+						selected = items.Length - 1;
+					}
+				} else {
+					selected = -1;
+				}
+				Invalidate();
+			}
+		}
+
+		/// <summary>
+		/// Строки комбобокса
+		/// </summary>
+		[EditorAttribute("System.ComponentModel.Design.MultilineStringEditor, System.Design", "System.Drawing.Design.UITypeEditor")]
+		public string Items {
+			get {
+				if (items!=null) {
+					return string.Join("\n", items);
+				}
+				return "";
+			}
+			set {
+				items = value.Replace("\r", "").Split('\n');
+
+				// Пересоздание контекстного меню
+				context.Items.Clear();
+				for (int i = 0; i < items.Length; i++) {
+					if (items[i].Length>0) {
+						context.Items.Add(items[i]);
+					}else{
+						context.Items.Add(new ToolStripSeparator());
+					}
+				}
+				if (selected < 0) {
+					selected = 0;
+				} else if (selected >= items.Length) {
+					selected = items.Length - 1;
+				}
+				Invalidate();
+			}
+		}
+
+		/// <summary>
+		/// Элементы списка
+		/// </summary>
+		string[] items;
+
+		/// <summary>
+		/// Выбранный пункт
+		/// </summary>
+		int selected;
+
+		/// <summary>
+		/// Контекстное меню
+		/// </summary>
+		NSContextMenu context;
 
 		public NSComboBox() {
 			SetStyle((ControlStyles)139286, true);
-			SetStyle(ControlStyles.Selectable, false);
-
-			DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			DropDownStyle = ComboBoxStyle.DropDownList;
+			SetStyle(ControlStyles.Selectable, false);		
 
 			BackColor = Color.FromArgb(50, 50, 50);
 			ForeColor = Color.White;
@@ -1433,6 +1499,9 @@ namespace SpriteBoy.Controls {
 
 			B1 = new SolidBrush(Color.FromArgb(65, 65, 65));
 			B2 = new SolidBrush(Color.FromArgb(55, 55, 55));
+
+			context = new NSContextMenu();
+			context.ItemClicked += context_ItemClicked;
 		}
 
 		private GraphicsPath GP1;
@@ -1469,11 +1538,13 @@ namespace SpriteBoy.Controls {
 			G.DrawPath(P1, GP1);
 			G.DrawPath(P4, GP2);
 
-			SZ1 = G.MeasureString(Text, Font);
-			PT1 = new PointF(5, Height / 2 - SZ1.Height / 2);
-
-			G.DrawString(Text, Font, Brushes.Black, PT1.X + 1, PT1.Y + 1);
-			G.DrawString(Text, Font, Brushes.White, PT1);
+			if (selected!=-1 && items != null) {
+				SZ1 = G.MeasureString(items[selected], Font);
+				PT1 = new PointF(5, Height / 2 - SZ1.Height / 2);
+				G.DrawString(items[selected], Font, Brushes.Black, PT1.X + 1, PT1.Y + 1);
+				G.DrawString(items[selected], Font, Brushes.White, PT1);
+			}
+			
 
 			G.DrawLine(P3, Width - 15, 10, Width - 11, 13);
 			G.DrawLine(P3, Width - 7, 10, Width - 11, 13);
@@ -1488,20 +1559,21 @@ namespace SpriteBoy.Controls {
 			G.DrawLine(P4, Width - 21, 1, Width - 21, Height - 2);
 		}
 
-		protected override void OnDrawItem(DrawItemEventArgs e) {
-			e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+		protected override void OnClick(EventArgs e) {
+			
 
-			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) {
-				e.Graphics.FillRectangle(B1, e.Bounds);
+			Point tp = PointToScreen(new Point(0, Height));
+			Screen scr = Screen.FromPoint(tp);
+			if (tp.Y+context.Height > scr.Bounds.Height) {
+				context.Show(this, Point.Empty, ToolStripDropDownDirection.AboveRight);
 			} else {
-				e.Graphics.FillRectangle(B2, e.Bounds);
-			}
-
-			if (!(e.Index == -1)) {
-				e.Graphics.DrawString(GetItemText(Items[e.Index]), e.Font, Brushes.White, e.Bounds);
+				context.Show(this, new Point(0, Height), ToolStripDropDownDirection.BelowRight);
 			}
 		}
 
+		void context_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+			SelectedIndex = context.Items.IndexOf(e.ClickedItem);
+		}
 	}
 
 	public class NSTabControl : TabControl {
@@ -2124,6 +2196,11 @@ namespace SpriteBoy.Controls {
 			}
 		}
 
+		protected override void OnMouseDown(MouseEventArgs e) {
+			Focus();
+			base.OnMouseDown(e);
+		}
+
 		protected override void OnMouseMove(MouseEventArgs e) {
 			if (!jumping || !LockMouse) {
 				prevPos = pos;
@@ -2602,7 +2679,10 @@ namespace SpriteBoy.Controls {
 
 	#endregion
 
-	public class NSDirectoryInspector : Panel {
+	public class NSDirectoryInspector : Control {
+
+		public event SelectionChangedEventHandler SelectionChanged;
+		public delegate void SelectionChangedEventHandler(object sender);
 
 		public NSDirectoryInspector() {
 			SetStyle((ControlStyles)139286, true);
@@ -2662,6 +2742,9 @@ namespace SpriteBoy.Controls {
 				selectedEntry = value;
 				if (selectedEntry!=null) {
 					ScrollIntoView();
+				}
+				if (SelectionChanged!=null) {
+					SelectionChanged(this);
 				}
 				Invalidate(); 
 			}
@@ -2871,6 +2954,9 @@ namespace SpriteBoy.Controls {
 				}
 			}
 			Invalidate();
+			if (SelectionChanged!=null) {
+				SelectionChanged(this);
+			}
 			base.OnMouseDown(e);
 		}
 
@@ -2974,12 +3060,8 @@ namespace SpriteBoy.Controls {
 		void Entries_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
 			if (!Entries.Contains(selectedEntry) && selectedEntry != null) {
 				selectedEntry = null;
-			}
-			if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove) {
-				if (ItemsStride>0) {
-					//int 
-				} else {
-					//offset = 0;
+				if (SelectionChanged != null) {
+					SelectionChanged(this);
 				}
 			}
 			CheckScroll();
@@ -2994,6 +3076,152 @@ namespace SpriteBoy.Controls {
 			public object Tag;
 		}
 
+	}
+
+	public class NSFileInfo : Control {
+
+		/// <summary>
+		/// Ссылка на файл
+		/// </summary>
+		public NSDirectoryInspector.Entry File {
+			get {
+				return file;
+			}
+			set {
+				file = value;
+				Invalidate();
+			}
+		}
+
+		/// <summary>
+		/// Скрытое поле файла
+		/// </summary>
+		NSDirectoryInspector.Entry file;
+
+		/// <summary>
+		/// Конструктор
+		/// </summary>
+		public NSFileInfo() {
+
+			SetStyle((ControlStyles)139286, true);
+			SetStyle(ControlStyles.Selectable, false);
+
+			DoubleBuffered = true;
+		}
+
+		/// <summary>
+		/// Отрисовка
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnPaint(PaintEventArgs e) {
+			Graphics G = e.Graphics;
+			G.Clear(Color.FromArgb(50, 50, 50));
+			G.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+			G.SmoothingMode = SmoothingMode.AntiAlias;
+
+			if (file!=null) {
+				int frameSize = Height - 6;
+				if (frameSize > Width / 3) {
+					frameSize = Width / 3;
+				}
+
+				GraphicsPath GP1 = ThemeModule.CreateRound(new Rectangle(3, 3, frameSize, frameSize), 7);
+				GraphicsPath GP2 = ThemeModule.CreateRound(new Rectangle(4, 4, frameSize - 2, frameSize - 2), 7);
+				Pen P1 = new Pen(Color.FromArgb(35, 35, 35));
+				Pen P2 = new Pen(Color.FromArgb(55, 55, 55));
+
+				PathGradientBrush PB1 = new PathGradientBrush(GP1);
+				PB1.CenterColor = Color.FromArgb(50, 50, 50);
+				PB1.SurroundColors = new Color[] { Color.FromArgb(45, 45, 45) };
+				PB1.FocusScales = new PointF(0.7f, 0.7f);
+
+
+				G.FillPath(PB1, GP1);
+				G.DrawPath(P2, GP1);
+				G.DrawPath(P1, GP2);
+
+				Rectangle rc = new Rectangle(3, 3, frameSize, frameSize);
+				rc.X += 8;
+				rc.Y += 8;
+				rc.Width -= 16;
+				rc.Height -= 16;
+				if (file != null) {
+					if (file.IsDirectory) {
+						Preview.FolderIcon.LargeIcon.Draw(G, rc);
+					} else {
+						file.Icon.LargeIcon.Draw(G, rc);
+					}
+				}
+
+				string[] lines = new string[3];
+				lines[0] = file.Name;
+				if (file.IsDirectory) {
+					lines[1] = ControlStrings.FileInfoFolder;
+					lines[2] = ControlStrings.FileInfoFolderFiles.Replace("%COUNT%", (file.Tag as Project.Dir).Entries.Length.ToString());
+				} else {
+					Project.Entry en = (file.Tag as Project.Entry);
+					string ext = System.IO.Path.GetExtension(en.Name).ToLower();
+					lines[1] = ControlStrings.FileInfoUnknown.Replace("%EXT%", ext.ToUpper());
+					if (Editor.Extensions.ContainsKey(ext)) {
+						lines[1] = Editor.Extensions[ext].Description;
+					}
+					lines[2] = CalculateFileSize(en.FullPath);
+
+
+				}
+
+
+
+				int textWidth = Width - frameSize - 10;
+				int textX = Width - textWidth;
+				int textY = 8;
+
+				for (int i = 0; i < lines.Length; i++) {
+					SizeF sz = G.MeasureString(lines[i], Font, textWidth);
+					G.DrawString(lines[i], Font, Brushes.Black, new RectangleF(textX + 1, textY + 1, sz.Width, sz.Height));
+					G.DrawString(lines[i], Font, i == 0 ? Brushes.White : Brushes.LightGray, new RectangleF(textX, textY, sz.Width, sz.Height));
+					textY += (int)sz.Height + 3;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Удаление объекта
+		/// </summary>
+		/// <param name="disposing"></param>
+		protected override void Dispose(bool disposing) {
+			base.Dispose(disposing);
+			Preview.PreviewsReady -= Preview_PreviewsReady;
+		}
+
+		/// <summary>
+		/// Событие загрузки превью
+		/// </summary>
+		/// <param name="e"></param>
+		void Preview_PreviewsReady(Events.Data.PreviewReadyEventArgs e) {
+			if (file != null) {
+				foreach (Preview p in e.ReadyPreviews) {
+					if (p == file.Icon) {
+						Invalidate();
+						break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Строка с размером файла
+		/// </summary>
+		/// <returns>Размер файла в виде строки</returns>
+		string CalculateFileSize(string path) {
+			string[] sizes = { "b", "kb", "mb", "gb", "pb" };
+			double len = new System.IO.FileInfo(path).Length;
+			int order = 0;
+			while (len >= 1024 && ++order < sizes.Length) {
+				len = len / 1024;
+			}
+			return String.Format("{0:0.##} {1}", len, sizes[order]);
+		}
 	}
 
 	public class NSMenuStrip : MenuStrip {
@@ -5331,19 +5559,6 @@ namespace SpriteBoy.Controls {
 			}
 			base.OnRenderArrow(e);
 		}
-
-		protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e) {
-			ToolStripButton t = e.Item as ToolStripButton;
-			e.Graphics.FillRectangle(Brushes.Red, e.Item.ContentRectangle);
-			base.OnRenderDropDownButtonBackground(e);
-		}
-
-		protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e) {
-			ToolStripButton t = e.Item as ToolStripButton;
-			e.Graphics.FillRectangle(Brushes.Red, e.Item.ContentRectangle);
-
-			//base.OnRenderButtonBackground(e);
-		}
 	}
 
 	public class NSColorTable : ProfessionalColorTable {
@@ -5595,7 +5810,7 @@ namespace SpriteBoy.Controls {
 		}
 
 		private int[] ColumnOffsets;
-		private void InvalidateColumns() {
+		public void InvalidateColumns() {
 			int Width = 3;
 			ColumnOffsets = new int[_Columns.Count];
 

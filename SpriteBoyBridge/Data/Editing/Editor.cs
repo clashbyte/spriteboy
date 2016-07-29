@@ -20,6 +20,11 @@ namespace SpriteBoy.Data.Editing {
 	public abstract class Editor {
 
 		/// <summary>
+		/// Описание расширений
+		/// </summary>
+		public static Dictionary<string, ExtensionInfo> Extensions;
+
+		/// <summary>
 		/// Ассоциации типов файлов с редакторами
 		/// </summary>
 		static Dictionary<string, Type> Associations;
@@ -41,6 +46,15 @@ namespace SpriteBoy.Data.Editing {
 		/// Типы файлов, создаваемых этим типом редактора
 		/// </summary>
 		public virtual FileCreator[] CreatingFiles {
+			get {
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Описание расширений файлов
+		/// </summary>
+		public virtual ExtensionInfo[] FileExtensionsInfo {
 			get {
 				return null;
 			}
@@ -89,22 +103,22 @@ namespace SpriteBoy.Data.Editing {
 		/// <summary>
 		/// Заголовок окна (скрытый)
 		/// </summary>
-		string title;
+		string title = "";
 
 		/// <summary>
 		/// Сохранён ли проект (скрыто)
 		/// </summary>
-		bool saved;
+		bool saved = true;
 
 		/// <summary>
 		/// Закрыт ли редактор
 		/// </summary>
-		protected bool closed;
+		protected bool closed = false;
 
 		/// <summary>
 		/// Сохраняется ли файл
 		/// </summary>
-		protected bool saving;
+		protected bool saving = false;
 
 		/// <summary>
 		/// Создание из файла
@@ -234,6 +248,7 @@ namespace SpriteBoy.Data.Editing {
 		public static void Register() {
 			Associations = new Dictionary<string, Type>();
 			ContentForms = new Dictionary<Type, Type>();
+			Extensions = new Dictionary<string, ExtensionInfo>();
 			List<FileCreator> creators = new List<FileCreator>();
 
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
@@ -261,6 +276,17 @@ namespace SpriteBoy.Data.Editing {
 						FileCreator[] fc = (FileCreator[])type.GetProperty("CreatingFiles").GetValue(obj, null);
 						if (fc != null && fc.Length > 0) {
 							creators.AddRange(fc);
+						}
+
+						// Поиск описания расширений
+						ExtensionInfo[] exinf = (ExtensionInfo[])type.GetProperty("FileExtensionsInfo").GetValue(obj, null);
+						if (exinf != null && exinf.Length > 0) {
+							foreach (ExtensionInfo ex in exinf) {
+								string exs = ex.Extension.ToLower();
+								if (Extensions.ContainsKey(exs)) {
+									Extensions.Add(exs, ex);
+								}
+							}
 						}
 					}
 				}
@@ -298,6 +324,28 @@ namespace SpriteBoy.Data.Editing {
 			/// Номер для сортировки
 			/// </summary>
 			public int Order {
+				get;
+				set;
+			}
+		}
+
+		/// <summary>
+		/// Описание расширения
+		/// </summary>
+		public class ExtensionInfo {
+
+			/// <summary>
+			/// Расширение
+			/// </summary>
+			public string Extension {
+				get;
+				set;
+			}
+
+			/// <summary>
+			/// Описание расширения
+			/// </summary>
+			public string Description {
 				get;
 				set;
 			}

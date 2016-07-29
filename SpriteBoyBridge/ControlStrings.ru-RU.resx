@@ -162,6 +162,15 @@
   <data name="EditorNotFoundTitle" xml:space="preserve">
     <value>Невозможно открыть файл</value>
   </data>
+  <data name="FileInfoFolder" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="FileInfoFolderFiles" xml:space="preserve">
+    <value>Файлов: %COUNT%</value>
+  </data>
+  <data name="FileInfoUnknown" xml:space="preserve">
+    <value>Файл (%EXT%)</value>
+  </data>
   <data name="FileNameExists" xml:space="preserve">
     <value>Указанное имя уже существует!</value>
   </data>

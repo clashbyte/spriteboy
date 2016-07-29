@@ -47,7 +47,9 @@
   <ItemGroup>
     <Compile Include="Data\DataExtensions.cs" />
     <Compile Include="Data\Rendering\ShaderSystem.cs" />
+    <Compile Include="Engine\Components\Rendering\MeshComponent.cs" />
     <Compile Include="Engine\Components\Rendering\WireCubeComponent.cs" />
+    <Compile Include="Engine\Components\Rendering\WireGridComponent.cs" />
     <Compile Include="Engine\Data\Component.cs" />
     <Compile Include="Engine\Data\IRenderable.cs" />
     <Compile Include="Data\Types\Vec2.cs" />

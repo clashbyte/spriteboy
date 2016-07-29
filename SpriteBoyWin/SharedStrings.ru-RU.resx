@@ -142,4 +142,13 @@
   <data name="SkyFileVisualName" xml:space="preserve">
     <value>Объект неба</value>
   </data>
+  <data name="TextureFiltering" xml:space="preserve">
+    <value>Нет (грубые пиксели)
+Билинейная (сглаженно)</value>
+  </data>
+  <data name="TextureWrapMode" xml:space="preserve">
+    <value>Не повторять
+Повторять
+Повторять с зеркалированием</value>
+  </data>
 </root>

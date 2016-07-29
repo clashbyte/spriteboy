@@ -8,7 +8,7 @@ using System.Text;
 
 namespace SpriteBoy.Components.Editors {
 
-	[FileEditor(typeof(ModelConverterForm), ".md3", ".md2", ".x", ".3ds", ".s3d")]
+	[FileEditor(typeof(ModelConverterForm), ".md3", ".md2", ".x", ".3ds")]
 	public class ModelConverter : Editor {
 
 		protected override void Load() {
