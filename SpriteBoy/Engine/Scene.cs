@@ -56,6 +56,8 @@ namespace SpriteBoy.Engine {
 			// Параметры
 			GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 			GL.Enable(EnableCap.Texture2D);
+			GL.Enable(EnableCap.CullFace);
+			GL.CullFace(CullFaceMode.Back);
 
 			// Отрисовка камеры
 			if (Camera!=null) {

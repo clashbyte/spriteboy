@@ -1581,6 +1581,7 @@ namespace SpriteBoy.Controls {
 		public NSTabControl() {
 			SetStyle((ControlStyles)139286, true);
 			SetStyle(ControlStyles.Selectable, false);
+			base.DoubleBuffered = true;
 
 			SizeMode = TabSizeMode.Fixed;
 			Alignment = TabAlignment.Left;
@@ -1723,6 +1724,7 @@ namespace SpriteBoy.Controls {
 		public NSProjectControl() {
 			SetStyle((ControlStyles)139286, true);
 			SetStyle(ControlStyles.Selectable, false);
+			base.DoubleBuffered = true;
 
 			SizeMode = TabSizeMode.Fixed;
 			Alignment = TabAlignment.Top;
@@ -5688,7 +5690,6 @@ namespace SpriteBoy.Controls {
 			get { return _Columns.ToArray(); }
 			set {
 				_Columns = new List<NSListViewColumnHeader>(value);
-				InvalidateColumns();
 			}
 		}
 
@@ -5767,6 +5768,7 @@ namespace SpriteBoy.Controls {
 		public NSListView() {
 			SetStyle((ControlStyles)139286, true);
 			SetStyle(ControlStyles.Selectable, true);
+			DoubleBuffered = true;
 
 			P1 = new Pen(Color.FromArgb(55, 55, 55));
 			P2 = new Pen(Color.FromArgb(35, 35, 35));
@@ -5805,19 +5807,6 @@ namespace SpriteBoy.Controls {
 		private void InvalidateLayout() {
 			VS.Location = new Point(Width - VS.Width - 1, 1);
 			VS.Size = new Size(18, Height - 2);
-
-			Invalidate();
-		}
-
-		private int[] ColumnOffsets;
-		public void InvalidateColumns() {
-			int Width = 3;
-			ColumnOffsets = new int[_Columns.Count];
-
-			for (int I = 0; I <= _Columns.Count - 1; I++) {
-				ColumnOffsets[I] = Width;
-				Width += Columns[I].Width;
-			}
 
 			Invalidate();
 		}
@@ -5874,6 +5863,15 @@ namespace SpriteBoy.Controls {
 			G.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
 			G.Clear(BackColor);
+
+			
+			int[] ColumnOffsets;
+			int colw = 3;
+			ColumnOffsets = new int[_Columns.Count];
+			for (int I = 0; I <= _Columns.Count - 1; I++) {
+				ColumnOffsets[I] = colw;
+				colw += Columns[I].Width;
+			}
 
 			int X = 0;
 			int Y = 0;

@@ -15,6 +15,11 @@ namespace SpriteBoy.Engine {
 	public class Camera : Entity {
 
 		/// <summary>
+		/// Размер ортогональной проекции
+		/// </summary>
+		public const float ORTHO_SIZE = 10f;
+
+		/// <summary>
 		/// Матрица проекции
 		/// </summary>
 		Matrix4 proj = Matrix4.Identity;
@@ -34,15 +39,21 @@ namespace SpriteBoy.Engine {
 		/// </summary>
 		Vector2 range = new Vector2(0.03f, 300f);
 
+
 		/// <summary>
 		/// Режим проекции камеры
 		/// </summary>
-		CameraProjectionMode mode = CameraProjectionMode.Perspective;
+		ProjectionMode mode = ProjectionMode.Perspective;
 
 		/// <summary>
 		/// Отношение ширины экрана к высоте
 		/// </summary>
 		float aspect = 1f;
+
+		/// <summary>
+		/// Увеличение камеры
+		/// </summary>
+		float zoom = 1f;
 
 		/// <summary>
 		/// Флаг, нужна ли матрица
@@ -76,9 +87,25 @@ namespace SpriteBoy.Engine {
 		}
 
 		/// <summary>
+		/// Увеличение камеры
+		/// </summary>
+		public float Zoom {
+			get {
+				return zoom;
+			}
+			set {
+				zoom = value;
+				if (zoom<0.00001f) {
+					zoom = 0.00001f;
+				}
+				needMatrix = true;
+			}
+		}
+
+		/// <summary>
 		/// Режим проекции камеры
 		/// </summary>
-		public CameraProjectionMode ProjectionMode {
+		public ProjectionMode Projection {
 			get {
 				return mode;
 			}
@@ -127,10 +154,16 @@ namespace SpriteBoy.Engine {
 		/// </summary>
 		void RebuildProjection() {
 			aspect = size.X / size.Y;
-			if (mode == CameraProjectionMode.Perspective) {
-				proj = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, aspect, range.X, range.Y);
-			}else{
-				proj = Matrix4.CreatePerspectiveOffCenter(0, size.X, size.Y, 0, range.X, range.Y);
+			switch (mode) {
+				case ProjectionMode.Ortho:
+					proj = Matrix4.CreateOrthographic(aspect * ORTHO_SIZE * (1f / zoom), ORTHO_SIZE * (1f / zoom), range.X, range.Y);
+					break;
+				case ProjectionMode.CanvasOrtho:
+					proj = Matrix4.CreateOrthographicOffCenter(0, size.X, size.Y, 0, range.X, range.Y);
+					break;
+				case ProjectionMode.Perspective:
+					proj = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 3f * (1f / zoom), aspect, range.X, range.Y);
+					break;
 			}
 		}
 
@@ -145,12 +178,17 @@ namespace SpriteBoy.Engine {
 		/// <summary>
 		/// Режимы проекции камеры
 		/// </summary>
-		public enum CameraProjectionMode {
+		public enum ProjectionMode {
 
 			/// <summary>
 			/// Ортогональная проекция
 			/// </summary>
 			Ortho,
+
+			/// <summary>
+			/// Ортогональная проекция с попиксельной точностью
+			/// </summary>
+			CanvasOrtho,
 
 			/// <summary>
 			/// Перспективная проекция

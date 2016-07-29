@@ -1,4 +1,5 @@
-﻿using SpriteBoy.Data;
+﻿using SpriteBoy.Controls;
+using SpriteBoy.Data;
 using SpriteBoy.Data.Editing;
 using SpriteBoy.Data.Editing.Graphics;
 using System;
@@ -17,6 +18,14 @@ namespace SpriteBoy.Forms.Editors {
 	/// Базовая форма для редактора
 	/// </summary>
 	public partial class BaseForm : Form {
+
+		/// <summary>
+		/// Холст для рисования
+		/// </summary>
+		public NSGraphicsCanvas Canvas {
+			get;
+			private set;
+		}
 
 		/// <summary>
 		/// Флаги для корректной отрисовки
@@ -92,6 +101,17 @@ namespace SpriteBoy.Forms.Editors {
 			if (icon != null) {
 				icon.Draw(g, new Rectangle(x, y, 16, 16), 1);
 			}
+		}
+
+		/// <summary>
+		/// Создание холста
+		/// </summary>
+		public void CreateCanvas() {
+			Canvas = new NSGraphicsCanvas();
+			Canvas.Dock = DockStyle.Fill;
+			Canvas.Visible = true;
+			Controls.Add(Canvas);
+			Canvas.BringToFront();
 		}
 	}
 }

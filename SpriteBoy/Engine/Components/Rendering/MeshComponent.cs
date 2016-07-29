@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
+using System.Drawing;
 
 namespace SpriteBoy.Engine.Components.Rendering {
 
@@ -113,19 +114,38 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// Текстура меша
 		/// </summary>
 		public Texture Texture {
-			get {
-				return tex;
-			}
-			set {
-				tex = value;
-			}
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Диффузный цвет
+		/// </summary>
+		public Color Diffuse {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Включен ли альфаканал
+		/// </summary>
+		public bool AlphaBlend {
+			get;
+			set;
 		}
 
 		// Скрытые переменные
 		float[] verts;
 		float[] uv;
 		ushort[] indices;
-		Texture tex;
+
+		/// <summary>
+		/// Статический меш
+		/// </summary>
+		public MeshComponent() {
+			Diffuse = Color.White;
+			AlphaBlend = false;
+		}
 
 		/// <summary>
 		/// Отрисовка меша
@@ -136,23 +156,41 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			if (verts != null && indices !=null) {
 				if (verts.Length>0 && indices.Length>0) {
 
-					GL.Enable(EnableCap.CullFace);
-					GL.CullFace(CullFaceMode.Back);
+					// Установка цвета
+					GL.Color3(Diffuse);
 
-					GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+					// Если есть альфасмешивание
+					if (AlphaBlend) {
+						GL.Enable(EnableCap.Blend);
+						GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+						GL.DepthMask(false);
+					}
 
-					GL.Color3(System.Drawing.Color.White);
+					// Загрузка вершин
 					GL.EnableClientState(ArrayCap.VertexArray);
 					GL.VertexPointer(3, VertexPointerType.Float, 0, verts);
 
+					// Загрузка текстурных координат
+					if (Texture!=null && uv!=null) {
+						GL.EnableClientState(ArrayCap.TextureCoordArray);
+						GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, uv);
+						Texture.Bind();
+					} else {
+						GL.BindTexture(TextureTarget.Texture2D, 0);
+					}
+
+					// Отрисовка элементов
 					GL.DrawElements(BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedShort, indices);
 
-					GL.DisableClientState(ArrayCap.IndexArray);
+					// Выключение состояний
+					GL.DisableClientState(ArrayCap.TextureCoordArray);
+					GL.DisableClientState(ArrayCap.VertexArray);
 
-					GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-
-
-					GL.Disable(EnableCap.CullFace);
+					// Отключение смешивания
+					if (AlphaBlend) {
+						GL.Disable(EnableCap.Blend);
+						GL.DepthMask(true);
+					}
 				}
 			}
 

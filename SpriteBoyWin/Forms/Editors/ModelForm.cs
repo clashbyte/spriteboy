@@ -17,11 +17,6 @@ namespace SpriteBoy.Forms.Editors {
 	public partial class ModelForm : BaseForm {
 
 		/// <summary>
-		/// Холст для рисования
-		/// </summary>
-		public NSGraphicsCanvas canvas;
-
-		/// <summary>
 		/// Поворот мышью
 		/// </summary>
 		bool mouseLook = false;
@@ -36,25 +31,22 @@ namespace SpriteBoy.Forms.Editors {
 		/// </summary>
 		public ModelForm() {
 			InitializeComponent();
-			canvas = new NSGraphicsCanvas();
-			canvas.Dock = DockStyle.Fill;
-			canvas.Visible = true;
-			canvas.MouseDown += canvas_MouseDown;
-			canvas.MouseUp += canvas_MouseUp;
-			canvas.MouseMove += canvas_MouseMove;
-			canvas.MouseWheel += canvas_MouseWheel;
-			Controls.Add(canvas);
-			canvas.BringToFront();
+
+			CreateCanvas();
+			Canvas.MouseDown += Canvas_MouseDown;
+			Canvas.MouseUp += Canvas_MouseUp;
+			Canvas.MouseMove += Canvas_MouseMove;
+			Canvas.MouseWheel += Canvas_MouseWheel;
 		}
 
 		/// <summary>
 		/// Мышь нажата
 		/// </summary>
-		void canvas_MouseDown(object sender, MouseEventArgs e) {
+		void Canvas_MouseDown(object sender, MouseEventArgs e) {
 			if (!mouseLook) {
 				mouseLook = true;
 				mouseButton = e.Button;
-				canvas.LockMouse = true;
+				Canvas.LockMouse = true;
 				Cursor.Hide();
 			}
 		}
@@ -62,10 +54,10 @@ namespace SpriteBoy.Forms.Editors {
 		/// <summary>
 		/// Мышь отпущена
 		/// </summary>
-		private void canvas_MouseUp(object sender, MouseEventArgs e) {
+		private void Canvas_MouseUp(object sender, MouseEventArgs e) {
 			if (mouseLook && mouseButton == e.Button) {
 				mouseLook = false;
-				canvas.LockMouse = false;
+				Canvas.LockMouse = false;
 				Cursor.Show();
 			}
 		}
@@ -75,9 +67,9 @@ namespace SpriteBoy.Forms.Editors {
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void canvas_MouseMove(object sender, MouseEventArgs e) {
+		void Canvas_MouseMove(object sender, MouseEventArgs e) {
 			if (mouseLook) {
-				PointF spd = canvas.MouseSpeed;
+				PointF spd = Canvas.MouseSpeed;
 				spd.X *= 0.7f;
 				spd.Y *= 0.7f;
 				(FileEditor as ModelEditor).RotateCamera(spd);
@@ -87,21 +79,21 @@ namespace SpriteBoy.Forms.Editors {
 		/// <summary>
 		/// Колесо мыши
 		/// </summary>
-		void canvas_MouseWheel(object sender, MouseEventArgs e) {
+		void Canvas_MouseWheel(object sender, MouseEventArgs e) {
 			(FileEditor as ModelEditor).ZoomCamera(e.Delta/120);
 		}
 
 		protected override void OnSizeChanged(EventArgs e) {
 			base.OnSizeChanged(e);
-			if (canvas!=null) {
-				(FileEditor as ModelEditor).ViewportChanded(canvas.ClientSize);
+			if (Canvas!=null) {
+				(FileEditor as ModelEditor).ViewportChanded(Canvas.ClientSize);
 			}
 			if (surfacesList != null) {
 				surfacesList.Columns[1].Width = surfacesList.Width - 160;
 				if (surfacesList.Columns[1].Width<1) {
 					surfacesList.Columns[1].Width = 1;
 				}
-				surfacesList.InvalidateColumns();
+				surfacesList.Invalidate();
 			}
 		}
 

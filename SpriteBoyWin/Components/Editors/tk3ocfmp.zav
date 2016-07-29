@@ -1,0 +1,86 @@
+﻿using SpriteBoy.Data.Attributes;
+using SpriteBoy.Data.Editing;
+using SpriteBoy.Data.Types;
+using SpriteBoy.Engine;
+using SpriteBoy.Forms.Editors;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace SpriteBoy.Components.Editors {
+
+	/// <summary>
+	/// Редактор для файлов изображений
+	/// </summary>
+	[FileEditor(typeof(ImageForm), ".png", ".jpg", ".jpeg", ".gif", ".bmp")]
+	public class ImageEditor : Editor {
+
+		/// <summary>
+		/// Сцена для рендера
+		/// </summary>
+		Scene scene;
+
+		/// <summary>
+		/// Ортогональная камера
+		/// </summary>
+		Camera cam;
+
+		/// <summary>
+		/// Сетка
+		/// </summary>
+		Entity grid;
+
+
+		/// <summary>
+		/// Загрузка изображения
+		/// </summary>
+		protected override void Load() {
+			UpdateTitle();
+			if (scene == null) {
+
+				// Создание сцены и камеры
+				scene = new Scene();
+
+				cam = new Camera();
+				cam.Range = new Vec2(-5, 10);
+				cam.Zoom = 1f;
+				cam.ProjectionMode = Camera.CameraProjectionMode.Ortho;
+
+			}
+		}
+
+		/// <summary>
+		/// Сохранение изображения
+		/// </summary>
+		public override void Save() {
+			
+		}
+
+		/// <summary>
+		/// Обновление редактора
+		/// </summary>
+		public override void Update() {
+			
+		}
+
+		/// <summary>
+		/// Рендер изображения
+		/// </summary>
+		public override void Render() {
+			
+		}
+
+		/// <summary>
+		/// Событие файла
+		/// </summary>
+		/// <param name="en"></param>
+		/// <param name="ev"></param>
+		public override void ProjectEntryEvent(Project.Entry en, Project.FileEvent ev) {
+			base.ProjectEntryEvent(en, ev);
+			if (closed) {
+				return;
+			}
+		}
+	}
+}

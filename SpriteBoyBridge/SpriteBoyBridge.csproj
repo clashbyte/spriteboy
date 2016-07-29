@@ -66,6 +66,7 @@
     <Compile Include="Data\Editing\Graphics\PreviewGenerator.cs" />
     <Compile Include="Data\Editing\Project.cs" />
     <Compile Include="Data\Editing\Graphics\ShadowImage.cs" />
+    <Compile Include="Files\MetaFile.cs" />
     <Compile Include="Files\ProjectFileDriver.cs" />
     <Compile Include="Events\Data\PreviewReadyEvent.cs" />
     <Compile Include="Events\Forms\EditorCloseEventArgs.cs" />

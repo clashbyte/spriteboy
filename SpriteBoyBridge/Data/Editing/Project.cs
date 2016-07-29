@@ -169,8 +169,16 @@ namespace SpriteBoy.Data.Editing {
 			}
 			if (newName != e.Name) {
 				string oldfull = e.FullPath;
+				byte[] meta = null;
+				if (newName.ToLower() != e.Name.ToLower()) {
+					meta = e.Meta;
+					e.Meta = null;
+				}
 				e.Name = newName;
 				e.Icon = Preview.Get(e.FullPath);
+				if (meta!=null) {
+					e.Meta = meta;
+				}
 				File.Move(oldfull, e.FullPath);
 				MainForm.ProjectEntryEvent(e, FileEvent.Renamed);
 			}
@@ -219,6 +227,7 @@ namespace SpriteBoy.Data.Editing {
 			Entry e = new Entry();
 			e.Name = fileName + ext;
 			e.Parent = parent;
+			e.Meta = en.Meta;
 			e.Icon = Preview.Get(e.FullPath);
 			List<Entry> fl = parent.Entries.ToList();
 			fl.Add(e);
@@ -396,7 +405,7 @@ namespace SpriteBoy.Data.Editing {
 				if (pd!="") {
 					pd += "/";
 				}
-				Dir dr = RecursiveOpenDir(pd+Path.GetFileName(dn));
+				Dir dr = RecursiveOpenDir(pd + Path.GetFileName(dn));
 				dr.Parent = dir;
 				dirList.Add(dr);
 			}
@@ -410,7 +419,7 @@ namespace SpriteBoy.Data.Editing {
 			List<Entry> fileList = new List<Entry>();
 			foreach (string fn in fileNames) {
 				// Чтение файла
-				if (((File.GetAttributes(fn) & FileAttributes.Hidden) != FileAttributes.Hidden)) {
+				if (((File.GetAttributes(fn) & FileAttributes.Hidden) != FileAttributes.Hidden) && fn.ToLower() != MetaFile.META_FILE_NAME) {
 					Entry en = new Entry();
 					en.Name = Path.GetFileName(fn);
 					en.Parent = dir;
@@ -543,7 +552,7 @@ namespace SpriteBoy.Data.Editing {
 
 			// Проверка новых файлов
 			for (int i = 0; i < foundFiles.Length; i++) {
-				if (!foundFiles[i] && ((File.GetAttributes(incFiles[i]) & FileAttributes.Hidden) != FileAttributes.Hidden)) {
+				if (!foundFiles[i] && ((File.GetAttributes(incFiles[i]) & FileAttributes.Hidden) != FileAttributes.Hidden) && incFiles[i].ToLower() != MetaFile.META_FILE_NAME) {
 					Entry e = new Entry();
 					e.Name = incFiles[i];
 					e.Parent = dir;
@@ -639,6 +648,18 @@ namespace SpriteBoy.Data.Editing {
 			}
 
 			/// <summary>
+			/// Метаданные
+			/// </summary>
+			internal MetaFile Meta {
+				get {
+					if (meta==null) {
+						meta = new MetaFile(this);
+					}
+					return meta;
+				}
+			}
+
+			/// <summary>
 			/// Флаг что эта директория удалена
 			/// </summary>
 			public bool Deleted {
@@ -698,6 +719,10 @@ namespace SpriteBoy.Data.Editing {
 			/// </summary>
 			internal DateTime writeTime;
 
+			/// <summary>
+			/// Метаданные для папки
+			/// </summary>
+			private MetaFile meta;
 		}
 
 		/// <summary>
@@ -732,6 +757,23 @@ namespace SpriteBoy.Data.Editing {
 			public bool Deleted {
 				get;
 				internal set;
+			}
+
+			/// <summary>
+			/// Получение метаданных для файла
+			/// </summary>
+			public byte[] Meta {
+				get {
+					if (Parent!=null) {
+						return Parent.Meta[Name];
+					}
+					return null;
+				}
+				set {
+					if (Parent!=null) {
+						Parent.Meta[Name] = value;
+					}
+				}
 			}
 
 			/// <summary>

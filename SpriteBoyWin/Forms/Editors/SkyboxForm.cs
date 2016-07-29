@@ -21,11 +21,6 @@ namespace SpriteBoy.Forms.Editors {
 	public partial class SkyboxForm : BaseForm {
 
 		/// <summary>
-		/// Холст для рисования
-		/// </summary>
-		public NSGraphicsCanvas canvas;
-
-		/// <summary>
 		/// Поворот мышью
 		/// </summary>
 		bool mouseLook = false;
@@ -51,36 +46,32 @@ namespace SpriteBoy.Forms.Editors {
 		public SkyboxForm() {
 			InitializeComponent();
 
-			canvas = new NSGraphicsCanvas();
-			canvas.Dock = DockStyle.Fill;
-			canvas.Visible = true;
-			canvas.MouseDown += canvas_MouseDown;
-			canvas.MouseUp += canvas_MouseUp;
-			canvas.MouseMove += canvas_MouseMove;
-			Controls.Add(canvas);
-			canvas.BringToFront();
+			CreateCanvas();
+			Canvas.MouseDown += Canvas_MouseDown;
+			Canvas.MouseUp += Canvas_MouseUp;
+			Canvas.MouseMove += Canvas_MouseMove;
 		}
 
-		void canvas_MouseDown(object sender, MouseEventArgs e) {
+		void Canvas_MouseDown(object sender, MouseEventArgs e) {
 			if (!mouseLook) {
 				mouseLook = true;
 				mouseButton = e.Button;
-				canvas.LockMouse = true;
+				Canvas.LockMouse = true;
 				Cursor.Hide();
 			}
 		}
 
-		private void canvas_MouseUp(object sender, MouseEventArgs e) {
+		private void Canvas_MouseUp(object sender, MouseEventArgs e) {
 			if (mouseLook && mouseButton == e.Button) {
 				mouseLook = false;
-				canvas.LockMouse = false;
+				Canvas.LockMouse = false;
 				Cursor.Show();
 			}
 		}
 
-		void canvas_MouseMove(object sender, MouseEventArgs e) {
+		void Canvas_MouseMove(object sender, MouseEventArgs e) {
 			if (mouseLook) {
-				PointF spd = canvas.MouseSpeed;
+				PointF spd = Canvas.MouseSpeed;
 				spd.X *= 0.7f;
 				spd.Y *= 0.7f;
 				(FileEditor as SkyboxEditor).RotateCamera(spd);
@@ -88,7 +79,7 @@ namespace SpriteBoy.Forms.Editors {
 		}
 
 		private void SkyboxForm_Resize(object sender, EventArgs e) {
-			(FileEditor as SkyboxEditor).ViewportChanded(canvas.ClientSize);
+			(FileEditor as SkyboxEditor).ViewportChanded(Canvas.ClientSize);
 		}
 
 		/// <summary>

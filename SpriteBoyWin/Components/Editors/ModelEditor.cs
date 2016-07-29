@@ -134,9 +134,9 @@ namespace SpriteBoy.Components.Editors {
 		/// Рендер сцены
 		/// </summary>
 		public override void Render() {
-			(Form as ModelForm).canvas.MakeCurrent();
+			Form.Canvas.MakeCurrent();
 			scene.Render();
-			(Form as ModelForm).canvas.Swap();
+			Form.Canvas.Swap();
 		}
 
 		/// <summary>

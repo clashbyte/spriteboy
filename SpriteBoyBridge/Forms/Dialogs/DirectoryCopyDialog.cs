@@ -202,6 +202,7 @@ namespace SpriteBoy.Forms.Dialogs {
 					Project.Entry ce = new Project.Entry();
 					ce.Name = e.Name;
 					ce.Parent = d;
+					ce.Meta = e.Meta;
 					entries.Add(ce);
 
 					// Копирование файла

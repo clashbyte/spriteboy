@@ -177,6 +177,7 @@
 			this.Controls.Add(this.toolPanel);
 			this.Controls.Add(this.nsTabControl1);
 			this.Controls.Add(this.utilPanel);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Image)(resources.GetObject("$this.Icon")));
 			this.Name = "ImageForm";
 			this.Text = "Image";

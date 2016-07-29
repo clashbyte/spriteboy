@@ -200,9 +200,9 @@ namespace SpriteBoy.Components.Editors {
 		/// Рендер сцены
 		/// </summary>
 		public override void Render() {
-			(Form as SkyboxForm).canvas.MakeCurrent();
+			Form.Canvas.MakeCurrent();
 			scene.Render();
-			(Form as SkyboxForm).canvas.Swap();
+			Form.Canvas.Swap();
 		}
 
 		/// <summary>
