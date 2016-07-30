@@ -7,6 +7,7 @@ using SpriteBoy.Forms.Editors;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -86,18 +87,18 @@ namespace SpriteBoy.Components.Editors {
 
 			float mulX = 1f / (float)tex.Width;
 			float mulY = 1f / (float)tex.Height;
-			float mul = mulX < mulY ? mulX : mulY;
+			float mul = mulX > mulY ? mulX : mulY;
 			float halfX = (float)tex.Width * mul / 2f;
 			float halfY = (float)tex.Height * mul / 2f;
 
 			if (singleQuad == null) {
 				singleQuad = new Entity();
-				singleQuad.AddComponent(new MeshComponent() {
+				singleQuad.AddComponent(new StaticMeshComponent() {
 					AlphaBlend = true
 				});
 				scene.Entities.Add(singleQuad);
 			}
-			MeshComponent singleMesh = singleQuad.GetComponent<MeshComponent>();
+			StaticMeshComponent singleMesh = singleQuad.GetComponent<StaticMeshComponent>();
 			singleMesh.Vertices = new Vec3[]{
 				new Vec3(-halfX,  halfY, 0),
 				new Vec3( halfX,  halfY, 0),
@@ -116,13 +117,68 @@ namespace SpriteBoy.Components.Editors {
 			};
 			singleMesh.Texture = tex;
 
+			if (wrapQuad == null) {
+				wrapQuad = new Entity();
+				wrapQuad.AddComponent(new StaticMeshComponent() {
+					AlphaBlend = true
+				});
+				scene.Entities.Add(wrapQuad);
+			}
+			StaticMeshComponent wrapMesh = wrapQuad.GetComponent<StaticMeshComponent>();
+			wrapMesh.Vertices = new Vec3[]{
+				new Vec3(-halfX*3,  halfY*3, 0),
+				new Vec3( halfX*3,  halfY*3, 0),
+				new Vec3(-halfX*3, -halfY*3, 0),
+				new Vec3( halfX*3, -halfY*3, 0),
+			};
+			wrapMesh.TexCoords = new Vec2[]{
+				new Vec2(-1f, -1f),
+				new Vec2( 2f, -1f),
+				new Vec2(-1f,  2f),
+				new Vec2( 2f,  2f),
+			};
+			wrapMesh.Indices = new ushort[]{
+				0, 1, 2,
+				1, 3, 2
+			};
+			wrapMesh.Texture = tex;
+			wrapQuad.Visible = false;
+
+
+			// Загрузка данных
+			byte[] meta = File.Meta;
+			if (meta!=null) {
+				BinaryReader f = new BinaryReader(new MemoryStream(meta));
+				ImageForm frm = Form as ImageForm;
+
+				frm.filteringCombo.SelectedIndex = f.ReadByte();
+				frm.wrapUCombo.SelectedIndex = f.ReadByte();
+				frm.wrapVCombo.SelectedIndex = f.ReadByte();
+				frm.imageTileButton.Checked = f.ReadBoolean();
+				f.Close();
+			}
+
+			Saved = true;
 		}
 
 		/// <summary>
 		/// Сохранение изображения
 		/// </summary>
 		public override void Save() {
-			
+			MemoryStream ms = new MemoryStream();
+			BinaryWriter f = new BinaryWriter(ms);
+			f.Write((byte)tex.Filtering);
+			f.Write((byte)tex.WrapHorizontal);
+			f.Write((byte)tex.WrapVertical);
+			f.Write((bool)wrapQuad.Visible);
+			f.Close();
+
+			// Запись метаданных
+			saving = true;
+			File.Meta = ms.ToArray();
+			Project.Notify(File);
+			saving = false;
+			Saved = true;
 		}
 
 		/// <summary>
@@ -199,6 +255,43 @@ namespace SpriteBoy.Components.Editors {
 			} else if (zoom > 30f) {
 				zoom = 30f;
 			}
+		}
+
+		/// <summary>
+		/// Изменена фильтрация
+		/// </summary>
+		/// <param name="index">Индекс фильтрации</param>
+		public void FilteringChanged(int index) {
+			if (tex!=null) {
+				tex.Filtering = (Texture.FilterMode)index;
+				Saved = false;
+			}
+		}
+
+		/// <summary>
+		/// Смена режима повтора
+		/// </summary>
+		/// <param name="isVertical">Вертикальный повтор</param>
+		/// <param name="index"></param>
+		public void WrappingChanged(bool isVertical, int index) {
+			if (tex != null) {
+				if (isVertical) {
+					tex.WrapVertical = (Texture.WrapMode)index;
+				} else {
+					tex.WrapHorizontal = (Texture.WrapMode)index;
+				}
+				Saved = false;
+			}
+		}
+
+		/// <summary>
+		/// Изменен повтор картинки
+		/// </summary>
+		/// <param name="state">Активирован ли тайлинг</param>
+		public void ImageTileChanged(bool state) {
+			singleQuad.Visible = !state;
+			wrapQuad.Visible = state;
+			Saved = false;
 		}
 	}
 }

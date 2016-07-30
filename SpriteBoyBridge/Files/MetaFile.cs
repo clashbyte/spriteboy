@@ -35,6 +35,7 @@ namespace SpriteBoy.Files {
 		/// </summary>
 		/// <param name="dir"></param>
 		public MetaFile(Project.Dir dir) {
+			Parent = dir;
 			LoadFile();
 		}
 

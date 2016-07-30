@@ -11,7 +11,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 	/// <summary>
 	/// Сетка
 	/// </summary>
-	public class WireGridComponent : Component, IRenderable {
+	public class WireGridComponent : EntityComponent, IRenderable {
 
 		/// <summary>
 		/// Основной цвет
@@ -57,6 +57,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			set {
 				if (value != cellCount) {
 					cellCount = value;
+					needBuffer = true;
 				}
 			}
 		}
@@ -71,7 +72,22 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			set {
 				if (cellSize != value) {
 					cellSize = value;
-					cellSize = value;
+					needBuffer = true;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Размер одной клетки
+		/// </summary>
+		public int GroupedCells {
+			get {
+				return groupedCells;
+			}
+			set {
+				if (groupedCells != value) {
+					groupedCells = value;
+					needBuffer = true;
 				}
 			}
 		}

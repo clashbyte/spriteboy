@@ -133,7 +133,13 @@
     <EmbeddedResource Include="Forms\DashboardForm.resx">
       <DependentUpon>DashboardForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\ImageForm.af.resx">
+      <DependentUpon>ImageForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\ImageForm.resx">
+      <DependentUpon>ImageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\ImageForm.ru-RU.resx">
       <DependentUpon>ImageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\MapForm.resx">
@@ -146,6 +152,9 @@
       <DependentUpon>ModelForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\SkyboxForm.resx">
+      <DependentUpon>SkyboxForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\SkyboxForm.ru-RU.resx">
       <DependentUpon>SkyboxForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Specialized\SplashForm.resx">

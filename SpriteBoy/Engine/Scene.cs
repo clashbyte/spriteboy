@@ -45,6 +45,18 @@ namespace SpriteBoy.Engine {
 		}
 
 		/// <summary>
+		/// Обновление логики
+		/// </summary>
+		public void Update() {
+			// Обновление всех предметов
+			foreach (Entity e in Entities) {
+				if (e.Visible) {
+					e.Update();
+				}
+			}
+		}
+
+		/// <summary>
 		/// Отрисовка всех объектов для каждой камеры
 		/// </summary>
 		public void Render() {

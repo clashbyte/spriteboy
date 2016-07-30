@@ -283,12 +283,14 @@ namespace SpriteBoy.Controls {
 		}
 
 		private Size _IconSize;
+		[Localizable(false)]
 		public Size IconSize {
 			get { return _IconSize; }
 			set { _IconSize = value; Invalidate(); }
 		}
 
 		private bool _Large;
+		[Localizable(false)]
 		public bool Large {
 			get { return _Large; }
 			set { _Large = value; Invalidate(); }
@@ -476,12 +478,14 @@ namespace SpriteBoy.Controls {
 		}
 
 		private Size _IconSize;
+		[Localizable(false)]
 		public Size IconSize {
 			get { return _IconSize; }
 			set { _IconSize = value; Invalidate(); }
 		}
 
 		private bool _Large;
+		[Localizable(false)]
 		public bool Large {
 			get { return _Large; }
 			set { _Large = value; Invalidate(); }
@@ -681,12 +685,14 @@ namespace SpriteBoy.Controls {
 		}
 
 		private Size _IconSize;
+		[Localizable(false)]
 		public Size IconSize {
 			get { return _IconSize; }
 			set { _IconSize = value; Invalidate(); }
 		}
 
 		private bool _Large;
+		[Localizable(false)]
 		public bool Large {
 			get { return _Large; }
 			set { _Large = value; Invalidate(); }
@@ -1416,6 +1422,9 @@ namespace SpriteBoy.Controls {
 
 	public class NSComboBox : Control {
 
+		public event SelectionChangedEventHandler IndexChanged;
+		public delegate void SelectionChangedEventHandler(object sender);
+
 		/// <summary>
 		/// Выбранный элемент
 		/// </summary>
@@ -1433,6 +1442,9 @@ namespace SpriteBoy.Controls {
 					}
 				} else {
 					selected = -1;
+				}
+				if (IndexChanged!=null) {
+					IndexChanged(this);
 				}
 				Invalidate();
 			}
@@ -1465,6 +1477,9 @@ namespace SpriteBoy.Controls {
 					selected = 0;
 				} else if (selected >= items.Length) {
 					selected = items.Length - 1;
+				}
+				if (IndexChanged != null) {
+					IndexChanged(this);
 				}
 				Invalidate();
 			}
@@ -2186,7 +2201,7 @@ namespace SpriteBoy.Controls {
 			if (!design) {
 				info = Utilities.CreateWindowsWindowInfo(Handle);
 				context = new GraphicsContext(
-					new GraphicsMode(new ColorFormat(32), 16, 0, 0),
+					new GraphicsMode(new ColorFormat(32), 24, 0, 0),
 					info,
 					2, 4,
 					GraphicsContextFlags.Default

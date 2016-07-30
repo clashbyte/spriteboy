@@ -10,10 +10,11 @@ using SpriteBoy.Data.Types;
 using SpriteBoy.Engine;
 using SpriteBoy.Engine.Components.Rendering;
 using System.IO;
+using SpriteBoy.Data.Formats;
 
 namespace SpriteBoy.Components.Editors {
 
-	[FileEditor(typeof(ModelForm), ".s3d")]
+	[FileEditor(typeof(ModelForm), ".s3d", ".md3", ".md2", ".x", ".3ds")]
 	public class ModelEditor : Editor {
 
 
@@ -38,6 +39,11 @@ namespace SpriteBoy.Components.Editors {
 		Entity model;
 
 		/// <summary>
+		/// Сетка
+		/// </summary>
+		Entity grid;
+
+		/// <summary>
 		/// Дальность камеры
 		/// </summary>
 		float range;
@@ -52,57 +58,37 @@ namespace SpriteBoy.Components.Editors {
 				scene = new Scene();
 
 				camHolder = new Entity();
-				camHolder.Position = Vec3.Zero;
-				camHolder.Angles = new Vec3(30, 45, 0);
+				camHolder.Position = Vec3.UnitY * 0.5f;
+				camHolder.Angles = new Vec3(30, 135, 0);
 				scene.Entities.Add(camHolder);
 
 				cam = new Camera();
 				scene.Camera = cam;
 				cam.Parent = camHolder;
 
-				model = new Entity();
-				model.AddComponent(new WireGridComponent());
-				scene.Entities.Add(model);
+				grid = new Entity();
+				grid.AddComponent(new WireGridComponent() {
+					CellCount = 30,
+					CellSize = 0.1f,
+					GroupedCells = 5
+				});
+				grid.AddComponent(new WireCubeComponent() {
+					WireColor = Color.Green,
+					Position = Vec3.UnitY*0.5f
+				});
+				scene.Entities.Add(grid);
 			}
 
-
-			BinaryReader f = new BinaryReader(new FileStream(File.FullPath, FileMode.Open, FileAccess.Read));
-			f.BaseStream.Position = 0;
-			int surfs = f.ReadUInt16();
-			for (int s = 0; s < surfs; s++) {
-				int tris = f.ReadUInt16();
-
-				Vec3[] positions = new Vec3[tris*3];
-				ushort[] indices = new ushort[tris*3];
-
-				for (int t = 0; t < tris*3; t++) {
-
-					Vec3 pos = new Vec3();
-					pos.X = f.ReadSingle() * 0.05f;
-					pos.Y = f.ReadSingle() * 0.05f;
-					pos.Z = f.ReadSingle() * 0.05f;
-					positions[t] = pos;
-
-					Vec2 uv = new Vec2();
-					uv.X = f.ReadSingle();
-					uv.Y = f.ReadSingle();
-				}
-
-				for (int i = 0; i < indices.Length; i++) {
-					indices[i] = (ushort)i;
-				}
-
-				MeshComponent mc = new MeshComponent();
-				mc.Indices = indices;
-				mc.Vertices = positions;
-				model.AddComponent(mc);
+			// Загрузка модели
+			if (model!=null) {
+				scene.Entities.Remove(model);
 			}
+			model = ModelLoader.FromFile(File.ProjectPath);
+			scene.Entities.Add(model);
 
-
-			range = 50f;
+			range = ModelLoader.MaxRange * 3f;
 			cam.LocalPosition = Vec3.UnitZ * -range;
 
-			f.Close();
 
 
 		}
@@ -175,10 +161,10 @@ namespace SpriteBoy.Components.Editors {
 			for (int i = 0; i < Math.Abs(side); i++) {
 				range *= mul;
 			}
-			if (range<0.1f) {
-				range = 0.1f;
-			}else if(range>250f){
-				range = 250f;
+			if (range<0.03f) {
+				range = 0.03f;
+			}else if(range>80f){
+				range = 80f;
 			}
 		}
 	}

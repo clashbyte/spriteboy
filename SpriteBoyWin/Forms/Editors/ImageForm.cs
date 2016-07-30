@@ -34,6 +34,8 @@ namespace SpriteBoy.Forms.Editors {
 			filteringCombo.Items = SharedStrings.TextureFiltering;
 			wrapUCombo.Items = SharedStrings.TextureWrapMode;
 			wrapVCombo.Items = SharedStrings.TextureWrapMode;
+			wrapUCombo.SelectedIndex = 1;
+			wrapVCombo.SelectedIndex = 1;
 
 			CreateCanvas();
 			Canvas.MouseDown += canvas_MouseDown;
@@ -89,6 +91,33 @@ namespace SpriteBoy.Forms.Editors {
 			base.OnSizeChanged(e);
 			if (Canvas != null) {
 				(FileEditor as ImageEditor).ViewportChanded(Canvas.ClientSize);
+			}
+		}
+
+		/// <summary>
+		/// Смена фильтрации
+		/// </summary>
+		private void filteringCombo_IndexChanged(object sender) {
+			if (FileEditor != null) {
+				(FileEditor as ImageEditor).FilteringChanged(filteringCombo.SelectedIndex);
+			}
+		}
+
+		private void wrapUCombo_IndexChanged(object sender) {
+			if (FileEditor != null) {
+				(FileEditor as ImageEditor).WrappingChanged(false, wrapUCombo.SelectedIndex);
+			}
+		}
+
+		private void wrapVCombo_IndexChanged(object sender) {
+			if (FileEditor != null) {
+				(FileEditor as ImageEditor).WrappingChanged(true, wrapVCombo.SelectedIndex);
+			}
+		}
+
+		private void imageTileButton_CheckedChanged(object sender) {
+			if (FileEditor != null) {
+				(FileEditor as ImageEditor).ImageTileChanged(imageTileButton.Checked);
 			}
 		}
 

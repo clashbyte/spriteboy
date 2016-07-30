@@ -48,14 +48,14 @@ namespace SpriteBoy.Engine {
 		/// <summary>
 		/// Компоненты объекта
 		/// </summary>
-		protected List<Component> components;
+		protected List<EntityComponent> components;
 
 		/// <summary>
 		/// Создание объекта
 		/// </summary>
 		public Entity() {
 			Children = new List<Entity>();
-			components = new List<Component>();
+			components = new List<EntityComponent>();
 		}
 		
 		/// <summary>
@@ -190,7 +190,7 @@ namespace SpriteBoy.Engine {
 		/// Добавление компонента к объекту
 		/// </summary>
 		/// <param name="c">Новый компонент</param>
-		public void AddComponent(Component c) {
+		public void AddComponent(EntityComponent c) {
 			components.Add(c);
 		}
 
@@ -198,7 +198,7 @@ namespace SpriteBoy.Engine {
 		/// Удаление компонента
 		/// </summary>
 		/// <param name="c">Компонент для удаления</param>
-		public void RemoveComponent(Component c) {
+		public void RemoveComponent(EntityComponent c) {
 			if (components.Contains(c)) {
 				components.Remove(c);
 			}
@@ -210,8 +210,8 @@ namespace SpriteBoy.Engine {
 		/// <typeparam name="T">Тип компонента</typeparam>
 		/// <param name="index">Индекс</param>
 		/// <returns>Компонент или null</returns>
-		public T GetComponent<T>(int index = 0) where T : Component {
-			foreach (Component c in components) {
+		public T GetComponent<T>(int index = 0) where T : EntityComponent {
+			foreach (EntityComponent c in components) {
 				if (c is T) {
 					if (index>0) {
 						index--;
@@ -224,6 +224,17 @@ namespace SpriteBoy.Engine {
 		}
 
 		/// <summary>
+		/// Обновление объекта
+		/// </summary>
+		public void Update() {
+			foreach (EntityComponent c in components) {
+				if (c is IRenderable) {
+					(c as IRenderable).Render();
+				}
+			}
+		}
+
+		/// <summary>
 		/// Отрисовка объекта
 		/// </summary>
 		public void Render() {
@@ -231,7 +242,7 @@ namespace SpriteBoy.Engine {
 			GL.MultMatrix(ref mat);
 			ShaderSystem.EntityMatrix = mat;
 
-			foreach (Component c in components) {
+			foreach (EntityComponent c in components) {
 				if (c is IRenderable) {
 					(c as IRenderable).Render();
 				}

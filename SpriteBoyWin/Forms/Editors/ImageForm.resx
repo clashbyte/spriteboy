@@ -117,7 +117,302 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&gt;&gt;utilPanel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="nsLabel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 21</value>
+  </data>
+  <data name="nsLabel3.Text" xml:space="preserve">
+    <value>Vertical wrapping</value>
+  </data>
+  <data name="$this.Icon" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAPZJREFUOE+lU0EKwjAQzE2v9QPqwSeIJ0+CxepBEC/iI3yF+AVBvPkUP1HfUSik
+        TZ1ZVqvQtGgHhmSzO8Nuk5rWKIoicM71/iG1xlr7SJIkBd2PTKk1DPI8P8NxD8ct1hW4Y1xHaqjlCMSa
+        48Rx3EFyLLM1gBoKpQM68hCuNx4iXkhVDaiRDj4NMFMEkws8AqkCkOsjPmn4RqXBC4hH4JJ7GF61q1CS
+        Cmq8BlmW3SmiGHnLPb84lq6W+A2wP1BQBRgetazaAOtEa71AzfTLQM/lGrEOkAjBmYdzcKi15TWiNXlI
+        4AaMGsia8iG1fsroot3P1A7GPAFN0279w4tc0QAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="&gt;&gt;nsLabel2.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="optionTabs.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="imageTileButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>44, 1</value>
+  </data>
+  <data name="&gt;&gt;toolPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="toolLook.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="imageTileButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 23</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>719, 521</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>SpriteBoy.Forms.Editors.BaseForm, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;imageTileButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;nsLabel2.Parent" xml:space="preserve">
+    <value>paramsTab</value>
+  </data>
+  <data name="toolPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 25</value>
+  </data>
+  <data name="wrapVCombo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 21</value>
+  </data>
+  <data name="wrapUCombo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 21</value>
+  </data>
+  <data name="nsLabel3.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;wrapVCombo.Parent" xml:space="preserve">
+    <value>paramsTab</value>
+  </data>
+  <data name="filteringCombo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 21</value>
+  </data>
+  <data name="&gt;&gt;toolLook.Parent" xml:space="preserve">
+    <value>toolPanel</value>
+  </data>
+  <data name="paramsTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 4</value>
+  </data>
+  <data name="toolPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>45, 395</value>
+  </data>
+  <data name="&gt;&gt;imageTileButton.Parent" xml:space="preserve">
+    <value>utilPanel</value>
+  </data>
+  <data name="&gt;&gt;toolPanel.Name" xml:space="preserve">
+    <value>toolPanel</value>
+  </data>
+  <data name="&gt;&gt;wrapUCombo.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSComboBox, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;toolLook.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;utilPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nsLabel1.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="toolPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="paramsTab.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;nsLabel3.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="nsLabel2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="&gt;&gt;imageTileButton.Name" xml:space="preserve">
+    <value>imageTileButton</value>
+  </data>
+  <data name="&gt;&gt;toolPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="toolLook.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="optionTabs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>719, 101</value>
+  </data>
+  <data name="imageTileButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;wrapUCombo.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="utilPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>719, 25</value>
+  </data>
+  <data name="filteringCombo.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="paramsTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>596, 93</value>
+  </data>
+  <data name="nsLabel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 21</value>
+  </data>
+  <data name="imageTileButton.Text" xml:space="preserve">
+    <value>Tile</value>
+  </data>
+  <data name="&gt;&gt;wrapVCombo.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;wrapVCombo.Name" xml:space="preserve">
+    <value>wrapVCombo</value>
+  </data>
+  <data name="nsLabel1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="toolPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;paramsTab.Name" xml:space="preserve">
+    <value>paramsTab</value>
+  </data>
+  <data name="nsLabel2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 33</value>
+  </data>
+  <data name="&gt;&gt;nsLabel3.Parent" xml:space="preserve">
+    <value>paramsTab</value>
+  </data>
+  <data name="&gt;&gt;paramsTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolLook.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSRadioIconicButton, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="optionTabs.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 420</value>
+  </data>
+  <data name="&gt;&gt;toolLook.Name" xml:space="preserve">
+    <value>toolLook</value>
+  </data>
+  <data name="nsLabel3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 60</value>
+  </data>
+  <data name="&gt;&gt;paramsTab.Parent" xml:space="preserve">
+    <value>optionTabs</value>
+  </data>
+  <data name="utilPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="&gt;&gt;nsLabel1.Parent" xml:space="preserve">
+    <value>paramsTab</value>
+  </data>
+  <data name="utilPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;utilPanel.Name" xml:space="preserve">
+    <value>utilPanel</value>
+  </data>
+  <data name="&gt;&gt;nsLabel2.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="imageTileButton.IconImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAD5JREFUOE/V
+        zjEKADAIQ9He/9J2eWRoFzfxL8FPCJ56OHAG+vcy6G0amMcnge57GfQ2Dczjk0D3vQx6awaqLrZTPd85
+        qn9dAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="optionTabs.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="nsLabel2.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="nsLabel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 6</value>
+  </data>
+  <data name="&gt;&gt;wrapUCombo.Name" xml:space="preserve">
+    <value>wrapUCombo</value>
+  </data>
+  <data name="toolLook.Size" type="System.Drawing.Size, System.Drawing">
+    <value>42, 42</value>
+  </data>
+  <data name="&gt;&gt;imageTileButton.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSCheckboxIconicButton, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;filteringCombo.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;filteringCombo.Parent" xml:space="preserve">
+    <value>paramsTab</value>
+  </data>
+  <data name="&gt;&gt;optionTabs.Name" xml:space="preserve">
+    <value>optionTabs</value>
+  </data>
+  <data name="&gt;&gt;wrapUCombo.Parent" xml:space="preserve">
+    <value>paramsTab</value>
+  </data>
+  <data name="filteringCombo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>145, 6</value>
+  </data>
+  <data name="nsLabel2.Text" xml:space="preserve">
+    <value>Horizontal wrapping</value>
+  </data>
+  <data name="wrapUCombo.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="optionTabs.Alignment" type="System.Windows.Forms.TabAlignment, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="&gt;&gt;paramsTab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="nsLabel3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="nsLabel1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="&gt;&gt;utilPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="paramsTab.Text" xml:space="preserve">
+    <value>Parameters</value>
+  </data>
+  <data name="&gt;&gt;wrapVCombo.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSComboBox, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;nsLabel1.Name" xml:space="preserve">
+    <value>nsLabel1</value>
+  </data>
+  <data name="&gt;&gt;filteringCombo.Name" xml:space="preserve">
+    <value>filteringCombo</value>
+  </data>
+  <data name="optionTabs.ItemSize" type="System.Drawing.Size, System.Drawing">
+    <value>28, 115</value>
+  </data>
+  <data name="&gt;&gt;optionTabs.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSTabControl, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;toolPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="nsLabel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 21</value>
+  </data>
+  <data name="&gt;&gt;filteringCombo.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSComboBox, SpriteBoyBridge, Version=1.0.6054.39851, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="wrapVCombo.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;nsLabel3.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;nsLabel3.Name" xml:space="preserve">
+    <value>nsLabel3</value>
+  </data>
   <data name="toolLook.IconImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABGdBTUEAALGPC/xhBQAABGJJREFUaEPt
@@ -142,14 +437,40 @@
         xDjxlJgndJFv7eESMUnoYe8yQ+e/3xYUFBQUFBS88XR1/Qt+LuTUtDJxDQAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="$this.Icon" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD1SURBVDhPpVNBCsIwEMxNr/UD6sEniCdPgsXqQRAv4iN8
-        hfgFQbz5FD9RP1KaNnVmWa1C06IdGJLN7gy7TWpaoyiKwDnX+4fUGmvtI03TBHQ/MqHWMMjz/AzHPRy3
-        WFfgjnEdqaGWIxBrjhPHcQfJsczWAGoolA7oyEO43niIeCFVNaBGOvg0wEwRTC7wCKQKQK6P+KThG5UG
-        LyAegUvuYXjVrkJJKqjxGmRZdqeIYuQt9/ziWLpa4jfA/kBBFWB41LJqA6wTrfUCNdMvAz2Xa8Q6QCIE
-        Zx7OwaHWlteI1uQhgRswaiBryofU+imji3Y/UzsY8wSognGgKQLkFgAAAABJRU5ErkJggg==
-</value>
+  <data name="wrapVCombo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>145, 60</value>
   </data>
+  <data name="&gt;&gt;nsLabel1.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;optionTabs.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>ImageForm</value>
+  </data>
+  <data name="wrapUCombo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>145, 33</value>
+  </data>
+  <data name="utilPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="&gt;&gt;optionTabs.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;nsLabel2.Name" xml:space="preserve">
+    <value>nsLabel2</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="nsLabel1.Text" xml:space="preserve">
+    <value>Filtering</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>ru-RU</value>
+  </metadata>
 </root>

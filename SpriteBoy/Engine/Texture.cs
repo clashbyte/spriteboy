@@ -149,6 +149,19 @@ namespace SpriteBoy.Engine {
 		}
 
 		/// <summary>
+		/// Установка настроек из метаданных
+		/// </summary>
+		public void ApplyMetaConfig(byte[] meta) {
+			if (meta != null) {
+				BinaryReader f = new BinaryReader(new MemoryStream(meta));
+				Filtering = (FilterMode)f.ReadByte();
+				WrapHorizontal = (WrapMode)f.ReadByte();
+				WrapVertical = (WrapMode)f.ReadByte();
+				f.Close();
+			}
+		}
+
+		/// <summary>
 		/// Установка текстуры
 		/// </summary>
 		public void Bind() {

@@ -46,8 +46,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataExtensions.cs" />
+    <Compile Include="Data\Formats\MD2Loader.cs" />
+    <Compile Include="Data\Formats\ModelLoader.cs" />
+    <Compile Include="Data\Formats\S3DLoader.cs" />
     <Compile Include="Data\Rendering\ShaderSystem.cs" />
+    <Compile Include="Engine\Components\Animation\AnimatorComponent.cs" />
+    <Compile Include="Engine\Components\Rendering\AnimatedMeshComponent.cs" />
     <Compile Include="Engine\Components\Rendering\MeshComponent.cs" />
+    <Compile Include="Engine\Components\Rendering\StaticMeshComponent.cs" />
+    <Compile Include="Engine\Components\Rendering\MorphMeshComponent.cs" />
     <Compile Include="Engine\Components\Rendering\WireCubeComponent.cs" />
     <Compile Include="Engine\Components\Rendering\WireGridComponent.cs" />
     <Compile Include="Engine\Data\Component.cs" />
@@ -55,6 +62,7 @@
     <Compile Include="Data\Types\Vec2.cs" />
     <Compile Include="Data\Types\Vec3.cs" />
     <Compile Include="Engine\Camera.cs" />
+    <Compile Include="Engine\Data\IUpdatable.cs" />
     <Compile Include="Engine\Entity.cs" />
     <Compile Include="Engine\Input.cs" />
     <Compile Include="Engine\Scene.cs" />

@@ -117,25 +117,365 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="nsLabel1.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <metadata name="nsLabel2.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <metadata name="nsLabel3.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <metadata name="nsLabel4.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <metadata name="nsLabel5.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <metadata name="nsLabel6.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
+  <data name="&gt;&gt;lightingTab.Name" xml:space="preserve">
+    <value>lightingTab</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="nsTabControl1.Alignment" type="System.Windows.Forms.TabAlignment, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="utilPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;nsLabel4.Name" xml:space="preserve">
+    <value>nsLabel4</value>
+  </data>
+  <data name="&gt;&gt;nsLabel6.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;rightSkyTexture.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="nsLabel8.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="nsLabel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 3</value>
+  </data>
+  <data name="nsLabel3.Text" xml:space="preserve">
+    <value>Top (Y+)</value>
+  </data>
+  <data name="nsLabel4.Text" xml:space="preserve">
+    <value>Bottom (Y-)</value>
+  </data>
+  <data name="&gt;&gt;lightingTab.Parent" xml:space="preserve">
+    <value>nsTabControl1</value>
+  </data>
+  <data name="weatherTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 4</value>
+  </data>
+  <data name="&gt;&gt;nsLabel4.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="&gt;&gt;lightingTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nsLabel4.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="weatherTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>648, 142</value>
+  </data>
+  <data name="&gt;&gt;nsLabel5.Name" xml:space="preserve">
+    <value>nsLabel5</value>
+  </data>
+  <data name="&gt;&gt;skyGizmoButton.Name" xml:space="preserve">
+    <value>skyGizmoButton</value>
+  </data>
+  <data name="toolPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="nsLabel7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="skyGizmoButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 23</value>
+  </data>
+  <data name="&gt;&gt;nsLabel7.Parent" xml:space="preserve">
+    <value>weatherTab</value>
+  </data>
+  <data name="&gt;&gt;nsLabel2.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="rightSkyTexture.Text" xml:space="preserve">
+    <value>rightSkyTexture</value>
+  </data>
+  <data name="nsTabControl1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>771, 150</value>
+  </data>
+  <data name="nsLabel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 20</value>
+  </data>
+  <data name="nsLabel8.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="backSkyTexture.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 105</value>
+  </data>
+  <data name="nsLabel2.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="bottomSkyTexture.Location" type="System.Drawing.Point, System.Drawing">
+    <value>294, 29</value>
+  </data>
+  <data name="&gt;&gt;weatherTab.Parent" xml:space="preserve">
+    <value>nsTabControl1</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Skybox</value>
+  </data>
+  <data name="&gt;&gt;nsLabel7.Name" xml:space="preserve">
+    <value>nsLabel7</value>
+  </data>
+  <data name="nsLabel2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>102, 3</value>
+  </data>
+  <data name="nsLabel4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 20</value>
+  </data>
+  <data name="bottomSkyTexture.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 105</value>
+  </data>
+  <data name="frontSkyTexture.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 105</value>
+  </data>
+  <data name="nsLabel6.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;nsTabControl1.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSTabControl, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;bottomSkyTexture.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSFileDropControl, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="rightSkyTexture.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8pt</value>
+  </data>
+  <data name="&gt;&gt;nsLabel6.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="&gt;&gt;leftSkyTexture.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSFileDropControl, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="bottomSkyTexture.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8pt</value>
+  </data>
+  <data name="&gt;&gt;toolLook.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.Icon" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAWpJREFUOE+1kjFLw3AQxUORIqVDJ+ksIs6liFNxLMXRT+AgjiLFr9BBREQcHEWk
+        iIijOHUWRycRJ3EQoRnTJE3i78VLg7XWQXzwuP/dvXe5/BPnXxDH8bZo6e9IkqQAZyx1oii6FC1VvyqN
+        pd+B+BheZUN4+q5o58UgCF6JbeUTQbMxGAzeiXWGlIlNkXMJrjK8R6yYfDLM2PB9/41zCp0xd2AXHtFf
+        NnkOiuuwhr5shmvyObgGE9Z/UW04HN73+/2IWvpqI+hJCE5oaOVEZkIhDMNH6jeciyaVdtOG1K2UIxsA
+        qhLoQKxZewQ2eWDwnqU50Jf0Cgju7EI1Y/RpM2A+ZwufeEG/ImOR5BTDjkgzJLapL5nnC6hrwxav+Iyv
+        q9VXPM9ziU0KZ/DWtFOBfsN1XS9N0lUA5kNdHvls2pgCtPv6wSz9BFMXtA1DnhCkv/MP7KHVJW+ZNQdP
+        n0dwMGYYp+6sZZa/wHE+AGF3uiNcg7dLAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="nsLabel3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="lightingTab.Text" xml:space="preserve">
+    <value>Lighting</value>
+  </data>
+  <data name="&gt;&gt;utilPanel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="nsLabel5.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="skyGizmoButton.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="leftSkyTexture.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 105</value>
+  </data>
+  <data name="&gt;&gt;nsLabel3.Name" xml:space="preserve">
+    <value>nsLabel3</value>
+  </data>
+  <data name="nsLabel4.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="nsLabel3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>198, 3</value>
+  </data>
+  <data name="&gt;&gt;leftSkyTexture.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="&gt;&gt;weatherTab.Name" xml:space="preserve">
+    <value>weatherTab</value>
+  </data>
+  <data name="&gt;&gt;backSkyTexture.Name" xml:space="preserve">
+    <value>backSkyTexture</value>
+  </data>
+  <data name="nsLabel1.Text" xml:space="preserve">
+    <value>Right (X+)</value>
+  </data>
+  <data name="nsTabControl1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 346</value>
+  </data>
+  <data name="skyGizmoButton.Text" xml:space="preserve">
+    <value>Guides</value>
+  </data>
+  <data name="&gt;&gt;rightSkyTexture.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="nsLabel4.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="topSkyTexture.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="frontSkyTexture.Text" xml:space="preserve">
+    <value>frontSkyTexture</value>
+  </data>
+  <data name="nsLabel6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 20</value>
+  </data>
+  <data name="bottomSkyTexture.Text" xml:space="preserve">
+    <value>bottomSkyTexture</value>
+  </data>
+  <data name="&gt;&gt;weatherTab.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;backSkyTexture.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="&gt;&gt;nsLabel5.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;frontSkyTexture.Name" xml:space="preserve">
+    <value>frontSkyTexture</value>
+  </data>
+  <data name="nsLabel5.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="nsLabel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 20</value>
+  </data>
+  <data name="&gt;&gt;leftSkyTexture.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;toolPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="nsLabel7.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>SkyboxForm</value>
+  </data>
+  <data name="toolPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;topSkyTexture.Name" xml:space="preserve">
+    <value>topSkyTexture</value>
+  </data>
+  <data name="lightingTab.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="texturesTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>648, 142</value>
+  </data>
+  <data name="nsLabel2.Text" xml:space="preserve">
+    <value>Left (X-)</value>
+  </data>
+  <data name="nsLabel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 20</value>
+  </data>
+  <data name="texturesTab.Text" xml:space="preserve">
+    <value>Textures</value>
+  </data>
+  <data name="&gt;&gt;nsLabel6.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="utilPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="&gt;&gt;nsLabel2.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="nsLabel8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>642, 136</value>
+  </data>
+  <data name="&gt;&gt;leftSkyTexture.Name" xml:space="preserve">
+    <value>leftSkyTexture</value>
+  </data>
+  <data name="topSkyTexture.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 105</value>
+  </data>
+  <data name="&gt;&gt;skyGizmoButton.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSCheckboxIconicButton, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="nsLabel7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>642, 136</value>
+  </data>
+  <data name="&gt;&gt;weatherTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="frontSkyTexture.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="frontSkyTexture.Location" type="System.Drawing.Point, System.Drawing">
+    <value>390, 29</value>
+  </data>
+  <data name="&gt;&gt;rightSkyTexture.Name" xml:space="preserve">
+    <value>rightSkyTexture</value>
+  </data>
+  <data name="nsTabControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="leftSkyTexture.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="backSkyTexture.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8pt</value>
+  </data>
+  <data name="topSkyTexture.Location" type="System.Drawing.Point, System.Drawing">
+    <value>198, 29</value>
+  </data>
+  <data name="&gt;&gt;nsLabel3.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="rightSkyTexture.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;nsLabel3.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="nsLabel7.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;backSkyTexture.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSFileDropControl, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="bottomSkyTexture.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;nsTabControl1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;nsLabel3.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="skyGizmoButton.IconImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAVBJREFUOE+t
+        kz9Lw3AQhkOQUkRKEXEoIg6lozh0dnQUh+LQqZODFAfxKzg4iJODk4NjP4E4ioM4OTiKODiIFHEo0vzT
+        5/1xDbFpyOILD7ncvXf95Zp4RUqSZANu4BrWLV0uzGtwBTHcw4PFl7BitrziOF7EcArf8Ay7QRD4YRj6
+        xF14gREc461Zm2uskjyCIXzAAbmKlVNlfJ/wDvtRFM3pyJ0fxFW/vGX+QuHZhJH1dLIDbkHXATTNn4rc
+        KmgP2sdjboCZtuEJxnDOsZdhifgMJrvpcnR/5gBJz0VuD97gy9Az97O7KRwwEeZ5aneCeMHSqUoHSNS0
+        j4Hd/tH/D+B6yFGrVneaNUAeebMD6nACesteoedeEEScDrDl9swjr3rqqjlx04ALCEF/5Q64ARYrp5o8
+        DWvLi2IL1KQjqkEoVq5ltnJhboM+Z9G29JQ87xcbZhZIItFtXgAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="skyGizmoButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>44, 1</value>
+  </data>
+  <data name="&gt;&gt;bottomSkyTexture.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
   <data name="toolLook.IconImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABGdBTUEAALGPC/xhBQAABGJJREFUaEPt
@@ -160,27 +500,292 @@
         xDjxlJgndJFv7eESMUnoYe8yQ+e/3xYUFBQUFBS88XR1/Qt+LuTUtDJxDQAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="skyGizmoButton.IconImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAVBJREFUOE+t
-        kz9Lw3AQhkOQUkRKEXEoIg6lozh0dnQUh+LQqZODFAfxKzg4iJODk4NjP4E4ioM4OTiKODiIFHEo0vzT
-        5/1xDbFpyOILD7ncvXf95Zp4RUqSZANu4BrWLV0uzGtwBTHcw4PFl7BitrziOF7EcArf8Ay7QRD4YRj6
-        xF14gREc461Zm2uskjyCIXzAAbmKlVNlfJ/wDvtRFM3pyJ0fxFW/vGX+QuHZhJH1dLIDbkHXATTNn4rc
-        KmgP2sdjboCZtuEJxnDOsZdhifgMJrvpcnR/5gBJz0VuD97gy9Az97O7KRwwEeZ5aneCeMHSqUoHSNS0
-        j4Hd/tH/D+B6yFGrVneaNUAeebMD6nACesteoedeEEScDrDl9swjr3rqqjlx04ALCEF/5Q64ARYrp5o8
-        DWvLi2IL1KQjqkEoVq5ltnJhboM+Z9G29JQ87xcbZhZIItFtXgAAAABJRU5ErkJggg==
-</value>
+  <data name="&gt;&gt;bottomSkyTexture.Name" xml:space="preserve">
+    <value>bottomSkyTexture</value>
   </data>
-  <data name="$this.Icon" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFpSURBVDhPtZIxSwNREISPIEFCilSSWkSsQxCrYBmCpb/A
-        QixFgn/BQkRELCxFJIiIpVilFksrESuxEAuvu7tcLuc3z80dxhgLcWDYt7sz+/Ze4v0LBoPBpmjp70jT
-        tACnLPWSJLkQLVW/Ko2l34H4CF4Oh3D7tmjn+V6v90JsKx8Lmo0wDN+IdYaUiU2RcwkuM7xLrJh8PMzY
-        iKLolbODzph3YAce0l80eQ6Kq7CGvmyGK/IZuAJT1n9Wrd/v3/m+n1Bzn5ZBNyE4pqGVU5kJhTiOH6hf
-        cy6aVNp1G1K3Uo7hAFCVQAdizdoZ2OSewbuW5kBf0icguLUH1Yzspx0C8xlbRMRz+hUZiyQnGLZEmjGx
-        TX3BPF9AXRu2+MQnfB2tvhQEwTuxSeEU3ph2ItCvcVngErcKwHygxyOfdo0JQLunP5iln2DqnLZhyCMC
-        93f+gV20euQNs+bg9lkE+yOGUerNWmb5CzzvA5Fcuj6tJDFZAAAAAElFTkSuQmCC
-</value>
+  <data name="&gt;&gt;nsLabel8.Parent" xml:space="preserve">
+    <value>lightingTab</value>
   </data>
+  <data name="&gt;&gt;frontSkyTexture.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="backSkyTexture.Location" type="System.Drawing.Point, System.Drawing">
+    <value>486, 29</value>
+  </data>
+  <data name="toolLook.Size" type="System.Drawing.Size, System.Drawing">
+    <value>42, 42</value>
+  </data>
+  <data name="toolLook.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="nsLabel3.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="nsLabel8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="rightSkyTexture.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 105</value>
+  </data>
+  <data name="&gt;&gt;nsLabel8.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="frontSkyTexture.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8pt</value>
+  </data>
+  <data name="texturesTab.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;nsLabel4.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;nsLabel2.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="nsLabel8.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="lightingTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 4</value>
+  </data>
+  <data name="weatherTab.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="backSkyTexture.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;toolLook.Name" xml:space="preserve">
+    <value>toolLook</value>
+  </data>
+  <data name="&gt;&gt;texturesTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nsLabel5.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="nsLabel5.Text" xml:space="preserve">
+    <value>Front (Z+)</value>
+  </data>
+  <data name="&gt;&gt;nsLabel5.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;topSkyTexture.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSFileDropControl, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;texturesTab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;nsTabControl1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="rightSkyTexture.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 29</value>
+  </data>
+  <data name="&gt;&gt;skyGizmoButton.Parent" xml:space="preserve">
+    <value>utilPanel</value>
+  </data>
+  <data name="&gt;&gt;nsLabel8.Name" xml:space="preserve">
+    <value>nsLabel8</value>
+  </data>
+  <data name="&gt;&gt;toolLook.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSRadioIconicButton, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;rightSkyTexture.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSFileDropControl, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>SpriteBoy.Forms.Editors.BaseForm, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="weatherTab.Text" xml:space="preserve">
+    <value>Weather</value>
+  </data>
+  <data name="nsLabel7.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;toolLook.Parent" xml:space="preserve">
+    <value>toolPanel</value>
+  </data>
+  <data name="nsLabel6.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="lightingTab.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;topSkyTexture.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;nsLabel7.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;backSkyTexture.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;skyGizmoButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="nsLabel1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="toolPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 25</value>
+  </data>
+  <data name="nsLabel7.Text" xml:space="preserve">
+    <value>Not implemented yet</value>
+  </data>
+  <data name="&gt;&gt;lightingTab.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="weatherTab.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="backSkyTexture.Text" xml:space="preserve">
+    <value>backSkyTexture</value>
+  </data>
+  <data name="nsLabel2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="&gt;&gt;texturesTab.Parent" xml:space="preserve">
+    <value>nsTabControl1</value>
+  </data>
+  <data name="&gt;&gt;nsLabel1.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="nsLabel5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 20</value>
+  </data>
+  <data name="utilPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>771, 25</value>
+  </data>
+  <data name="&gt;&gt;nsLabel6.Name" xml:space="preserve">
+    <value>nsLabel6</value>
+  </data>
+  <data name="nsLabel4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>294, 3</value>
+  </data>
+  <data name="topSkyTexture.Text" xml:space="preserve">
+    <value>topSkyTexture</value>
+  </data>
+  <data name="toolPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>45, 321</value>
+  </data>
+  <data name="&gt;&gt;utilPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="nsLabel5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>390, 3</value>
+  </data>
+  <data name="utilPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="&gt;&gt;utilPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="nsLabel8.Text" xml:space="preserve">
+    <value>Not implemented yet</value>
+  </data>
+  <data name="leftSkyTexture.Text" xml:space="preserve">
+    <value>leftSkyTexture</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>771, 496</value>
+  </data>
+  <data name="&gt;&gt;texturesTab.Name" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="&gt;&gt;topSkyTexture.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="nsLabel1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;toolPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;frontSkyTexture.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="&gt;&gt;bottomSkyTexture.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="&gt;&gt;nsLabel2.Name" xml:space="preserve">
+    <value>nsLabel2</value>
+  </data>
+  <data name="&gt;&gt;nsLabel1.Parent" xml:space="preserve">
+    <value>texturesTab</value>
+  </data>
+  <data name="&gt;&gt;nsLabel7.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;nsTabControl1.Name" xml:space="preserve">
+    <value>nsTabControl1</value>
+  </data>
+  <data name="&gt;&gt;nsLabel1.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="nsLabel6.Text" xml:space="preserve">
+    <value>Back (Z-)</value>
+  </data>
+  <data name="toolLook.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="nsTabControl1.ItemSize" type="System.Drawing.Size, System.Drawing">
+    <value>28, 115</value>
+  </data>
+  <data name="&gt;&gt;toolPanel.Name" xml:space="preserve">
+    <value>toolPanel</value>
+  </data>
+  <data name="texturesTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 4</value>
+  </data>
+  <data name="nsTabControl1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;utilPanel.Name" xml:space="preserve">
+    <value>utilPanel</value>
+  </data>
+  <data name="leftSkyTexture.Location" type="System.Drawing.Point, System.Drawing">
+    <value>102, 29</value>
+  </data>
+  <data name="topSkyTexture.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8pt</value>
+  </data>
+  <data name="&gt;&gt;nsLabel1.Name" xml:space="preserve">
+    <value>nsLabel1</value>
+  </data>
+  <data name="leftSkyTexture.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8pt</value>
+  </data>
+  <data name="nsLabel6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>486, 3</value>
+  </data>
+  <data name="lightingTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>648, 142</value>
+  </data>
+  <data name="&gt;&gt;nsLabel8.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSLabel, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;frontSkyTexture.Type" xml:space="preserve">
+    <value>SpriteBoy.Controls.NSFileDropControl, SpriteBoyBridge, Version=1.0.6054.38304, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <metadata name="nsLabel6.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="nsLabel4.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="nsLabel1.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="nsLabel3.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="nsLabel2.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="nsLabel5.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
 </root>

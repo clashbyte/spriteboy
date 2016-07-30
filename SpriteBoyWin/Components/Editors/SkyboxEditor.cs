@@ -231,10 +231,8 @@ namespace SpriteBoy.Components.Editors {
 					}
 				}
 				if (needTex) {
-					sky[side] = new Texture(file.ProjectPath, Texture.LoadingMode.Queued) {
-						WrapHorizontal = Texture.WrapMode.Clamp,
-						WrapVertical = Texture.WrapMode.Clamp
-					};
+					sky[side] = new Texture(file.ProjectPath, Texture.LoadingMode.Queued);
+					sky[side].ApplyMetaConfig(file.Meta);
 				}
 			} else {
 				sky[side] = null;

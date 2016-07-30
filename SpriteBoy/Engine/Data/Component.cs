@@ -8,7 +8,7 @@ namespace SpriteBoy.Engine.Data {
 	/// <summary>
 	/// Некоторый компонент от энтити - может быть чем угодно
 	/// </summary>
-	public abstract class Component {
+	public abstract class EntityComponent {
 
 		/// <summary>
 		/// Включен ли компонент
@@ -18,7 +18,7 @@ namespace SpriteBoy.Engine.Data {
 		/// <summary>
 		/// Конструктор компонента
 		/// </summary>
-		public Component() {
+		public EntityComponent() {
 			Enabled = true;
 		}
 

@@ -13,7 +13,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 	/// <summary>
 	/// Куб из линий
 	/// </summary>
-	public class WireCubeComponent : Component, IRenderable {
+	public class WireCubeComponent : EntityComponent, IRenderable {
 
 		/// <summary>
 		/// Массив индексов для куба

@@ -95,8 +95,8 @@ namespace SpriteBoy.Engine {
 
 				// Индексы
 				indices = new ushort[] {
-					0, 1, 2,
-					1, 3, 2
+					2, 1, 0,
+					2, 3, 1
 				};
 			}
 
@@ -120,8 +120,8 @@ namespace SpriteBoy.Engine {
 			}
 
 			// Отключение массивов
-			GL.DisableClientState(ArrayCap.VertexArray);
 			GL.DisableClientState(ArrayCap.TextureCoordArray);
+			GL.DisableClientState(ArrayCap.VertexArray);
 		}
 
 		/// <summary>
