@@ -1,8 +1,11 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using OpenTK.Graphics.OpenGL;
 
 namespace SpriteBoy.Engine.Pipeline {
 
@@ -10,6 +13,21 @@ namespace SpriteBoy.Engine.Pipeline {
 	/// Кеш текстур
 	/// </summary>
 	public static class TextureCache {
+
+		/// <summary>
+		/// Количество потоков для чтения с диска
+		/// </summary>
+		const int LOADING_THREADS = 2;
+
+		/// <summary>
+		/// Количество отправляемых текстур за кадр
+		/// </summary>
+		const int SENDS_PER_FRAME = 15;
+
+		/// <summary>
+		/// Время жизни потерянной текстуры
+		/// </summary>
+		const int LOST_TEXTURE_LIFETIME = 3000;
 
 		/// <summary>
 		/// Загруженные текстуры
@@ -27,10 +45,34 @@ namespace SpriteBoy.Engine.Pipeline {
 		static ConcurrentQueue<CacheEntry> sendQueue = new ConcurrentQueue<CacheEntry>();
 
 		/// <summary>
+		/// Потоки для чтения с диска
+		/// </summary>
+		static Thread[] loadingThreads;
+
+		/// <summary>
 		/// Обновление кеша текстур
 		/// </summary>
 		internal static void Update() {
 
+			// Отправка текстур
+			int sendQuota = SENDS_PER_FRAME;
+
+			// Проверка текстур 
+			List<string> namesToRemove = new List<string>();
+			foreach (KeyValuePair<string, CacheEntry> e in textures) {
+				if (e.Value.UseCount == 0) {
+					if ((DateTime.Now - e.Value.LastUseLostTime).Milliseconds > LOST_TEXTURE_LIFETIME) {
+						e.Value.Release();
+						namesToRemove.Add(e.Key);
+					}
+				}
+			}
+			
+			// Удаление текстур
+			foreach (string nm in namesToRemove) {
+				CacheEntry ce;
+				textures.TryRemove(nm, out ce);
+			}
 		}
 
 
@@ -43,6 +85,14 @@ namespace SpriteBoy.Engine.Pipeline {
 			/// Количество использований
 			/// </summary>
 			public int UseCount {
+				get;
+				set;
+			}
+
+			/// <summary>
+			/// Время освобождение
+			/// </summary>
+			public DateTime LastUseLostTime {
 				get;
 				set;
 			}
@@ -70,6 +120,93 @@ namespace SpriteBoy.Engine.Pipeline {
 				get;
 				set;
 			}
+
+			/// <summary>
+			/// Ширина
+			/// </summary>
+			public int Width {
+				get;
+				set;
+			}
+
+			/// <summary>
+			/// Высота
+			/// </summary>
+			public int Height {
+				get;
+				set;
+			}
+
+			/// <summary>
+			/// Вычисленная ширина (если видеокарта не поддерживет NPOT)
+			/// </summary>
+			public int ComputedWidth {
+				get;
+				set;
+			}
+
+			/// <summary>
+			/// Вычисленная высота (если видеокарта не поддерживает NPOT)
+			/// </summary>
+			public int ComputedHeight {
+				get;
+				set;
+			}
+
+			/// <summary>
+			/// Горизонтальный множитель (если видеокарта не поддерживает NPOT)
+			/// </summary>
+			public float HorizontalDelta {
+				get;
+				set;
+			}
+
+			/// <summary>
+			/// Вертикальный множитель (если видеокарта не поддерживает NPOT)
+			/// </summary>
+			public float VerticalDelta {
+				get;
+				set;
+			}
+
+			/// <summary>
+			/// Текстурная матрица (если видеокарта не поддерживает NPOT)
+			/// </summary>
+			public Matrix4 TextureMatrix {
+				get;
+				set;
+			}
+
+			/// <summary>
+			/// Обьявление о новой ссылке на текстуру
+			/// </summary>
+			public void IncrementReference() {
+				UseCount++;
+			}
+
+			/// <summary>
+			/// Объявление об отписке от текстуры
+			/// </summary>
+			public void DecrementReference() {
+				UseCount--;
+				if (UseCount == 0) {
+					LastUseLostTime = DateTime.Now;
+				}
+			}
+
+			/// <summary>
+			/// Отправка текстуры на видеокарту
+			/// </summary>
+			public void Send {
+
+			}
+
+			/// <summary>
+			/// Удаление текстуры
+			/// </summary>
+			public void Release() {
+
+			}
 			
 		}
 
@@ -96,7 +233,11 @@ namespace SpriteBoy.Engine.Pipeline {
 			/// <summary>
 			/// Текстура отправлена и готова к отрисовке
 			/// </summary>
-			Complete = 4
+			Complete = 4,
+			/// <summary>
+			/// Текстура очищена для экономии памяти
+			/// </summary>
+			Released = 5
 		}
 	}
 }
