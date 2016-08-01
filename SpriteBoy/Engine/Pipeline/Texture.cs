@@ -12,7 +12,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace SpriteBoy.Engine {
+namespace SpriteBoy.Engine.Pipeline {
 
 	/// <summary>
 	/// Текстурный объект

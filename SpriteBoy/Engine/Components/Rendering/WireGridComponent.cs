@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
+using SpriteBoy.Data.Types;
 
 namespace SpriteBoy.Engine.Components.Rendering {
 
@@ -58,6 +59,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 				if (value != cellCount) {
 					cellCount = value;
 					needBuffer = true;
+					RebuildParentCull();
 				}
 			}
 		}
@@ -73,6 +75,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 				if (cellSize != value) {
 					cellSize = value;
 					needBuffer = true;
+					RebuildParentCull();
 				}
 			}
 		}
@@ -117,10 +120,14 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// </summary>
 		bool needBuffer;
 
+		/// <summary>
+		/// Сфера отсечения
+		/// </summary>
+		CullSphere cull;
+
 		// Скрытые буфферы
 		float[] vertexBuffer;
 		byte[] colorBuffer;
-		ushort[] indexBuffer;
 
 		/// <summary>
 		/// Конструктор
@@ -129,20 +136,34 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			cellSize = 1f;
 			cellCount = 30;
 			groupedCells = 10;
+			WireWidth = 0.5f;
 			accentColor = Color.FromArgb(80, 80, 80);
 			mainColor = Color.FromArgb(60, 60, 60);
-
+			cull = new CullSphere();
 			needBuffer = true;
+		}
+
+		/// <summary>
+		/// Коробка для отсечения
+		/// </summary>
+		internal override CullBox GetCullingBox() {
+			Vec3 sz = new Vec3(1f, 0f, 1f) * cellCount * cellSize;
+			return new CullBox() { 
+				Max = sz,
+				Min = -sz
+			};
 		}
 
 		/// <summary>
 		/// Отрисовка
 		/// </summary>
-		public void Render() {
+		internal override void Render() {
 			if (needBuffer) {
 				RebuildBuffer();
 				needBuffer = false;
 			}
+
+			GL.LineWidth(WireWidth);
 
 			GL.BindTexture(TextureTarget.Texture2D, 0);
 			GL.EnableClientState(ArrayCap.VertexArray);

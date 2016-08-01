@@ -49,7 +49,12 @@
     <Compile Include="Data\Formats\MD2Loader.cs" />
     <Compile Include="Data\Formats\ModelLoader.cs" />
     <Compile Include="Data\Formats\S3DLoader.cs" />
+    <Compile Include="Data\Rendering\Frustum.cs" />
+    <Compile Include="Data\Rendering\Intersections.cs" />
     <Compile Include="Data\Rendering\ShaderSystem.cs" />
+    <Compile Include="Data\Types\CullBox.cs" />
+    <Compile Include="Data\Types\CullSphere.cs" />
+    <Compile Include="Data\Types\Ray.cs" />
     <Compile Include="Engine\Components\Animation\AnimatorComponent.cs" />
     <Compile Include="Engine\Components\Rendering\AnimatedMeshComponent.cs" />
     <Compile Include="Engine\Components\Rendering\MeshComponent.cs" />
@@ -57,17 +62,20 @@
     <Compile Include="Engine\Components\Rendering\MorphMeshComponent.cs" />
     <Compile Include="Engine\Components\Rendering\WireCubeComponent.cs" />
     <Compile Include="Engine\Components\Rendering\WireGridComponent.cs" />
+    <Compile Include="Engine\Components\Volumes\TrimeshVolumeComponent.cs" />
+    <Compile Include="Engine\Components\Volumes\VolumeComponent.cs" />
     <Compile Include="Engine\Data\Component.cs" />
     <Compile Include="Engine\Data\IRenderable.cs" />
     <Compile Include="Data\Types\Vec2.cs" />
     <Compile Include="Data\Types\Vec3.cs" />
-    <Compile Include="Engine\Camera.cs" />
+    <Compile Include="Engine\Pipeline\TextureCache.cs" />
+    <Compile Include="Engine\World\Camera.cs" />
     <Compile Include="Engine\Data\IUpdatable.cs" />
-    <Compile Include="Engine\Entity.cs" />
-    <Compile Include="Engine\Input.cs" />
-    <Compile Include="Engine\Scene.cs" />
-    <Compile Include="Engine\Skybox.cs" />
-    <Compile Include="Engine\Texture.cs" />
+    <Compile Include="Engine\World\Entity.cs" />
+    <Compile Include="Engine\Controls\Input.cs" />
+    <Compile Include="Engine\World\Scene.cs" />
+    <Compile Include="Engine\World\Skybox.cs" />
+    <Compile Include="Engine\Pipeline\Texture.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -81,9 +89,7 @@
       <Name>SpriteBoyFileSystem</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Engine\World\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

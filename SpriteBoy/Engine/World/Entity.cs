@@ -7,8 +7,11 @@ using System.Linq;
 using System.Text;
 using SpriteBoy.Engine.Data;
 using OpenTK.Graphics.OpenGL;
+using SpriteBoy.Data.Rendering;
+using SpriteBoy.Engine.Components.Rendering;
+using SpriteBoy.Engine.Components.Volumes;
 
-namespace SpriteBoy.Engine {
+namespace SpriteBoy.Engine.World {
 	
 	/// <summary>
 	/// Базовый объект игрового мира
@@ -51,13 +54,35 @@ namespace SpriteBoy.Engine {
 		protected List<EntityComponent> components;
 
 		/// <summary>
+		/// Требуется перестройка сферы отсечения
+		/// </summary>
+		internal bool needCullRebuild;
+
+		/// <summary>
+		/// Сфера отсечения
+		/// </summary>
+		protected CullSphere cullSphere = new CullSphere();
+
+		/// <summary>
 		/// Создание объекта
 		/// </summary>
 		public Entity() {
 			Children = new List<Entity>();
 			components = new List<EntityComponent>();
 		}
-		
+
+		/// <summary>
+		/// Радиус объекта - используется в редакторе
+		/// </summary>
+		public float Radius {
+			get {
+				if (needCullRebuild) {
+					RebuildCullSphere();
+				}
+				return cullSphere.Radius;
+			}
+		}
+
 		/// <summary>
 		/// Виден ли объект
 		/// </summary>
@@ -191,6 +216,10 @@ namespace SpriteBoy.Engine {
 		/// </summary>
 		/// <param name="c">Новый компонент</param>
 		public void AddComponent(EntityComponent c) {
+			c.Parent = this;
+			if (c is IRenderable) {
+				needCullRebuild = true;
+			}
 			components.Add(c);
 		}
 
@@ -200,6 +229,10 @@ namespace SpriteBoy.Engine {
 		/// <param name="c">Компонент для удаления</param>
 		public void RemoveComponent(EntityComponent c) {
 			if (components.Contains(c)) {
+				c.Parent = null;
+				if (c is IRenderable) {
+					needCullRebuild = true;
+				}
 				components.Remove(c);
 			}
 		}
@@ -220,16 +253,31 @@ namespace SpriteBoy.Engine {
 					}
 				}
 			}
-			return default(T);
+			return null;
+		}
+
+		/// <summary>
+		/// Получение всех компонентов указанного типа
+		/// </summary>
+		/// <typeparam name="T">Тип компонента</typeparam>
+		/// <returns>Список компонентов</returns>
+		public T[] GetComponents<T>() where T : EntityComponent {
+			List<T> rc = new List<T>();
+			foreach (EntityComponent c in components) {
+				if (c is T) {
+					rc.Add((T)c);
+				}
+			}
+			return rc.ToArray();
 		}
 
 		/// <summary>
 		/// Обновление объекта
 		/// </summary>
-		public void Update() {
+		internal void Update() {
 			foreach (EntityComponent c in components) {
-				if (c is IRenderable) {
-					(c as IRenderable).Render();
+				if (c is IUpdatable) {
+					c.Update();
 				}
 			}
 		}
@@ -237,17 +285,86 @@ namespace SpriteBoy.Engine {
 		/// <summary>
 		/// Отрисовка объекта
 		/// </summary>
-		public void Render() {
-			GL.PushMatrix();
-			GL.MultMatrix(ref mat);
-			ShaderSystem.EntityMatrix = mat;
+		internal void Render() {
 
-			foreach (EntityComponent c in components) {
-				if (c is IRenderable) {
-					(c as IRenderable).Render();
+			// Перестройка сферы отсечения
+			if (needCullRebuild) {
+				RebuildCullSphere();
+			}
+
+			// Если не отсечен по сфере
+			if (Frustum.Contains(cullSphere.Position, cullSphere.Radius)) {
+				GL.PushMatrix();
+				GL.MultMatrix(ref mat);
+				ShaderSystem.EntityMatrix = mat;
+
+				foreach (EntityComponent c in components) {
+					if (c is IRenderable) {
+						c.Render();
+					}
+				}
+				GL.PopMatrix();
+			}
+		}
+
+		/// <summary>
+		/// Проброс луча через объект
+		/// </summary>
+		/// <param name="pos">Расположение луча</param>
+		/// <param name="dir">Направление луча</param>
+		/// <param name="hitPos">Место пересечения</param>
+		/// <param name="hitNormal">Нормаль пересечения</param>
+		/// <param name="hitVolume">Пересеченный объект</param>
+		/// <returns>True если есть пересечение</returns>
+		internal bool RayCast(Vec3 pos, Vec3 dir, float rayLength, out Vec3 hitPos, out Vec3 hitNormal, out VolumeComponent hitVolume) {
+
+			// Перестроение основной сферы
+			if (needCullRebuild) {
+				RebuildCullSphere();
+			}
+
+			// Пересечение с основной сферой
+			if (Intersections.RaySphere(pos, dir, cullSphere.Position, cullSphere.Radius)) {
+				float range = float.MaxValue;
+				Vec3 norm = Vec3.Zero;
+				Vec3 hitp = Vec3.Zero;
+				VolumeComponent hvol = null;
+
+				// Пересечение с волюмами
+				Vec3 tfpos = PointToLocal(pos);
+				Vec3 tfnrm = VectorToLocal(dir);
+				VolumeComponent[] volumes = GetComponents<VolumeComponent>();
+				if (volumes!=null && volumes.Length >0) {
+					foreach (VolumeComponent v in volumes) {
+						if (v.Enabled) {
+							Vec3 hp, hn;
+							if (v.RayHit(tfpos, tfnrm, rayLength, out hp, out hn)) {
+								float dst = (hp - tfpos).Length;
+								if (dst < range) {
+									range = dst;
+									hitp = hp;
+									norm = hn;
+									hvol = v;
+								}
+							}
+						}
+					}
+				}
+				
+				// Возврат
+				if (hvol != null && range <= rayLength) {
+					hitPos = PointToWorld(hitp);
+					hitNormal = VectorToWorld(norm);
+					hitVolume = hvol;
+					return true;
 				}
 			}
-			GL.PopMatrix();
+
+			// Нет пересечения
+			hitPos = Vec3.Zero;
+			hitNormal = Vec3.Zero;
+			hitVolume = null;
+			return false;
 		}
 
 		/// <summary>
@@ -306,6 +423,24 @@ namespace SpriteBoy.Engine {
 			foreach (Entity e in Children) {
 				e.RebuildMatrix();
 			}
+		}
+
+		/// <summary>
+		/// Перестройка сферы отсечения
+		/// </summary>
+		protected virtual void RebuildCullSphere() {
+			List<CullBox> culls = new List<CullBox>();
+			foreach (EntityComponent c in components) {
+				if (c is IRenderable) {
+					CullBox cb = c.GetCullingBox();
+					if (cb!=null) {
+						culls.Add(cb);
+					}
+				}
+			}
+			cullSphere = CullBox.FromBoxes(culls.ToArray()).ToSphere();
+			cullSphere.Position = PointToWorld(cullSphere.Position);
+			needCullRebuild = false;
 		}
 
 		/// <summary>

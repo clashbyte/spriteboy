@@ -16,6 +16,8 @@ using System.Windows.Forms;
 using SpriteBoy.Forms.Editors;
 using SpriteBoy.Forms.Common;
 using SpriteBoy.Controls;
+using SpriteBoy.Engine.World;
+using SpriteBoy.Engine.Pipeline;
 
 namespace SpriteBoy.Components.Editors {
 	

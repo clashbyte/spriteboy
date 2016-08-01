@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using SpriteBoy.Engine.Pipeline;
 
 namespace SpriteBoy.Engine.Components.Rendering {
 
@@ -17,16 +18,17 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// <summary>
 		/// Вершины
 		/// </summary>
-		public Vec3[] Vertices {
+		public virtual Vec3[] Vertices {
 			get {
-				if (vertices != null) {
-					Vec3[] va = new Vec3[vertices.Length / 3];
+				float[] verts = SearchVertices();
+				if (verts != null) {
+					Vec3[] va = new Vec3[verts.Length / 3];
 					for (int i = 0; i < va.Length; i++) {
 						int ps = i * 3;
 						va[i] = new Vec3(
-							vertices[ps],
-							vertices[ps + 1],
-							-vertices[ps + 2]
+							verts[ps],
+							verts[ps + 1],
+							-verts[ps + 2]
 						);
 					}
 					return va;
@@ -36,12 +38,34 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			set {
 				if (value != null) {
 					vertices = new float[value.Length * 3];
+					Vec3 max = Vec3.One * float.MinValue, min = Vec3.One * float.MaxValue;
 					for (int i = 0; i < value.Length; i++) {
 						int ps = i * 3;
 						vertices[ps + 0] = value[i].X;
 						vertices[ps + 1] = value[i].Y;
 						vertices[ps + 2] = -value[i].Z;
+						if (value[i].X > max.X) {
+							max.X = value[i].X;
+						}
+						if (value[i].Y > max.Y) {
+							max.Y = value[i].Y;
+						}
+						if (value[i].Z > max.Z) {
+							max.Z = value[i].Z;
+						}
+						if (value[i].X < min.X) {
+							min.X = value[i].X;
+						}
+						if (value[i].Y < min.Y) {
+							min.Y = value[i].Y;
+						}
+						if (value[i].Z < min.Z) {
+							min.Z = value[i].Z;
+						}
 					}
+					cull.Min = min;
+					cull.Max = max;
+					RebuildParentCull();
 				} else {
 					vertices = null;
 				}
@@ -51,16 +75,17 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// <summary>
 		/// Нормали
 		/// </summary>
-		public Vec3[] Normals {
+		public virtual Vec3[] Normals {
 			get {
-				if (normals != null) {
-					Vec3[] na = new Vec3[normals.Length / 3];
+				float[] norms = SearchNormals();
+				if (norms != null) {
+					Vec3[] na = new Vec3[norms.Length / 3];
 					for (int i = 0; i < na.Length; i++) {
 						int ps = i * 3;
 						na[i] = new Vec3(
-							normals[ps],
-							normals[ps + 1],
-							-normals[ps + 2]
+							norms[ps],
+							norms[ps + 1],
+							-norms[ps + 2]
 						);
 					}
 					return na;
@@ -88,15 +113,16 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// <summary>
 		/// Текстурные координаты
 		/// </summary>
-		public Vec2[] TexCoords {
+		public virtual Vec2[] TexCoords {
 			get {
-				if (uv != null) {
-					Vec2[] ca = new Vec2[uv.Length / 2];
+				float[] tcrd = SearchTexCoords();
+				if (tcrd != null) {
+					Vec2[] ca = new Vec2[tcrd.Length / 2];
 					for (int i = 0; i < ca.Length; i++) {
 						int ps = i * 2;
 						ca[i] = new Vec2(
-							uv[ps],
-							uv[ps + 1]
+							tcrd[ps],
+							tcrd[ps + 1]
 						);
 					}
 					return ca;
@@ -120,14 +146,15 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// <summary>
 		/// Индексы
 		/// </summary>
-		public ushort[] Indices {
+		public virtual ushort[] Indices {
 			get {
-				if (indices != null) {
-					ushort[] ia = new ushort[indices.Length];
-					for (int i = 0; i < indices.Length; i += 3) {
-						ia[i + 0] = indices[i + 2];
-						ia[i + 1] = indices[i + 1];
-						ia[i + 2] = indices[i + 0];
+				ushort[] idxs = SearchIndices();
+				if (idxs != null) {
+					ushort[] ia = new ushort[idxs.Length];
+					for (int i = 0; i < idxs.Length; i += 3) {
+						ia[i + 0] = idxs[i + 2];
+						ia[i + 1] = idxs[i + 1];
+						ia[i + 2] = idxs[i + 0];
 					}
 					return ia;
 				}
@@ -184,6 +211,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		protected float[] normals;
 		protected float[] uv;
 		protected ushort[] indices;
+		protected CullBox cull;
 
 		/// <summary>
 		/// Статический меш
@@ -191,11 +219,28 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		public MeshComponent() {
 			Diffuse = Color.White;
 			AlphaBlend = false;
+			cull = new CullBox();
 		}
+
+		/// <summary>
+		/// Метод, вызываемый до рендера
+		/// </summary>
+		protected virtual void BeforeRender() { }
+
+		/// <summary>
+		/// Метод, вызываемый после рендера
+		/// </summary>
+		protected virtual void AfterRender() { }
+
 		/// <summary>
 		/// Отрисовка меша
 		/// </summary>
-		public virtual void Render() {
+		internal override void Render() {
+
+			// Не рисуем если меш отключен
+			if (!Enabled) {
+				return;
+			}
 
 			// Поиск вершин и индексов
 			float[] va = SearchVertices();
@@ -204,6 +249,9 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			// Рендер только если есть что рисовать
 			if (va != null && ia != null) {
 				if (va.Length > 0 && ia.Length > 0) {
+
+					// Установка данных
+					BeforeRender();
 
 					// Установка цвета
 					GL.Color3(Diffuse);
@@ -253,9 +301,20 @@ namespace SpriteBoy.Engine.Components.Rendering {
 						GL.Disable(EnableCap.Blend);
 						GL.DepthMask(true);
 					}
+
+					// Отключение значений
+					AfterRender();
 				}
 			}
 
+		}
+
+		/// <summary>
+		/// Получение сферы отсечения
+		/// </summary>
+		/// <returns>Сфера</returns>
+		internal override CullBox GetCullingBox() {
+			return cull;
 		}
 
 		/// <summary>

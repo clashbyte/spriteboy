@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using SpriteBoy.Forms;
-using SpriteBoy.Data;
+﻿using SpriteBoy.Components.Editors;
 using SpriteBoy.Controls;
-using SpriteBoy.Components.Editors;
-using SpriteBoy.Engine;
 using SpriteBoy.Data.Editing;
+using SpriteBoy.Engine.World;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace SpriteBoy.Forms.Editors {
 

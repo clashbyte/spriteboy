@@ -5,13 +5,19 @@ using System.Text;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using SpriteBoy.Data.Types;
 
-namespace SpriteBoy.Engine {
+namespace SpriteBoy.Engine.World {
 
 	/// <summary>
 	/// Сцена, содержащая объекты
 	/// </summary>
 	public class Scene {
+
+		/// <summary>
+		/// Количество миллисекунд на кадр
+		/// </summary>
+		const int FRAME_TICKS = 16;
 
 		/// <summary>
 		/// Список всех объектов сцены
@@ -37,6 +43,16 @@ namespace SpriteBoy.Engine {
 		public Color BackColor { get; set; }
 
 		/// <summary>
+		/// Обновление находится в режиме паузы
+		/// </summary>
+		public bool Paused { get; set; }
+
+		/// <summary>
+		/// Время последнего обновления сцены
+		/// </summary>
+		protected int LastUpdateTime;
+
+		/// <summary>
 		/// Конструктор сцены
 		/// </summary>
 		public Scene() {
@@ -48,11 +64,22 @@ namespace SpriteBoy.Engine {
 		/// Обновление логики
 		/// </summary>
 		public void Update() {
+			// Количество тиков для обновления
+			int times = 1;
+			if (LastUpdateTime == 0) {
+				LastUpdateTime = Environment.TickCount - FRAME_TICKS;
+			} else {
+				times = (Environment.TickCount - LastUpdateTime) / FRAME_TICKS;
+			}
+
 			// Обновление всех предметов
-			foreach (Entity e in Entities) {
-				if (e.Visible) {
-					e.Update();
+			for (int i = 0; i < times; i++) {
+				if (!Paused) {
+					foreach (Entity e in Entities) {
+						e.Update();
+					}
 				}
+				LastUpdateTime += FRAME_TICKS;
 			}
 		}
 
@@ -90,6 +117,7 @@ namespace SpriteBoy.Engine {
 				}
 			}
 
+			// Отключение состояний
 			GL.Disable(EnableCap.DepthTest);
 		}
 

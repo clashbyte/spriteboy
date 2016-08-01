@@ -6,8 +6,10 @@ using SpriteBoy.Engine.Data;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using SpriteBoy.Data.Types;
+using SpriteBoy.Engine.Pipeline;
 
-namespace SpriteBoy.Engine {
+namespace SpriteBoy.Engine.World {
 
 	/// <summary>
 	/// Коробка с текстурами неба
@@ -72,7 +74,7 @@ namespace SpriteBoy.Engine {
 		/// <summary>
 		/// Отрисовка скайбокса
 		/// </summary>
-		public void Render() {
+		internal void Render() {
 
 			// Создание массивов
 			if (vertices == null || coords == null || indices == null) {

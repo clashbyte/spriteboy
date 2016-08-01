@@ -5634,9 +5634,12 @@ namespace SpriteBoy.Controls {
 		public override Color MenuStripGradientEnd { get { return Color.OrangeRed; } }
 	}
 
-	//If you have made it this far it's not too late to turn back, you must not continue on! If you are trying to fullfill some 
-	//sick act of masochism by studying the source of the ListView then, may god have mercy on your soul.
+	[DefaultEvent("SelectedItemChanged")]
 	public class NSListView : Control {
+
+
+		public event SelectedItemChangedEventHandler SelectedItemChanged;
+		public delegate void SelectedItemChangedEventHandler(object sender);
 
 		public class NSListViewItem {
 			public string Text { get; set; }
@@ -5690,6 +5693,7 @@ namespace SpriteBoy.Controls {
 			get { return _Items.ToArray(); }
 			set {
 				_Items = new List<NSListViewItem>(value);
+				_SelectedItems.Clear();
 				InvalidateScroll();
 			}
 		}
@@ -5697,6 +5701,34 @@ namespace SpriteBoy.Controls {
 		private List<NSListViewItem> _SelectedItems = new List<NSListViewItem>();
 		public NSListViewItem[] SelectedItems {
 			get { return _SelectedItems.ToArray(); }
+			set {
+				if (value != null) {
+					_SelectedItems = new List<NSListViewItem>(value);
+				} else {
+					_SelectedItems.Clear();
+				}
+				if (SelectedItemChanged != null) {
+					SelectedItemChanged(this);
+				}
+				InvalidateScroll();
+			}
+		}
+
+		public NSListViewItem SelectedItem {
+			get {
+				if (_SelectedItems.Count > 0) {
+					return _SelectedItems[0];
+				}
+				return null;
+			}
+			set {
+				_SelectedItems.Clear();
+				_SelectedItems.Add(value);
+				if (SelectedItemChanged!=null) {
+					SelectedItemChanged(this);
+				}
+				InvalidateScroll();
+			}
 		}
 
 		private List<NSListViewColumnHeader> _Columns = new List<NSListViewColumnHeader>();
@@ -5716,9 +5748,12 @@ namespace SpriteBoy.Controls {
 
 				if (_SelectedItems.Count > 1) {
 					_SelectedItems.RemoveRange(1, _SelectedItems.Count - 1);
+					if (SelectedItemChanged != null) {
+						SelectedItemChanged(this);
+					}
 				}
 
-				Invalidate();
+				InvalidateScroll();
 			}
 		}
 
@@ -5853,6 +5888,9 @@ namespace SpriteBoy.Controls {
 						_SelectedItems.Clear();
 						_SelectedItems.Add(_Items[Index]);
 					}
+					if (SelectedItemChanged != null) {
+						SelectedItemChanged(this);
+					}
 				}
 
 				Invalidate();
@@ -5883,7 +5921,7 @@ namespace SpriteBoy.Controls {
 			int[] ColumnOffsets;
 			int colw = 3;
 			ColumnOffsets = new int[_Columns.Count];
-			for (int I = 0; I <= _Columns.Count - 1; I++) {
+			for (int I = 0; I < _Columns.Count; I++) {
 				ColumnOffsets[I] = colw;
 				colw += Columns[I].Width;
 			}
@@ -5913,7 +5951,7 @@ namespace SpriteBoy.Controls {
 				R1 = new Rectangle(0, ItemHeight + (I * ItemHeight) + 1 - Offset, Width, ItemHeight - 1);
 
 				H = G.MeasureString(CI.Text, Font).Height;
-				Y = R1.Y + Convert.ToInt32((ItemHeight / 2) - (H / 2));
+				Y = R1.Y + (int)((ItemHeight / 2) - (H / 2));
 
 				if (_SelectedItems.Contains(CI)) {
 					if (I % 2 == 0) {
@@ -5942,7 +5980,9 @@ namespace SpriteBoy.Controls {
 
 				if (CI.SubItems != null) {
 					for (int I2 = 0; I2 <= Math.Min(CI.SubItems.Count, _Columns.Count) - 1; I2++) {
-						X = ColumnOffsets[I2 + 1] + 4;
+						X = ColumnOffsets[I2] + 4;
+						H = G.MeasureString(CI.SubItems[I2].Text, Font).Height;
+						Y = R1.Y + (int)((ItemHeight / 2) - (H / 2));
 
 						R1.X = X;
 						R1.Width = Columns[I2].Width;

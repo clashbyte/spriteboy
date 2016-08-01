@@ -1,8 +1,5 @@
 ﻿using SpriteBoy.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using SpriteBoy.Engine.Pipeline;
 
 namespace SpriteBoy {
 	
@@ -10,6 +7,11 @@ namespace SpriteBoy {
 	/// Основные функции и хуки движка
 	/// </summary>
 	public class GameEngine {
+
+		/// <summary>
+		/// Отладочный режим
+		/// </summary>
+		public static bool DebugMode = false;
 
 		/// <summary>
 		/// Обновление переменных движка

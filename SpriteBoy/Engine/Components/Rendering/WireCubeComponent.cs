@@ -30,6 +30,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			set {
 				pos = value;
 				needBuffer = true;
+				RebuildParentCull();
 			}
 		}
 
@@ -43,6 +44,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			set {
 				size = value;
 				needBuffer = true;
+				RebuildParentCull();
 			}
 		}
 
@@ -82,9 +84,26 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		}
 
 		/// <summary>
+		/// Получение сферы отсечения
+		/// </summary>
+		/// <returns>Сфера отсечения</returns>
+		internal override CullBox GetCullingBox() {
+			return new CullBox() {
+				Min = pos - size / 2,
+				Max = pos + size / 2
+			};
+		}
+
+		/// <summary>
 		/// Отрисовка куба
 		/// </summary>
-		public void Render() {
+		internal override void Render() {
+
+			// Выход если выключен
+			if (!Enabled) {
+				return;
+			}
+
 			// Генерация массивов
 			if (needBuffer || vertexArray == null) {
 				float halfX = size.X / 2f;
@@ -173,5 +192,6 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			GL.DrawElements(BeginMode.Lines, indexArray.Length, DrawElementsType.UnsignedShort, indexArray);
 			GL.DisableClientState(ArrayCap.VertexArray);
 		}
+
 	}
 }

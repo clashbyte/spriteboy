@@ -552,9 +552,9 @@ namespace SpriteBoy.Data.Editing {
 
 			// Проверка новых файлов
 			for (int i = 0; i < foundFiles.Length; i++) {
-				if (!foundFiles[i] && ((File.GetAttributes(incFiles[i]) & FileAttributes.Hidden) != FileAttributes.Hidden) && incFiles[i].ToLower() != MetaFile.META_FILE_NAME) {
+				if (!foundFiles[i] && ((File.GetAttributes(incFiles[i]) & FileAttributes.Hidden) != FileAttributes.Hidden) && lowerFiles[i] != MetaFile.META_FILE_NAME) {
 					Entry e = new Entry();
-					e.Name = incFiles[i];
+					e.Name = System.IO.Path.GetFileName(incFiles[i]);
 					e.Parent = dir;
 					allEntries.Add(e);
 					MainForm.ProjectEntryEvent(e, FileEvent.Created);

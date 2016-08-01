@@ -1,12 +1,8 @@
 ﻿using SpriteBoy.Data.Types;
-using SpriteBoy.Engine;
 using SpriteBoy.Engine.Components.Rendering;
+using SpriteBoy.Engine.World;
 using SpriteBoy.Files;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace SpriteBoy.Data.Formats {
 	

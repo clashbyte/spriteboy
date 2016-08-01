@@ -3,6 +3,8 @@ using SpriteBoy.Data.Editing;
 using SpriteBoy.Data.Types;
 using SpriteBoy.Engine;
 using SpriteBoy.Engine.Components.Rendering;
+using SpriteBoy.Engine.Pipeline;
+using SpriteBoy.Engine.World;
 using SpriteBoy.Forms.Editors;
 using System;
 using System.Collections.Generic;

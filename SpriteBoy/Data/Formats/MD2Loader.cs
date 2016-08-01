@@ -1,6 +1,8 @@
 ﻿using SpriteBoy.Data.Types;
 using SpriteBoy.Engine;
+using SpriteBoy.Engine.Components.Animation;
 using SpriteBoy.Engine.Components.Rendering;
+using SpriteBoy.Engine.World;
 using SpriteBoy.Files;
 using System;
 using System.Collections.Generic;
@@ -16,6 +18,11 @@ namespace SpriteBoy.Data.Formats {
 	internal static class MD2Loader {
 
 		/// <summary>
+		/// Загруженные файлы
+		/// </summary>
+		static Dictionary<string, MorphMeshComponent> loaded = new Dictionary<string,MorphMeshComponent>();
+
+		/// <summary>
 		/// Загрузка MD2 из файла
 		/// </summary>
 		/// <param name="fname">Имя файла</param>
@@ -23,15 +30,21 @@ namespace SpriteBoy.Data.Formats {
 		public static Entity Load(string fname) {
 
 			// Загрузка модели
-			MorphMeshComponent me = ReadModel(fname);
+			string f = fname.ToLower();
+			if (!loaded.ContainsKey(f)) {
+				loaded.Add(f, ReadModel(fname));
+			}
+			MorphMeshComponent me = loaded[f];
 
 			// Создание объекта
 			Entity e = new Entity();
 			e.AddComponent(new MorphMeshComponent() {
-				Proxy = me,
-				Texture = new Texture("skin_ss.png")
+				Proxy = me
 			});
+			e.AddComponent(new AnimatorComponent());
 
+
+			
 			// Возврат
 			return e;
 		}
@@ -194,6 +207,7 @@ namespace SpriteBoy.Data.Formats {
 
 				// Создание кадра
 				MorphMeshComponent.MorphFrame frame = new MorphMeshComponent.MorphFrame();
+				frame.Time = fr;
 				frame.Vertices = frameVerts;
 				frame.Normals = frameNorms;
 				morphFrames[fr] = frame;

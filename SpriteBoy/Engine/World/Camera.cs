@@ -6,8 +6,10 @@ using System.Linq;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 using SpriteBoy.Data;
+using SpriteBoy.Data.Rendering;
+using System.Drawing.Drawing2D;
 
-namespace SpriteBoy.Engine {
+namespace SpriteBoy.Engine.World {
 	
 	/// <summary>
 	/// Камера для отрисовки мира
@@ -116,12 +118,63 @@ namespace SpriteBoy.Engine {
 		}
 
 		/// <summary>
-		/// Настройка камеры перед рендером кадра
+		/// Перевод точки в экранные координаты
 		/// </summary>
-		public void Setup() {
+		/// <param name="point">Точка в глобальных координатах</param>
+		/// <returns></returns>
+		public Vec2 PointToScreen(Vec3 point) {
 			if (needMatrix) {
 				RebuildProjection();
-				needMatrix = false;
+			}
+			Vector4 tv = Vector4.Transform(new Vector4(point.X, point.Y, -point.Z, 1f), invmat * proj);
+			if (tv.W < -float.Epsilon || tv.W > float.Epsilon) {
+				tv /= tv.W;
+			}
+			return new Vec2(
+				(tv.X + 1f) * 0.5f * size.X,
+				(-tv.Y + 1f) * 0.5f * size.Y
+			);
+		}
+
+		/// <summary>
+		/// Перевод экранных координат в точку
+		/// </summary>
+		/// <param name="sx">X-координата</param>
+		/// <param name="sy">Y-координата</param>
+		/// <returns>Точка в мировых координатах</returns>
+		public Vec3 ScreenToPoint(float sx, float sy) {
+			return ScreenToPoint(new Vec3(sx, sy, 0));
+		}
+
+		/// <summary>
+		/// Перевод точки из экранных координат в мировые
+		/// </summary>
+		/// <param name="p">Точка для перевода</param>
+		/// <returns>Точка в мировых координатах</returns>
+		internal Vec3 ScreenToPoint(Vec3 p) {
+			if (needMatrix) {
+				RebuildProjection();
+			}
+			Vector4 vec;
+			vec.X = 2.0f * p.X / (float)size.X - 1;
+			vec.Y = -(2.0f * p.Y / (float)size.Y - 1);
+			vec.Z = p.Z;
+			vec.W = 1.0f;
+			vec = Vector4.Transform(vec, (invmat * proj).Inverted());
+			if (vec.W > float.Epsilon || vec.W < float.Epsilon) {
+				vec.X /= vec.W;
+				vec.Y /= vec.W;
+				vec.Z /= vec.W;
+			}
+			return new Vec3(vec.X, vec.Y, -vec.Z);
+		}
+
+		/// <summary>
+		/// Настройка камеры перед рендером кадра
+		/// </summary>
+		internal void Setup() {
+			if (needMatrix) {
+				RebuildProjection();
 			}
 			
 			// Загрузка данныз
@@ -134,7 +187,7 @@ namespace SpriteBoy.Engine {
 		/// <summary>
 		/// Загрузка матрицы неба
 		/// </summary>
-		public void LoadSkyMatrix() {
+		internal void LoadSkyMatrix() {
 			ShaderSystem.CameraMatrix = skymat;
 			GL.MatrixMode(MatrixMode.Modelview);
 			GL.LoadMatrix(ref skymat);
@@ -143,10 +196,13 @@ namespace SpriteBoy.Engine {
 		/// <summary>
 		/// Загрузка обычной матрицы
 		/// </summary>
-		public void LoadMatrix() {
+		internal void LoadMatrix() {
 			ShaderSystem.CameraMatrix = invmat;
 			GL.MatrixMode(MatrixMode.Modelview);
 			GL.LoadMatrix(ref invmat);
+
+			// Настройка фрустума
+			Frustum.Setup(proj, invmat);
 		}
 
 		/// <summary>
@@ -165,6 +221,7 @@ namespace SpriteBoy.Engine {
 					proj = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 3f * (1f / zoom), aspect, range.X, range.Y);
 					break;
 			}
+			needMatrix = false;
 		}
 
 		/// <summary>
