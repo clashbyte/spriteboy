@@ -23,17 +23,22 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.nsColorPicker1 = new SpriteBoy.Controls.NSColorPicker();
+			this.nsAnimationView1 = new SpriteBoy.Controls.NSAnimationView();
 			this.SuspendLayout();
 			// 
-			// nsColorPicker1
+			// nsAnimationView1
 			// 
-			this.nsColorPicker1.Location = new System.Drawing.Point(12, 12);
-			this.nsColorPicker1.Name = "nsColorPicker1";
-			this.nsColorPicker1.SelectedColor = System.Drawing.Color.White;
-			this.nsColorPicker1.Size = new System.Drawing.Size(200, 200);
-			this.nsColorPicker1.TabIndex = 0;
-			this.nsColorPicker1.Text = "nsColorPicker1";
+			this.nsAnimationView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.nsAnimationView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+			this.nsAnimationView1.Length = 80;
+			this.nsAnimationView1.Location = new System.Drawing.Point(12, 12);
+			this.nsAnimationView1.MarkerPosition = 4F;
+			this.nsAnimationView1.Name = "nsAnimationView1";
+			this.nsAnimationView1.PointKeys = null;
+			this.nsAnimationView1.Size = new System.Drawing.Size(414, 143);
+			this.nsAnimationView1.TabIndex = 0;
+			this.nsAnimationView1.Text = "nsAnimationView1";
 			// 
 			// TestForm
 			// 
@@ -41,7 +46,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
 			this.ClientSize = new System.Drawing.Size(488, 365);
-			this.Controls.Add(this.nsColorPicker1);
+			this.Controls.Add(this.nsAnimationView1);
 			this.Name = "TestForm";
 			this.Text = "TestForm";
 			this.Load += new System.EventHandler(this.TestForm_Load);
@@ -51,6 +56,7 @@
 
 		#endregion
 
-		private Controls.NSColorPicker nsColorPicker1;
+		private Controls.NSAnimationView nsAnimationView1;
+
 	}
 }

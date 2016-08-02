@@ -3247,24 +3247,174 @@ namespace SpriteBoy.Controls {
 	public class NSAnimationView : Control {
 
 		/// <summary>
+		/// Маркер проигрывания
+		/// </summary>
+		public float MarkerPosition {
+			get {
+				return marker;
+			}
+			set {
+				marker = value;
+				if (marker > 0) {
+
+					
+				}
+				Invalidate();
+			}
+		}
+		float marker = 10;
+
+		/// <summary>
+		/// Длина в кадрах
+		/// </summary>
+		public int Length {
+			get {
+				return length;
+			}
+			set {
+				length = value;
+				CalculateValues();
+				Invalidate();
+			}
+		}
+		int length = 60;
+
+		/// <summary>
+		/// Точечные ключи
+		/// </summary>
+		public PointKey[] PointKeys {
+			get {
+				return keys;
+			}
+			set {
+				keys = value;
+				Invalidate();
+			}
+		}
+		PointKey[] keys;
+
+		/// <summary>
+		/// Отступ
+		/// </summary>
+		float offset = 0;
+
+		/// <summary>
+		/// Увеличение
+		/// </summary>
+		float scale = 1f;
+
+		// Внутренние переменные
+		float workingArea		= 0f;
+		int frameSkip			= 0;
+		float framesSize		= 0;
+		float framesPixelOffset = 0f;
+		float frameCellOffset	= 0f;
+		int framesOffset		= 0;
+		int visibleFrames		= 0;
+
+		// Перетаскивание данных
+		bool draggingMarker = false;
+		int mouseDragOrigin = 0;
+		float dragMarkerOrigin = 0;
+
+
+		/// <summary>
 		/// Скроллбар
 		/// </summary>
 		NSHScrollBar scroller;
 
+		// Ручки-карандаши
+		private Pen P1;
+		private Pen P2;
+		private Pen P3;
+		private Pen P4;
+		private SolidBrush B1;
+		private SolidBrush B2;
+		private SolidBrush B3;
+		private SolidBrush B4;
+		private SolidBrush B5;
+		private SolidBrush B6;
+		private SolidBrush BAccent;
+		private Font timeFont;
 
 		public NSAnimationView() {
 			SetStyle((ControlStyles)139286, true);
 			SetStyle(ControlStyles.Selectable, true);
 			BackColor = Color.FromArgb(50, 50, 50);
 
+
+			P1 = new Pen(Color.FromArgb(45, 45, 45));
+			P2 = new Pen(Color.FromArgb(35, 35, 35));
+			P4 = new Pen(Color.FromArgb(37, 37, 37));
+			P3 = new Pen(Color.FromArgb(50, 50, 50));
+
+			B1 = new SolidBrush(Color.FromArgb(62, 62, 62));
+			B2 = new SolidBrush(Color.FromArgb(65, 65, 65));
+			B3 = new SolidBrush(Color.FromArgb(47, 47, 47));
+			B4 = new SolidBrush(Color.FromArgb(50, 50, 50));
+			B5 = new SolidBrush(Color.FromArgb(40, 40, 40));
+			B6 = new SolidBrush(Color.FromArgb(37, 37, 37));
+			BAccent = new SolidBrush(NSTheme.UI_ACCENT);
+
+			timeFont = new System.Drawing.Font("Tahoma", 8);
+
 			scroller = new NSHScrollBar();
-			scroller.Dock = DockStyle.Bottom;
-			scroller.Height = 20;
+			scroller.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+			scroller.Size = new Size(Width - 2, 18);
+			scroller.Location = new Point(1, Height - 19);
+			scroller.Scroll += scroller_Scroll;
+
 			Controls.Add(scroller);
 
 			DoubleBuffered = true;
 		}
 
+		void scroller_Scroll(object sender) {
+			offset = (float)scroller.Value / workingArea;
+			CalculateValues();
+			Invalidate();
+		}
+
+		void ResetScroll() {
+			scroller.Scroll -= scroller_Scroll;
+			if (scale == 1) {
+				scroller.Enabled = false;
+				scroller.Minimum = 0;
+				scroller.Maximum = 1;
+			} else {
+				scroller.Enabled = true;
+				scroller.Minimum = 0;
+				scroller.Maximum = (int)((workingArea * scale - workingArea)*workingArea);
+				scroller.Value = (int)(offset*workingArea);
+			}
+			scroller.Scroll += scroller_Scroll;
+		}
+
+		void CalculateValues() {
+			workingArea = Width - 10;
+			int fr = length + 1;
+			if (workingArea <= 0) {
+				return;
+			}
+
+			frameSkip = 0;
+			frameCellOffset = workingArea / (float)(fr) * scale;
+			while (frameCellOffset * frameSkip < 8) {
+				frameSkip++;
+			}
+
+			framesSize = frameCellOffset * frameSkip;
+			visibleFrames = (int)Math.Floor(workingArea / framesSize) + 2;
+			framesPixelOffset = -(offset % framesSize);
+			framesOffset = (int)Math.Floor(offset / framesSize) * frameSkip;
+
+			ResetScroll();
+		}
+
+		protected override void OnSizeChanged(EventArgs e) {
+			CalculateValues();
+			base.OnSizeChanged(e);
+		}
 
 		protected override void OnPaint(PaintEventArgs e) {
 			Graphics G = e.Graphics;
@@ -3272,9 +3422,216 @@ namespace SpriteBoy.Controls {
 
 			G.Clear(BackColor);
 			G.SmoothingMode = SmoothingMode.AntiAlias;
+
+			if (workingArea <= 0) {
+				return;
+			}
+
+			G.FillRectangle(B5, 1, 1, Width-2, Height - 20);
+			Rectangle R1 = new Rectangle(1, 1, Width-2, 20);
+			LinearGradientBrush GB1 = new LinearGradientBrush(R1, Color.FromArgb(60, 60, 60), Color.FromArgb(55, 55, 55), 90f);
+			G.FillRectangle(GB1, R1);
+			G.DrawRectangle(P3, 1, 1, Width - 2, 20);
+
+			if (keys!=null) {
+				G.FillRectangle(B6, 2, Height - 47, Width-4, 4);
+			}
+
+			float skipFramePixels = 0;
+			int orig = 5;
+			for (int i = 0; i < visibleFrames; i++) {
+				int dx = (int)(framesPixelOffset + orig + i * framesSize + frameCellOffset / 2f);
+				int fi = framesOffset + i * frameSkip;
+				if (fi > length || fi < 0) {
+					continue;
+				}
+				bool longLine = false;
+
+				if ((fi % 5) == 0 && skipFramePixels == 0) {
+					SizeF ssz = G.MeasureString(fi.ToString(), timeFont);
+					skipFramePixels = Math.Max((int)ssz.Width + 6, 30);
+					longLine = true;
+				} else {
+					skipFramePixels -= framesSize;
+					if (skipFramePixels < 0) {
+						skipFramePixels = 0;
+					}
+				}
+
+				G.DrawLine(P2, dx, 0, dx, longLine ? 15 : 5);
+				G.DrawLine(longLine ? P2 : P4, dx, 23, dx, Height - 20);
+
+			}
+			if (marker>=0) {
+				if (marker >= framesOffset && marker <= framesOffset + visibleFrames * frameSkip) {
+					SolidBrush shade = new SolidBrush(Color.FromArgb(100, 0, 0, 0));
+					int dx = (int)((marker - framesOffset) * (framesSize / (float)frameSkip) + orig + frameCellOffset / 2f + framesPixelOffset);
+					G.FillRectangle(shade, dx, 0, 2, Height - 28);
+					G.FillRectangle(BAccent, dx - 1, 0, 2, Height - 28);
+					G.FillPolygon(shade, new Point[]{
+						new Point(dx+1, Height - 30),
+						new Point(dx+6, Height - 22),
+						new Point(dx-4, Height - 22),
+					});
+					G.FillPolygon(BAccent, new Point[]{
+						new Point(dx, Height - 31),
+						new Point(dx+5, Height - 23),
+						new Point(dx-5, Height - 23),
+					});
+				}
+			}
+			skipFramePixels = 0;
+			for (int i = 0; i < visibleFrames; i++) {
+				int dx = (int)(framesPixelOffset + orig + i * framesSize + frameCellOffset / 2f);
+				int fi = framesOffset + i*frameSkip;
+				if (fi>length || fi <0) {
+					continue;
+				}
+				bool longLine = false;
+				
+				if ((fi % 5) == 0 && skipFramePixels == 0) {
+					SizeF ssz = G.MeasureString(fi.ToString(), timeFont);
+					skipFramePixels = Math.Max((int)ssz.Width + 6, 30);
+					if (workingArea - dx > ssz.Width) {
+						G.DrawString(fi.ToString(), timeFont, Brushes.Black, dx + 4, 8);
+						G.DrawString(fi.ToString(), timeFont, Brushes.White, dx + 3, 7);
+					}
+					longLine = true;
+				} else {
+					skipFramePixels -= framesSize;
+					if (skipFramePixels < 0) {
+						skipFramePixels = 0;
+					}
+				}
+
+			}
+
+			if (keys!=null) {
+				List<PointKey> pkeys = new List<PointKey>();
+
+				foreach (PointKey pk in keys) {
+					if (pk.Frame >= framesOffset && pk.Frame < framesOffset + visibleFrames * frameSkip) {
+						bool cont = false;
+						foreach (PointKey p in pkeys) {
+							if (p.Frame == pk.Frame) {
+								cont = true;
+								break;
+							}
+						}
+						if (!cont) {
+							pkeys.Add(pk);
+						}
+					}
+				}
+
+				if (pkeys.Count>0) {
+					pkeys.Sort((a, b) => {
+						return a.Frame.CompareTo(b.Frame);
+					});
+					SolidBrush shade = new SolidBrush(Color.FromArgb(50, 0, 0, 0));
+					foreach (PointKey pk in pkeys) {
+						int dx = (int)(framesPixelOffset + orig + ((float)Math.Floor(((float)pk.Frame-framesOffset)/frameSkip) * framesSize + frameCellOffset / 2f));
+
+						G.FillPie(Brushes.Black, dx - 4, Height - 49, 10, 10, 0, 360);
+						G.FillPie(Brushes.White, dx - 5, Height - 50, 10, 10, 0, 360);
+					}
+				}
+			}
+
+
+			G.DrawRectangle(P2, 0, 0, Width - 1, Height - 1);
 		}
 
+		protected override void OnMouseWheel(MouseEventArgs e) {
+			if (draggingMarker) {
+				return;
+			}
+			float aw = Width - 10;
+			int fr = length + 1;
+			float frameDeltaSize = aw * scale;
 
+			int num = e.Delta / 120;
+			float mul = 1.1f;
+			if (num < 0) {
+				mul = 0.9f;
+				num *= -1;
+			}
+			for (int i = 0; i < num; i++) {
+				scale *= mul;
+			}
+			if (scale < 1) {
+				scale = 1;
+			}
+			float frameDeltaSize2 = aw * scale;
+			float sz = frameDeltaSize2 - frameDeltaSize;
+			offset += sz * Math.Min(Math.Max((float)e.Location.X / (float)Width, 0f), 1f);
+			if (offset < 0) {
+				offset = 0;
+			}
+			if (offset > aw * scale - aw) {
+				offset = aw * scale - aw;
+			}
+			CalculateValues();
+			Invalidate();
+		}
+
+		protected override void OnMouseDown(MouseEventArgs e) {
+			if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+				mouseDragOrigin = e.Location.X;
+				if (false) {
+
+				} else {
+					marker = CalculateMarkerDragging(e.Location.X);
+					dragMarkerOrigin = marker;
+					draggingMarker = true;
+					Invalidate();
+				}
+			}
+		}
+
+		protected override void OnMouseUp(MouseEventArgs e) {
+			if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+				if (draggingMarker) {
+					dragMarkerOrigin = 0;
+					draggingMarker = false;
+				} else {
+
+				}
+			}
+		}
+
+		protected override void OnMouseMove(MouseEventArgs e) {
+			if (draggingMarker) {
+				float dr = CalculateMarkerDragging(e.Location.X);
+				if (dr != marker) {
+					marker = dr;
+					Invalidate();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Вычисление перетаскивания маркера
+		/// </summary>
+		/// <param name="drag"></param>
+		/// <returns></returns>
+		float CalculateMarkerDragging(int drag) {
+			float d = (float)drag;
+			float m = (
+				((d-5f) / workingArea)  * (float)visibleFrames * frameSkip + framesOffset
+			);
+			return Math.Min(Math.Max(m, 0), length);
+		}
+
+		/// <summary>
+		/// Круглый ключ на каждом из требуемых кадров
+		/// </summary>
+		public class PointKey {
+			public int Frame;
+			public PointKey(int k) {
+				Frame = k;
+			}
+		}
 	}
 
 	public class NSMenuStrip : MenuStrip {

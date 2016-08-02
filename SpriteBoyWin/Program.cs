@@ -17,7 +17,13 @@ namespace SpriteBoy {
 		static void Main() {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			
+
+			bool controlTest = true;
+			if (controlTest) {
+				Application.Run(new Forms.TestForm());
+				return;
+			}
+
 			// Вывод сплэша загрузки
 			SplashForm.Label = SharedStrings.AppStartupState;
 			SplashForm.Open();
@@ -42,7 +48,6 @@ namespace SpriteBoy {
 			Application.Run(new Forms.Common.MainForm());
 			 
 
-			//Application.Run(new Forms.TestForm());
 		}
 	}
 }
