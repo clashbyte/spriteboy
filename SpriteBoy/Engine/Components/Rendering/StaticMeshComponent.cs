@@ -19,7 +19,6 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// </summary>
 		public StaticMeshComponent() {
 			Diffuse = Color.White;
-			AlphaBlend = false;
 		}
 
 		

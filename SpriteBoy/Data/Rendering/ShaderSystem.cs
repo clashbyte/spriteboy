@@ -26,5 +26,15 @@ namespace SpriteBoy.Data {
 		/// </summary>
 		public static Matrix4 EntityMatrix;
 
+		/// <summary>
+		/// Текстурная матрица
+		/// </summary>
+		public static Matrix4 TextureMatrix;
+
+		/// <summary>
+		/// Включен ли альфатест на данном проходе
+		/// </summary>
+		public static bool IsAlphaTest;
+
 	}
 }

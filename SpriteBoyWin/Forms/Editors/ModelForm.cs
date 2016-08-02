@@ -223,10 +223,17 @@ namespace SpriteBoy.Forms.Editors {
 		}
 
 		/// <summary>
+		/// Изменен режим смешивания поверхности
+		/// </summary>
+		private void surfaceBlending_IndexChanged(object sender) {
+			(FileEditor as ModelEditor).SurfaceFlagsChanged(surfaceBlending.SelectedIndex, surfaceUnlit.Checked);
+		}
+
+		/// <summary>
 		/// Изменены флаги поверхности
 		/// </summary>
 		private void surfaceFlags_CheckedChanged(object sender) {
-			(FileEditor as ModelEditor).SurfaceFlagsChanged(surfaceOpaque.Checked, surfaceUnlit.Checked);
+			(FileEditor as ModelEditor).SurfaceFlagsChanged(surfaceBlending.SelectedIndex, surfaceUnlit.Checked);
 		}
 
 		/// <summary>

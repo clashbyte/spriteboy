@@ -19,7 +19,7 @@ namespace SpriteBoy {
 		public static void Update() {
 
 			// Текстуры
-			Texture.UpdateQueued();
+			TextureCache.Update();
 
 			// Ввод
 			Input.Update();

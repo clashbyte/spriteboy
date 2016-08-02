@@ -95,9 +95,7 @@ namespace SpriteBoy.Components.Editors {
 
 			if (singleQuad == null) {
 				singleQuad = new Entity();
-				singleQuad.AddComponent(new StaticMeshComponent() {
-					AlphaBlend = true
-				});
+				singleQuad.AddComponent(new StaticMeshComponent());
 				scene.Entities.Add(singleQuad);
 			}
 			StaticMeshComponent singleMesh = singleQuad.GetComponent<StaticMeshComponent>();
@@ -121,9 +119,7 @@ namespace SpriteBoy.Components.Editors {
 
 			if (wrapQuad == null) {
 				wrapQuad = new Entity();
-				wrapQuad.AddComponent(new StaticMeshComponent() {
-					AlphaBlend = true
-				});
+				wrapQuad.AddComponent(new StaticMeshComponent());
 				scene.Entities.Add(wrapQuad);
 			}
 			StaticMeshComponent wrapMesh = wrapQuad.GetComponent<StaticMeshComponent>();

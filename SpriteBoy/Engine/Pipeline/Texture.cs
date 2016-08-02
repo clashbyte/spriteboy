@@ -17,32 +17,7 @@ namespace SpriteBoy.Engine.Pipeline {
 	/// <summary>
 	/// Текстурный объект
 	/// </summary>
-	public class Texture {
-
-		/// <summary>
-		/// Количество потоков для загрузки текстур
-		/// </summary>
-		const int THREAD_COUNT = 2;
-
-		/// <summary>
-		/// Текстур на загрузку в один кадр
-		/// </summary>
-		const int UPLOADS_PER_FRAME = 10;
-
-		/// <summary>
-		/// Очередь на чтение с диска
-		/// </summary>
-		static ConcurrentQueue<Texture> readingQueue;
-
-		/// <summary>
-		/// Очередь на отправку в видеопамять
-		/// </summary>
-		static ConcurrentQueue<Texture> sendingQueue;
-
-		/// <summary>
-		/// Потоки для загрузки текстуры
-		/// </summary>
-		static Thread[] loadingThreads;
+	public class Texture : IDisposable {
 
 		/// <summary>
 		/// Имя файла во внутренней файловой системе
@@ -56,6 +31,31 @@ namespace SpriteBoy.Engine.Pipeline {
 		/// Состояние загрузки текстуры
 		/// </summary>
 		public LoadingState State {
+			get {
+				if (IsReleased || tex == null) {
+					return LoadingState.Empty;
+				} else {
+					return (LoadingState)((byte)tex.State);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Режим прозрачности текстуры
+		/// </summary>
+		public TransparencyMode Transparency {
+			get {
+				if (tex != null) {
+					return (TransparencyMode)((byte)tex.Transparency);
+				}
+				return TransparencyMode.Opaque;
+			}
+		}
+
+		/// <summary>
+		/// Освобождена ли текстура
+		/// </summary>
+		public bool IsReleased {
 			get;
 			private set;
 		}
@@ -96,37 +96,30 @@ namespace SpriteBoy.Engine.Pipeline {
 		/// Ширина текстуры
 		/// </summary>
 		public int Width {
-			get;
-			private set;
+			get {
+				if (tex != null) {
+					return tex.Width;
+				}
+				return 0;
+			}
 		}
 
 		/// <summary>
 		/// Высота текстуры
 		/// </summary>
 		public int Height {
-			get;
-			private set;
+			get {
+				if (tex != null) {
+					return tex.Height;
+				}
+				return 0;
+			}
 		}
 
 		/// <summary>
-		/// Промежуточные несжатые данные из файла
+		/// Текстура в кеше
 		/// </summary>
-		byte[] scanData;
-
-		
-
-		/// <summary>
-		/// "Имя" (индекс) GL-текстуры
-		/// </summary>
-		int texHandle;
-
-		/// <summary>
-		/// Тип пикселя
-		/// </summary>
-		OpenTK.Graphics.OpenGL.PixelFormat pixelFormat;
-
-
-
+		TextureCache.CacheEntry tex;
 
 		/// <summary>
 		/// Загрузка текстуры
@@ -137,15 +130,36 @@ namespace SpriteBoy.Engine.Pipeline {
 			Link = file;
 			WrapHorizontal = WrapMode.Repeat;
 			WrapVertical = WrapMode.Repeat;
-			if (loadMode == LoadingMode.Instant) {
-				// Нужно загрузить прямо сейчас
-				ReadData();
-				SendToVRAM();
-			} else {
-				// Нужно добавить в список "на потом"
-				PrepareThreads();
-				readingQueue.Enqueue(this);
+			tex = TextureCache.Get(file, loadMode == LoadingMode.Instant);
+			tex.IncrementReference();
+		}
+
+		/// <summary>
+		/// Удаление текстуры
+		/// </summary>
+		public void Dispose() {
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Внутреннее освобожение ресурсов
+		/// </summary>
+		void Dispose(bool disposing) {
+			if (!IsReleased) {
+				if (tex != null) {
+					tex.DecrementReference();
+					tex = null;
+				}
+				IsReleased = true;
 			}
+		}
+
+		/// <summary>
+		/// Деструктор
+		/// </summary>
+		~Texture() {
+			Dispose(false);
 		}
 
 		/// <summary>
@@ -162,13 +176,28 @@ namespace SpriteBoy.Engine.Pipeline {
 		}
 
 		/// <summary>
+		/// Освобождение текстуры
+		/// </summary>
+		public void Release() {
+			
+		}
+
+		/// <summary>
 		/// Установка текстуры
 		/// </summary>
-		public void Bind() {
-			if (State == LoadingState.Complete) {
+		internal void Bind() {
+			bool bindable = false;
+			if (State != LoadingState.Empty) {
+				if (tex.GLTex != 0) {
+					bindable = true;
+				}
+			}
+
+			// Если есть что установить в конвейер
+			if (bindable) {
 
 				// Установка в конвейер
-				GL.BindTexture(TextureTarget.Texture2D, texHandle);
+				tex.Bind();
 
 				// Фильтрация
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
@@ -217,122 +246,6 @@ namespace SpriteBoy.Engine.Pipeline {
 		}
 
 		/// <summary>
-		/// Чтение данных
-		/// </summary>
-		void ReadData() {
-			State = LoadingState.Reading;
-
-			// Чтение байт-массива
-			if (FileSystem.FileExist(Link)) {
-
-				// Загрузка картинки
-				byte[] data = FileSystem.Read(Link);
-				Bitmap bmp = Bitmap.FromStream(new MemoryStream(data)) as Bitmap;
-				Width = bmp.Width;
-				Height = bmp.Height;
-
-				// Превращение картинки в скан
-				BitmapData bd = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-				scanData = new byte[Math.Abs(bd.Stride * bd.Height)];
-				Marshal.Copy(bd.Scan0, scanData, 0, scanData.Length);
-				bmp.UnlockBits(bd);
-				bmp.Dispose();
-
-				// Сохранение параметров скана
-				pixelFormat = OpenTK.Graphics.OpenGL.PixelFormat.Bgra;
-
-				// Текстура готова к отправке
-				State = LoadingState.NotSent;
-			} else {
-				State = LoadingState.Destroyed;
-			}
-		}
-
-		/// <summary>
-		/// Отправка в видеопамять
-		/// </summary>
-		void SendToVRAM() {
-			State = LoadingState.Sending;
-
-			// Отправка текстуры
-			texHandle = GL.GenTexture();
-			GL.BindTexture(TextureTarget.Texture2D, texHandle);
-			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Four, Width, Height, 0, pixelFormat, PixelType.UnsignedByte, scanData);
-
-			GL.BindTexture(TextureTarget.Texture2D, 0);
-			scanData = null;
-
-			State = LoadingState.Complete;
-		}
-
-
-		/// <summary>
-		/// Запуск потоков
-		/// </summary>
-		static void PrepareThreads() {
-			if (readingQueue == null) {
-				readingQueue = new ConcurrentQueue<Texture>();
-			}
-			if (sendingQueue == null) {
-				sendingQueue = new ConcurrentQueue<Texture>();
-			}
-			if (loadingThreads == null) {
-				loadingThreads = new Thread[THREAD_COUNT];
-				for (int i = 0; i < THREAD_COUNT; i++) {
-					Thread t = new Thread(ThreadedLoading);
-					t.Priority = ThreadPriority.BelowNormal;
-					t.IsBackground = true;
-					t.Start();
-				}
-			}
-		}
-
-		/// <summary>
-		/// Процедура для потоковой загрузки данных
-		/// </summary>
-		static void ThreadedLoading() {
-			while(true){
-				if (!readingQueue.IsEmpty) {
-					Texture t = null;
-					if (readingQueue.TryDequeue(out t)) {
-						if (t.State != LoadingState.Destroyed) {
-							t.ReadData();
-							sendingQueue.Enqueue(t);
-						}
-					}
-					Thread.Sleep(0);
-				}else{
-					Thread.Sleep(50);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Отправка всех неотправленных текстур
-		/// </summary>
-		public static void UpdateQueued() {
-			if (sendingQueue != null) {
-				int quota = UPLOADS_PER_FRAME;
-				while (!sendingQueue.IsEmpty) {
-
-					Texture t = null;
-					if (sendingQueue.TryDequeue(out t)) {
-						if (t.State != LoadingState.Destroyed) {
-							t.SendToVRAM();
-						} else {
-							t.scanData = null;
-						}
-					}
-
-					quota--;
-					if (quota <= 0) {
-						break;
-					}
-				}
-			}
-		}
-
-		/// <summary>
 		/// Режим загрузки текстуры
 		/// </summary>
 		public enum LoadingMode : byte {
@@ -371,9 +284,9 @@ namespace SpriteBoy.Engine.Pipeline {
 			/// </summary>
 			Complete	= 4,
 			/// <summary>
-			/// Текстура уничтожена и должна быть выгружена отовсюду
+			/// Текстура пуста
 			/// </summary>
-			Destroyed	= 5
+			Empty	= 5
 		}
 
 		/// <summary>
@@ -406,6 +319,24 @@ namespace SpriteBoy.Engine.Pipeline {
 			/// Текстура сглаживается
 			/// </summary>
 			Enabled		= 1
+		}
+
+		/// <summary>
+		/// Тип прозрачности текстуры
+		/// </summary>
+		public enum TransparencyMode : byte {
+			/// <summary>
+			/// Полностью непрозрачное изображение
+			/// </summary>
+			Opaque = 0,
+			/// <summary>
+			/// Однобитная прозрачность, есть-нет
+			/// </summary>
+			AlphaCut = 1,
+			/// <summary>
+			/// Интерполированная прозрачность
+			/// </summary>
+			AlphaFull = 2
 		}
 	}
 }

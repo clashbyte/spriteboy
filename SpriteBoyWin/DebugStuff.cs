@@ -23,6 +23,7 @@ namespace SpriteBoy {
 			if (Project.Opened) {
 				//MainForm.OpenEditor(Project.GetEntry("sky/skytest — копия (3).sbsky"));
 				//MainForm.OpenEditor(Project.GetEntry("sky/skytest — копия (2).sbsky"));
+				MainForm.OpenEditor(Project.GetEntry("rail.md2"));
 			}
 			
 

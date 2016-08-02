@@ -26,6 +26,24 @@ namespace SpriteBoy.Engine.Data {
 		}
 
 		/// <summary>
+		/// Проход рендера
+		/// </summary>
+		internal virtual TransparencyPass RenditionPass {
+			get {
+				return TransparencyPass.Opaque;
+			}
+		}
+
+		/// <summary>
+		/// Режим смешивания поверхности
+		/// </summary>
+		internal virtual BlendingMode RenditionBlending {
+			get {
+				return BlendingMode.AlphaChannel;
+			}
+		}
+
+		/// <summary>
 		/// Конструктор компонента
 		/// </summary>
 		public EntityComponent() {
@@ -56,6 +74,50 @@ namespace SpriteBoy.Engine.Data {
 			if (Parent!=null) {
 				Parent.needCullRebuild = true;
 			}
+		}
+
+		/// <summary>
+		/// Режим прозрачности
+		/// </summary>
+		internal enum TransparencyPass {
+			/// <summary>
+			/// Непрозрачный
+			/// </summary>
+			Opaque,
+			/// <summary>
+			/// Альфатест (0-1)
+			/// </summary>
+			AlphaTest,
+			/// <summary>
+			/// Полное попиксельное смешивание
+			/// </summary>
+			Blend
+		}
+
+		/// <summary>
+		/// Режим смешивания
+		/// </summary>
+		public enum BlendingMode : byte {
+			/// <summary>
+			/// Прозрачность текстуры или диффузного цвета
+			/// </summary>
+			AlphaChannel = 0,
+			/// <summary>
+			/// Цвет как альфаканал
+			/// </summary>
+			Brightness = 1,
+			/// <summary>
+			/// Добавление - цвета пикселей суммируются
+			/// </summary>
+			Add = 2,
+			/// <summary>
+			/// Умножение - цвета пикселей перемножаются
+			/// </summary>
+			Multiply = 3,
+			/// <summary>
+			/// Непрозрачный - модель принудительно рисуется непрозрачной
+			/// </summary>
+			ForceOpaque = 4
 		}
 	}
 }

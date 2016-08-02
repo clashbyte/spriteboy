@@ -796,18 +796,21 @@ namespace SpriteBoy.Controls {
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e) {
-			IsMouseDown = true;
+			if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+				IsMouseDown = true;
+			}
 			Invalidate();
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e) {
-			IsMouseDown = false;
-			Invalidate();
-		}
-
-		protected override void OnClick(EventArgs e) {
-			base.OnClick(e);
-			Checked = !Checked;
+			if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+				IsMouseDown = false;
+				if ((new Rectangle(0, 0, Width, Height)).Contains(e.Location)) {
+					Checked = !Checked;
+				} else {
+					Invalidate();
+				}
+			}
 		}
 
 		void GenerateShadow() {
@@ -3239,6 +3242,39 @@ namespace SpriteBoy.Controls {
 			}
 			return String.Format("{0:0.##} {1}", len, sizes[order]);
 		}
+	}
+
+	public class NSAnimationView : Control {
+
+		/// <summary>
+		/// Скроллбар
+		/// </summary>
+		NSHScrollBar scroller;
+
+
+		public NSAnimationView() {
+			SetStyle((ControlStyles)139286, true);
+			SetStyle(ControlStyles.Selectable, true);
+			BackColor = Color.FromArgb(50, 50, 50);
+
+			scroller = new NSHScrollBar();
+			scroller.Dock = DockStyle.Bottom;
+			scroller.Height = 20;
+			Controls.Add(scroller);
+
+			DoubleBuffered = true;
+		}
+
+
+		protected override void OnPaint(PaintEventArgs e) {
+			Graphics G = e.Graphics;
+			G.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+
+			G.Clear(BackColor);
+			G.SmoothingMode = SmoothingMode.AntiAlias;
+		}
+
+
 	}
 
 	public class NSMenuStrip : MenuStrip {

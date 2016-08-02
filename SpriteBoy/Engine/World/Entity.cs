@@ -212,6 +212,15 @@ namespace SpriteBoy.Engine.World {
 		}
 
 		/// <summary>
+		/// Матрица - используется рендером
+		/// </summary>
+		internal Matrix4 RenditionMatrix {
+			get {
+				return mat;
+			}
+		}
+
+		/// <summary>
 		/// Добавление компонента к объекту
 		/// </summary>
 		/// <param name="c">Новый компонент</param>
@@ -272,20 +281,25 @@ namespace SpriteBoy.Engine.World {
 		}
 
 		/// <summary>
-		/// Обновление объекта
+		/// Отдача всех обновляемых объектов
 		/// </summary>
-		internal void Update() {
+		internal IEnumerable<EntityComponent> GetLogicalComponents() {
+			List<EntityComponent> cl = new List<EntityComponent>();
 			foreach (EntityComponent c in components) {
-				if (c is IUpdatable) {
-					c.Update();
+				if (c is IUpdatable && c.Enabled) {
+					cl.Add(c);
 				}
 			}
+			return cl;
 		}
 
 		/// <summary>
-		/// Отрисовка объекта
+		/// Отдача всех видимых компонентов
 		/// </summary>
-		internal void Render() {
+		internal IEnumerable<EntityComponent> GetVisualComponents() {
+
+			// Сборка компонентов
+			List<EntityComponent> cl = new List<EntityComponent>();
 
 			// Перестройка сферы отсечения
 			if (needCullRebuild) {
@@ -294,17 +308,16 @@ namespace SpriteBoy.Engine.World {
 
 			// Если не отсечен по сфере
 			if (Frustum.Contains(cullSphere.Position, cullSphere.Radius)) {
-				GL.PushMatrix();
-				GL.MultMatrix(ref mat);
-				ShaderSystem.EntityMatrix = mat;
 
+				// Поиск видимых компонентов
 				foreach (EntityComponent c in components) {
-					if (c is IRenderable) {
-						c.Render();
+					if (c is IRenderable && c.Enabled) {
+						cl.Add(c);
 					}
 				}
-				GL.PopMatrix();
 			}
+
+			return cl;
 		}
 
 		/// <summary>

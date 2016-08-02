@@ -15,6 +15,7 @@ using SpriteBoy.Engine.Components.Volumes;
 using SpriteBoy.Controls;
 using SpriteBoy.Engine.World;
 using SpriteBoy.Engine.Pipeline;
+using SpriteBoy.Engine.Data;
 
 namespace SpriteBoy.Components.Editors {
 
@@ -319,7 +320,7 @@ namespace SpriteBoy.Components.Editors {
 			ModelForm mf = Form as ModelForm;
 			mf.textureFile.File = surfData[surf].file;
 			mf.surfaceColorButton.SelectedColor = surfData[surf].tint;
-			mf.surfaceOpaque.Checked = surfData[surf].opaque;
+			mf.surfaceBlending.SelectedIndex = (int)surfData[surf].blend;
 			mf.surfaceUnlit.Checked = surfData[surf].unlit;
 			surfaceCodeChange = false;
 		}
@@ -352,11 +353,10 @@ namespace SpriteBoy.Components.Editors {
 		/// <summary>
 		/// Изменены флаги поверхности
 		/// </summary>
-		/// <param name="isOpaque"></param>
 		/// <param name="isUnlit"></param>
-		public void SurfaceFlagsChanged(bool isOpaque, bool isUnlit) {
+		public void SurfaceFlagsChanged(int blending, bool isUnlit) {
 			if (surfData!=null && !surfaceCodeChange) {
-				surfData[selectedSurface].opaque = isOpaque;
+				surfData[selectedSurface].blend = (EntityComponent.BlendingMode)blending;
 				surfData[selectedSurface].unlit = isUnlit;
 				ApplySurfaceData();
 				Saved = false;
@@ -423,7 +423,7 @@ namespace SpriteBoy.Components.Editors {
 			for (int i = 0; i < surfData.Length; i++) {
 				surfaces[i].Texture = surfData[i].tex;
 				surfaces[i].Diffuse = surfData[i].tint;
-				surfaces[i].AlphaBlend = !surfData[i].opaque;
+				surfaces[i].Blending = surfData[i].blend;
 			}
 		}
 
@@ -484,7 +484,7 @@ namespace SpriteBoy.Components.Editors {
 			/// <summary>
 			/// Непрозрачный
 			/// </summary>
-			public bool opaque = true;
+			public EntityComponent.BlendingMode blend = EntityComponent.BlendingMode.AlphaChannel;
 			/// <summary>
 			/// Всегда яркий
 			/// </summary>

@@ -68,6 +68,7 @@
     <Compile Include="Engine\Data\IRenderable.cs" />
     <Compile Include="Data\Types\Vec2.cs" />
     <Compile Include="Data\Types\Vec3.cs" />
+    <Compile Include="Engine\Pipeline\GraphicalCaps.cs" />
     <Compile Include="Engine\Pipeline\TextureCache.cs" />
     <Compile Include="Engine\World\Camera.cs" />
     <Compile Include="Engine\Data\IUpdatable.cs" />

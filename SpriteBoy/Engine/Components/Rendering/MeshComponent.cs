@@ -191,9 +191,9 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		}
 
 		/// <summary>
-		/// Включен ли альфаканал
+		/// Режим смешивания
 		/// </summary>
-		public bool AlphaBlend {
+		public BlendingMode Blending {
 			get;
 			set;
 		}
@@ -204,6 +204,42 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		public MeshComponent Proxy {
 			get;
 			set;
+		}
+
+		/// <summary>
+		/// Режим смешивания при отрисовке
+		/// </summary>
+		internal override EntityComponent.BlendingMode RenditionBlending {
+			get {
+				return Blending;
+			}
+		}
+
+		/// <summary>
+		/// Выборка, в какой из проходов рендера включить данный меш
+		/// </summary>
+		internal override EntityComponent.TransparencyPass RenditionPass {
+			get {
+				if (Diffuse.A < 255) {
+					return TransparencyPass.Blend;
+				}
+				switch (Blending) {
+					case BlendingMode.AlphaChannel:
+						if (Texture!=null) {
+							if (Texture.Transparency == Pipeline.Texture.TransparencyMode.AlphaFull) {
+								return TransparencyPass.Blend;
+							} else if (Texture.Transparency == Pipeline.Texture.TransparencyMode.AlphaCut) {
+								return TransparencyPass.AlphaTest;
+							}
+						}
+						break;
+					case BlendingMode.Brightness:
+					case BlendingMode.Add:
+					case BlendingMode.Multiply:
+						return TransparencyPass.Blend;
+				}
+				return TransparencyPass.Opaque;
+			}
 		}
 
 		// Скрытые переменные
@@ -218,7 +254,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// </summary>
 		public MeshComponent() {
 			Diffuse = Color.White;
-			AlphaBlend = false;
+			Blending = BlendingMode.AlphaChannel;
 			cull = new CullBox();
 		}
 
@@ -256,13 +292,6 @@ namespace SpriteBoy.Engine.Components.Rendering {
 					// Установка цвета
 					GL.Color3(Diffuse);
 
-					// Если есть альфасмешивание
-					if (AlphaBlend) {
-						GL.Enable(EnableCap.Blend);
-						GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-						GL.DepthMask(false);
-					}
-
 					// Загрузка вершин
 					GL.EnableClientState(ArrayCap.VertexArray);
 					GL.VertexPointer(3, VertexPointerType.Float, 0, va);
@@ -295,12 +324,6 @@ namespace SpriteBoy.Engine.Components.Rendering {
 					GL.DisableClientState(ArrayCap.NormalArray);
 					GL.DisableClientState(ArrayCap.TextureCoordArray);
 					GL.DisableClientState(ArrayCap.VertexArray);
-
-					// Отключение смешивания
-					if (AlphaBlend) {
-						GL.Disable(EnableCap.Blend);
-						GL.DepthMask(true);
-					}
 
 					// Отключение значений
 					AfterRender();

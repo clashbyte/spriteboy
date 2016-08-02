@@ -43,7 +43,7 @@ namespace SpriteBoy.Data.Formats {
 			});
 			e.AddComponent(new AnimatorComponent());
 
-
+			e.GetComponent<AnimatorComponent>().Animate(0, 60, 0.1f);
 			
 			// Возврат
 			return e;
