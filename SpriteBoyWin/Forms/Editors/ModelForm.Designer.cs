@@ -32,6 +32,9 @@
 			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader2 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
 			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader3 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
 			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader4 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader5 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader6 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader7 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
 			this.toolPanel = new System.Windows.Forms.Panel();
 			this.toolCursor = new SpriteBoy.Controls.NSRadioIconicButton();
 			this.utilPanel = new System.Windows.Forms.Panel();
@@ -47,14 +50,14 @@
 			this.textureFile = new SpriteBoy.Controls.NSFileDropControl();
 			this.animationPage = new System.Windows.Forms.TabPage();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.nsAnimationView1 = new SpriteBoy.Controls.NSAnimationView();
+			this.animationTracker = new SpriteBoy.Controls.NSAnimationView();
 			this.panel3 = new System.Windows.Forms.Panel();
-			this.nsIconicButton2 = new SpriteBoy.Controls.NSIconicButton();
-			this.nsIconicButton1 = new SpriteBoy.Controls.NSIconicButton();
+			this.animationAdd = new SpriteBoy.Controls.NSIconicButton();
+			this.animationRemove = new SpriteBoy.Controls.NSIconicButton();
 			this.animationStop = new SpriteBoy.Controls.NSIconicButton();
 			this.animationPlay = new SpriteBoy.Controls.NSCheckboxIconicButton();
-			this.nsListView1 = new SpriteBoy.Controls.NSListView();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.animationList = new SpriteBoy.Controls.NSListView();
+			this.animationProps = new System.Windows.Forms.Panel();
 			this.jointsPage = new System.Windows.Forms.TabPage();
 			nsLabel1 = new SpriteBoy.Controls.NSLabel();
 			nsLabel3 = new SpriteBoy.Controls.NSLabel();
@@ -305,7 +308,7 @@
 			// 
 			this.animationPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
 			this.animationPage.Controls.Add(this.panel2);
-			this.animationPage.Controls.Add(this.panel1);
+			this.animationPage.Controls.Add(this.animationProps);
 			this.animationPage.Location = new System.Drawing.Point(119, 4);
 			this.animationPage.Name = "animationPage";
 			this.animationPage.Padding = new System.Windows.Forms.Padding(3);
@@ -315,66 +318,70 @@
 			// 
 			// panel2
 			// 
-			this.panel2.Controls.Add(this.nsAnimationView1);
+			this.panel2.Controls.Add(this.animationTracker);
 			this.panel2.Controls.Add(this.panel3);
-			this.panel2.Controls.Add(this.nsListView1);
+			this.panel2.Controls.Add(this.animationList);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel2.Location = new System.Drawing.Point(3, 3);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(477, 136);
+			this.panel2.Size = new System.Drawing.Size(453, 136);
 			this.panel2.TabIndex = 2;
 			// 
-			// nsAnimationView1
+			// animationTracker
 			// 
-			this.nsAnimationView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-			this.nsAnimationView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.nsAnimationView1.Location = new System.Drawing.Point(0, 0);
-			this.nsAnimationView1.Name = "nsAnimationView1";
-			this.nsAnimationView1.Size = new System.Drawing.Size(277, 103);
-			this.nsAnimationView1.TabIndex = 0;
-			this.nsAnimationView1.Text = "nsAnimationView1";
+			this.animationTracker.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+			this.animationTracker.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.animationTracker.Length = 60;
+			this.animationTracker.Location = new System.Drawing.Point(0, 0);
+			this.animationTracker.MarkerPosition = -1F;
+			this.animationTracker.Name = "animationTracker";
+			this.animationTracker.PointKeys = null;
+			this.animationTracker.Size = new System.Drawing.Size(253, 103);
+			this.animationTracker.TabIndex = 0;
+			this.animationTracker.Text = "nsAnimationView1";
 			// 
 			// panel3
 			// 
-			this.panel3.Controls.Add(this.nsIconicButton2);
-			this.panel3.Controls.Add(this.nsIconicButton1);
+			this.panel3.Controls.Add(this.animationAdd);
+			this.panel3.Controls.Add(this.animationRemove);
 			this.panel3.Controls.Add(this.animationStop);
 			this.panel3.Controls.Add(this.animationPlay);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panel3.Location = new System.Drawing.Point(0, 103);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(277, 33);
+			this.panel3.Size = new System.Drawing.Size(253, 33);
 			this.panel3.TabIndex = 2;
 			// 
-			// nsIconicButton2
+			// animationAdd
 			// 
-			this.nsIconicButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.nsIconicButton2.Corners.BottomLeft = true;
-			this.nsIconicButton2.Corners.BottomRight = false;
-			this.nsIconicButton2.Corners.TopLeft = true;
-			this.nsIconicButton2.Corners.TopRight = false;
-			this.nsIconicButton2.IconImage = null;
-			this.nsIconicButton2.IconSize = new System.Drawing.Size(0, 0);
-			this.nsIconicButton2.Large = false;
-			this.nsIconicButton2.Location = new System.Drawing.Point(225, 5);
-			this.nsIconicButton2.Name = "nsIconicButton2";
-			this.nsIconicButton2.Size = new System.Drawing.Size(25, 25);
-			this.nsIconicButton2.TabIndex = 3;
+			this.animationAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.animationAdd.Corners.BottomLeft = true;
+			this.animationAdd.Corners.BottomRight = false;
+			this.animationAdd.Corners.TopLeft = true;
+			this.animationAdd.Corners.TopRight = false;
+			this.animationAdd.IconImage = null;
+			this.animationAdd.IconSize = new System.Drawing.Size(0, 0);
+			this.animationAdd.Large = false;
+			this.animationAdd.Location = new System.Drawing.Point(201, 5);
+			this.animationAdd.Name = "animationAdd";
+			this.animationAdd.Size = new System.Drawing.Size(25, 25);
+			this.animationAdd.TabIndex = 3;
 			// 
-			// nsIconicButton1
+			// animationRemove
 			// 
-			this.nsIconicButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.nsIconicButton1.Corners.BottomLeft = false;
-			this.nsIconicButton1.Corners.BottomRight = true;
-			this.nsIconicButton1.Corners.TopLeft = false;
-			this.nsIconicButton1.Corners.TopRight = true;
-			this.nsIconicButton1.IconImage = null;
-			this.nsIconicButton1.IconSize = new System.Drawing.Size(0, 0);
-			this.nsIconicButton1.Large = false;
-			this.nsIconicButton1.Location = new System.Drawing.Point(249, 5);
-			this.nsIconicButton1.Name = "nsIconicButton1";
-			this.nsIconicButton1.Size = new System.Drawing.Size(25, 25);
-			this.nsIconicButton1.TabIndex = 2;
+			this.animationRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.animationRemove.Corners.BottomLeft = false;
+			this.animationRemove.Corners.BottomRight = true;
+			this.animationRemove.Corners.TopLeft = false;
+			this.animationRemove.Corners.TopRight = true;
+			this.animationRemove.Enabled = false;
+			this.animationRemove.IconImage = null;
+			this.animationRemove.IconSize = new System.Drawing.Size(0, 0);
+			this.animationRemove.Large = false;
+			this.animationRemove.Location = new System.Drawing.Point(225, 5);
+			this.animationRemove.Name = "animationRemove";
+			this.animationRemove.Size = new System.Drawing.Size(25, 25);
+			this.animationRemove.TabIndex = 2;
 			// 
 			// animationStop
 			// 
@@ -405,27 +412,37 @@
 			this.animationPlay.Size = new System.Drawing.Size(35, 30);
 			this.animationPlay.TabIndex = 0;
 			// 
-			// nsListView1
+			// animationList
 			// 
-			this.nsListView1.Columns = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader[0];
-			this.nsListView1.Dock = System.Windows.Forms.DockStyle.Right;
-			this.nsListView1.Items = new SpriteBoy.Controls.NSListView.NSListViewItem[0];
-			this.nsListView1.Location = new System.Drawing.Point(277, 0);
-			this.nsListView1.MultiSelect = true;
-			this.nsListView1.Name = "nsListView1";
-			this.nsListView1.SelectedItem = null;
-			this.nsListView1.SelectedItems = new SpriteBoy.Controls.NSListView.NSListViewItem[0];
-			this.nsListView1.Size = new System.Drawing.Size(200, 136);
-			this.nsListView1.TabIndex = 1;
-			this.nsListView1.Text = "nsListView1";
+			nsListViewColumnHeader5.Text = "Name";
+			nsListViewColumnHeader5.Width = 102;
+			nsListViewColumnHeader6.Text = "Start";
+			nsListViewColumnHeader6.Width = 40;
+			nsListViewColumnHeader7.Text = "End";
+			nsListViewColumnHeader7.Width = 40;
+			this.animationList.Columns = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader[] {
+        nsListViewColumnHeader5,
+        nsListViewColumnHeader6,
+        nsListViewColumnHeader7};
+			this.animationList.Dock = System.Windows.Forms.DockStyle.Right;
+			this.animationList.Items = new SpriteBoy.Controls.NSListView.NSListViewItem[0];
+			this.animationList.Location = new System.Drawing.Point(253, 0);
+			this.animationList.MultiSelect = true;
+			this.animationList.Name = "animationList";
+			this.animationList.SelectedItem = null;
+			this.animationList.SelectedItems = new SpriteBoy.Controls.NSListView.NSListViewItem[0];
+			this.animationList.Size = new System.Drawing.Size(200, 136);
+			this.animationList.TabIndex = 1;
+			this.animationList.Text = "nsListView1";
 			// 
-			// panel1
+			// animationProps
 			// 
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel1.Location = new System.Drawing.Point(480, 3);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(120, 136);
-			this.panel1.TabIndex = 1;
+			this.animationProps.Dock = System.Windows.Forms.DockStyle.Right;
+			this.animationProps.Location = new System.Drawing.Point(456, 3);
+			this.animationProps.Name = "animationProps";
+			this.animationProps.Size = new System.Drawing.Size(144, 136);
+			this.animationProps.TabIndex = 1;
+			this.animationProps.Visible = false;
 			// 
 			// jointsPage
 			// 
@@ -466,10 +483,6 @@
 		private System.Windows.Forms.Panel toolPanel;
 		private Controls.NSRadioIconicButton toolCursor;
 		private System.Windows.Forms.Panel utilPanel;
-		private Controls.NSTabControl propertyTabs;
-		private System.Windows.Forms.TabPage surfacePage;
-		private System.Windows.Forms.TabPage animationPage;
-		private System.Windows.Forms.TabPage jointsPage;
 		public Controls.NSListView surfacesList;
 		public System.Windows.Forms.Panel surfaceTexPanel;
 		public Controls.NSFileDropControl textureFile;
@@ -479,13 +492,17 @@
 		public Controls.NSOnOffBox surfaceUnlit;
 		public Controls.NSComboBox surfaceBlending;
 		private System.Windows.Forms.Panel panel2;
-		private Controls.NSAnimationView nsAnimationView1;
 		private System.Windows.Forms.Panel panel3;
-		private Controls.NSListView nsListView1;
-		private System.Windows.Forms.Panel panel1;
-		private Controls.NSIconicButton animationStop;
-		private Controls.NSCheckboxIconicButton animationPlay;
-		private Controls.NSIconicButton nsIconicButton2;
-		private Controls.NSIconicButton nsIconicButton1;
+		public Controls.NSTabControl propertyTabs;
+		public System.Windows.Forms.TabPage surfacePage;
+		public System.Windows.Forms.TabPage animationPage;
+		public System.Windows.Forms.TabPage jointsPage;
+		public Controls.NSAnimationView animationTracker;
+		public Controls.NSListView animationList;
+		public System.Windows.Forms.Panel animationProps;
+		public Controls.NSIconicButton animationStop;
+		public Controls.NSCheckboxIconicButton animationPlay;
+		public Controls.NSIconicButton animationAdd;
+		public Controls.NSIconicButton animationRemove;
 	}
 }

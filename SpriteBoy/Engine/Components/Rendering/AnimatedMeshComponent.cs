@@ -13,13 +13,15 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// <summary>
 		/// Длина анимации
 		/// </summary>
-		public float AnimationLength {
+		public int AnimationLength {
 			get {
-				float ln = 0;
+				int ln = 0;
 				Frame[] fr = Frames;
 				if (fr!=null) {
 					foreach (Frame f in fr) {
-						ln += f.Time;
+						if (f.Time > ln) {
+							ln = f.Time;
+						}
 					}
 				}
 				return ln;
@@ -55,19 +57,40 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		Frame[] frames;
 
 		/// <summary>
+		/// Необходимо сделать переходящий буффер
+		/// </summary>
+		internal bool needTransitionCache;
+		/// <summary>
+		/// Необходимо пересчитать данные
+		/// </summary>
+		internal bool frameRefresh;
+		/// <summary>
+		/// Переходное значение буффера
+		/// </summary>
+		internal float frameDelta;
+		/// <summary>
+		/// Первый кадр (-1 - интерполяция)
+		/// </summary>
+		protected int frameOne;
+		/// <summary>
+		/// Второй кадр
+		/// </summary>
+		protected int frameTwo;
+
+		/// <summary>
 		/// Текущее состояние меша
 		/// </summary>
-		public virtual Frame CurrentFrame {
+		internal virtual Frame CurrentFrame {
 			get;
-			internal set;
+			set;
 		}
 
 		/// <summary>
 		/// Переходной кадр
 		/// </summary>
-		public virtual Frame TransitionFrame {
+		internal virtual Frame TransitionFrame {
 			get;
-			internal set;
+			set;
 		}
 
 		/// <summary>
@@ -78,7 +101,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			/// <summary>
 			/// Время кадра
 			/// </summary>
-			public float Time {
+			public int Time {
 				get;
 				set;
 			}

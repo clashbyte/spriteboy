@@ -13,50 +13,97 @@ namespace SpriteBoy.Engine.Components.Animation {
 	public class AnimatorComponent : EntityComponent, IUpdatable {
 
 		/// <summary>
-		/// Анимированные меши
+		/// Количество кадров
 		/// </summary>
-		AnimatedMeshComponent[] meshes;
+		public int FrameCount {
+			get {
+				AnimatedMeshComponent[] ms = Parent.GetComponents<AnimatedMeshComponent>();
+				int sz = 0;
+				foreach (AnimatedMeshComponent m in ms) {
+					float l = m.AnimationLength;
+					if (l>sz) {
+						sz = l;
+					}
+				}
+				return sz;
+			}
+		}
 
 		/// <summary>
 		/// Режим анимации
 		/// </summary>
-		AnimationMode loopmode;
+		public AnimationMode Mode {
+			get;
+			private set;
+		}
 
 		/// <summary>
-		/// Анимируется ли меш
+		/// Играется ли анимация
 		/// </summary>
-		bool playing;
+		public bool Playing {
+			get;
+			private set;
+		}
 
 		/// <summary>
-		/// Происходит переход
+		/// Первый кадр
 		/// </summary>
-		bool trans;
+		public int FirstFrame {
+			get;
+			private set;
+		}
 
 		/// <summary>
-		/// Время перехода
+		/// Последний кадр
 		/// </summary>
-		float transTime;
-
-		/// <summary>
-		/// Начало и конец отрезка анимации
-		/// </summary>
-		float start, end;
+		public int LastFrame {
+			get;
+			private set;
+		}
 
 		/// <summary>
 		/// Скорость проигрывания
 		/// </summary>
-		float speed;
+		public float Speed {
+			get;
+			set;
+		}
 
+		/// <summary>
+		/// Идёт переход
+		/// </summary>
+		public bool IsTransition {
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Текущее время
+		/// </summary>
+		public float Time {
+			get {
+				if (Speed > 0) {
+					return (float)FirstFrame + time;
+ 				}
+				return (float)LastFrame - time;
+			}
+		}
+		
 		/// <summary>
 		/// Текущее время
 		/// </summary>
 		float time;
 
 		/// <summary>
+		/// Анимированные меши
+		/// </summary>
+		AnimatedMeshComponent[] meshes;
+
+		/// <summary>
 		/// Обновление анимации
 		/// </summary>
 		internal override void Update() {
-			if (playing) {
+			if (Playing) {
 
 				// Кадры для смешивания
 				AnimatedMeshComponent.Frame fr1 = null, fr2 = null;
@@ -117,6 +164,14 @@ namespace SpriteBoy.Engine.Components.Animation {
 				}
 
 			}
+		}
+
+		/// <summary>
+		/// Установка кадра без анимирования 
+		/// </summary>
+		/// <param name="frame"></param>
+		public void SetFrame(float frame) {
+
 		}
 
 		/// <summary>

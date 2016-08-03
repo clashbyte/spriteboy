@@ -18,7 +18,7 @@ namespace SpriteBoy {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
-			bool controlTest = true;
+			bool controlTest = false;
 			if (controlTest) {
 				Application.Run(new Forms.TestForm());
 				return;

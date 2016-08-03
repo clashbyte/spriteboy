@@ -3246,6 +3246,10 @@ namespace SpriteBoy.Controls {
 
 	public class NSAnimationView : Control {
 
+
+		public event FrameChangedEventHandler FrameChanged;
+		public delegate void FrameChangedEventHandler(object sender);
+
 		/// <summary>
 		/// Маркер проигрывания
 		/// </summary>
@@ -3255,14 +3259,13 @@ namespace SpriteBoy.Controls {
 			}
 			set {
 				marker = value;
-				if (marker > 0) {
-
-					
+				if (FrameChanged != null) {
+					FrameChanged(this);
 				}
 				Invalidate();
 			}
 		}
-		float marker = 10;
+		float marker = -1;
 
 		/// <summary>
 		/// Длина в кадрах
@@ -3576,14 +3579,18 @@ namespace SpriteBoy.Controls {
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e) {
+			Focus();
 			if (e.Button == System.Windows.Forms.MouseButtons.Left) {
 				mouseDragOrigin = e.Location.X;
 				if (false) {
 
 				} else {
-					marker = CalculateMarkerDragging(e.Location.X);
+					marker = CalculateFrameClamped(e.Location.X);
 					dragMarkerOrigin = marker;
 					draggingMarker = true;
+					if (FrameChanged != null) {
+						FrameChanged(this);
+					}
 					Invalidate();
 				}
 			}
@@ -3602,25 +3609,33 @@ namespace SpriteBoy.Controls {
 
 		protected override void OnMouseMove(MouseEventArgs e) {
 			if (draggingMarker) {
-				float dr = CalculateMarkerDragging(e.Location.X);
+				float dr = CalculateFrameClamped(e.Location.X);
 				if (dr != marker) {
 					marker = dr;
+					if (FrameChanged != null) {
+						FrameChanged(this);
+					}
 					Invalidate();
 				}
 			}
 		}
 
 		/// <summary>
-		/// Вычисление перетаскивания маркера
+		/// Вычисление кадра по щелчку 
 		/// </summary>
-		/// <param name="drag"></param>
+		/// <param name="mouseX"></param>
 		/// <returns></returns>
-		float CalculateMarkerDragging(int drag) {
-			float d = (float)drag;
-			float m = (
-				((d-5f) / workingArea)  * (float)visibleFrames * frameSkip + framesOffset
-			);
-			return Math.Min(Math.Max(m, 0), length);
+		float CalculateFrame(int mouseX) {
+			return ((float)mouseX - 5f - frameCellOffset / 2f - framesPixelOffset) / (framesSize / (float)frameSkip) + framesOffset;
+		}
+
+		/// <summary>
+		/// Пере
+		/// </summary>
+		/// <param name="mouseX"></param>
+		/// <returns></returns>
+		float CalculateFrameClamped(int mouseX) {
+			return Math.Min(Math.Max(CalculateFrame(mouseX), 0), length);
 		}
 
 		/// <summary>

@@ -42,11 +42,11 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// <summary>
 		/// Текущий кадр
 		/// </summary>
-		public override AnimatedMeshComponent.Frame CurrentFrame {
+		internal override AnimatedMeshComponent.Frame CurrentFrame {
 			get {
 				return base.CurrentFrame;
 			}
-			internal set {
+			set {
 				base.CurrentFrame = value;
 				MorphFrame cf = (MorphFrame)base.CurrentFrame;
 				if (cf != null) {

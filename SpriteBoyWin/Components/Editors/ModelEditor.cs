@@ -16,6 +16,7 @@ using SpriteBoy.Controls;
 using SpriteBoy.Engine.World;
 using SpriteBoy.Engine.Pipeline;
 using SpriteBoy.Engine.Data;
+using SpriteBoy.Engine.Components.Animation;
 
 namespace SpriteBoy.Components.Editors {
 
@@ -72,6 +73,11 @@ namespace SpriteBoy.Components.Editors {
 		/// Данные о поверхностях
 		/// </summary>
 		SurfaceData[] surfData;
+
+		/// <summary>
+		/// Аниматор
+		/// </summary>
+		AnimatorComponent animator;
 
 		/// <summary>
 		/// Луч для поиска вершин
@@ -204,6 +210,38 @@ namespace SpriteBoy.Components.Editors {
 
 			// Создание луча
 			ray = new Ray(new Entity[] { model });
+
+			// Поиск аниматора
+			animator = model.GetComponent<AnimatorComponent>();
+			if (animator!=null) {
+				if (!(Form as ModelForm).propertyTabs.TabPages.Contains((Form as ModelForm).animationPage)) {
+					(Form as ModelForm).propertyTabs.TabPages.Add((Form as ModelForm).animationPage);
+				}
+
+				List<int> frameTimes = new List<int>();
+				AnimatedMeshComponent[] amsh = model.GetComponents<AnimatedMeshComponent>();
+				foreach (AnimatedMeshComponent am in amsh) {
+					if (am.Frames != null) {
+						foreach (AnimatedMeshComponent.Frame fr in am.Frames) {
+							if (!frameTimes.Contains((int)fr.Time)) {
+								frameTimes.Add((int)fr.Time);
+							}
+						}
+					}
+				}
+				int[] frameTimeArr = frameTimes.ToArray();
+				NSAnimationView.PointKey[] pointKeys = new NSAnimationView.PointKey[frameTimeArr.Length];
+				for (int i = 0; i < pointKeys.Length; i++) {
+					pointKeys[i] = new NSAnimationView.PointKey(frameTimeArr[i]);
+				}
+				(Form as ModelForm).animationTracker.PointKeys = pointKeys;
+				(Form as ModelForm).animationTracker.Length = animator.FrameCount;
+			}else{
+				if ((Form as ModelForm).propertyTabs.TabPages.Contains((Form as ModelForm).animationPage)) {
+					(Form as ModelForm).propertyTabs.TabPages.Remove((Form as ModelForm).animationPage);
+				}
+			}
+
 
 			// Настройка интерфейса
 			(Form as ModelForm).cellGizmoButton.Checked = false;
