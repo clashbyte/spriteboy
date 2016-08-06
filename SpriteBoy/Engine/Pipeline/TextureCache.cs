@@ -85,9 +85,6 @@ namespace SpriteBoy.Engine.Pipeline {
 				}
 			}
 
-			// Очистка GL-текстур
-
-
 			// Проверка текстур 
 			List<string> namesToRemove = new List<string>();
 			foreach (KeyValuePair<string, CacheEntry> e in textures) {
@@ -413,6 +410,7 @@ namespace SpriteBoy.Engine.Pipeline {
 				GLTex = GL.GenTexture();
 				GL.BindTexture(TextureTarget.Texture2D, GLTex);
 				GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Four, ComputedWidth, ComputedHeight, 0, DataFormat, PixelType.UnsignedByte, Data);
+				GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvModeCombine.Modulate);
 				GL.BindTexture(TextureTarget.Texture2D, 0);
 
 				Data = null;

@@ -47,18 +47,23 @@
   <ItemGroup>
     <Compile Include="Data\DataExtensions.cs" />
     <Compile Include="Data\Formats\MD2Loader.cs" />
+    <Compile Include="Data\Formats\MD3Loader.cs" />
     <Compile Include="Data\Formats\ModelLoader.cs" />
     <Compile Include="Data\Formats\S3DLoader.cs" />
     <Compile Include="Data\Rendering\Frustum.cs" />
     <Compile Include="Data\Rendering\Intersections.cs" />
     <Compile Include="Data\Rendering\ShaderSystem.cs" />
+    <Compile Include="Data\Shaders\MeshShader.cs" />
+    <Compile Include="Data\Shaders\MorphMeshShader.cs" />
+    <Compile Include="Data\Shaders\ShaderBase.cs" />
+    <Compile Include="Data\Shaders\WireCubeShader.cs" />
+    <Compile Include="Data\Shaders\WireGridShader.cs" />
     <Compile Include="Data\Types\CullBox.cs" />
     <Compile Include="Data\Types\CullSphere.cs" />
     <Compile Include="Data\Types\Ray.cs" />
     <Compile Include="Engine\Components\Animation\AnimatorComponent.cs" />
     <Compile Include="Engine\Components\Rendering\AnimatedMeshComponent.cs" />
     <Compile Include="Engine\Components\Rendering\MeshComponent.cs" />
-    <Compile Include="Engine\Components\Rendering\StaticMeshComponent.cs" />
     <Compile Include="Engine\Components\Rendering\MorphMeshComponent.cs" />
     <Compile Include="Engine\Components\Rendering\WireCubeComponent.cs" />
     <Compile Include="Engine\Components\Rendering\WireGridComponent.cs" />
@@ -79,6 +84,11 @@
     <Compile Include="Engine\Pipeline\Texture.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShaderSources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShaderSources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpriteBoyBridge\SpriteBoyBridge.csproj">
@@ -90,7 +100,12 @@
       <Name>SpriteBoyFileSystem</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="ShaderSources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShaderSources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

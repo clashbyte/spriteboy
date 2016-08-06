@@ -28,13 +28,13 @@
 			SpriteBoy.Controls.NSLabel nsLabel5;
 			SpriteBoy.Controls.NSLabel nsLabel4;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModelForm));
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader1 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader2 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader3 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader4 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader5 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader6 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader7 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader11 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader12 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader13 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader14 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader8 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader9 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader10 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
 			this.toolPanel = new System.Windows.Forms.Panel();
 			this.toolCursor = new SpriteBoy.Controls.NSRadioIconicButton();
 			this.utilPanel = new System.Windows.Forms.Panel();
@@ -216,19 +216,19 @@
 			// 
 			// surfacesList
 			// 
-			nsListViewColumnHeader1.Text = "№";
-			nsListViewColumnHeader1.Width = 30;
-			nsListViewColumnHeader2.Text = "Texture";
-			nsListViewColumnHeader2.Width = 100;
-			nsListViewColumnHeader3.Text = "Verts";
-			nsListViewColumnHeader3.Width = 50;
-			nsListViewColumnHeader4.Text = "Tris";
-			nsListViewColumnHeader4.Width = 50;
+			nsListViewColumnHeader11.Text = "№";
+			nsListViewColumnHeader11.Width = 30;
+			nsListViewColumnHeader12.Text = "Texture";
+			nsListViewColumnHeader12.Width = 100;
+			nsListViewColumnHeader13.Text = "Verts";
+			nsListViewColumnHeader13.Width = 50;
+			nsListViewColumnHeader14.Text = "Tris";
+			nsListViewColumnHeader14.Width = 50;
 			this.surfacesList.Columns = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader[] {
-        nsListViewColumnHeader1,
-        nsListViewColumnHeader2,
-        nsListViewColumnHeader3,
-        nsListViewColumnHeader4};
+        nsListViewColumnHeader11,
+        nsListViewColumnHeader12,
+        nsListViewColumnHeader13,
+        nsListViewColumnHeader14};
 			this.surfacesList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.surfacesList.Items = new SpriteBoy.Controls.NSListView.NSListViewItem[0];
 			this.surfacesList.Location = new System.Drawing.Point(3, 3);
@@ -339,6 +339,7 @@
 			this.animationTracker.Size = new System.Drawing.Size(253, 103);
 			this.animationTracker.TabIndex = 0;
 			this.animationTracker.Text = "nsAnimationView1";
+			this.animationTracker.FrameChanged += new SpriteBoy.Controls.NSAnimationView.FrameChangedEventHandler(this.animationTracker_FrameChanged);
 			// 
 			// panel3
 			// 
@@ -414,16 +415,16 @@
 			// 
 			// animationList
 			// 
-			nsListViewColumnHeader5.Text = "Name";
-			nsListViewColumnHeader5.Width = 102;
-			nsListViewColumnHeader6.Text = "Start";
-			nsListViewColumnHeader6.Width = 40;
-			nsListViewColumnHeader7.Text = "End";
-			nsListViewColumnHeader7.Width = 40;
+			nsListViewColumnHeader8.Text = "Name";
+			nsListViewColumnHeader8.Width = 102;
+			nsListViewColumnHeader9.Text = "Start";
+			nsListViewColumnHeader9.Width = 40;
+			nsListViewColumnHeader10.Text = "End";
+			nsListViewColumnHeader10.Width = 40;
 			this.animationList.Columns = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader[] {
-        nsListViewColumnHeader5,
-        nsListViewColumnHeader6,
-        nsListViewColumnHeader7};
+        nsListViewColumnHeader8,
+        nsListViewColumnHeader9,
+        nsListViewColumnHeader10};
 			this.animationList.Dock = System.Windows.Forms.DockStyle.Right;
 			this.animationList.Items = new SpriteBoy.Controls.NSListView.NSListViewItem[0];
 			this.animationList.Location = new System.Drawing.Point(253, 0);

@@ -90,6 +90,11 @@ namespace SpriteBoy.Components.Editors {
 		bool surfaceCodeChange;
 
 		/// <summary>
+		/// Изменение анимации кодом
+		/// </summary>
+		bool animationCodeChange;
+
+		/// <summary>
 		/// Выбранная поверхность
 		/// </summary>
 		int selectedSurface;
@@ -242,11 +247,9 @@ namespace SpriteBoy.Components.Editors {
 				}
 			}
 
-
 			// Настройка интерфейса
 			(Form as ModelForm).cellGizmoButton.Checked = false;
 			(Form as ModelForm).firstPersonButton.Checked = false;
-
 		}
 
 		/// <summary>
@@ -271,6 +274,13 @@ namespace SpriteBoy.Components.Editors {
 				cam.LocalPosition = Vec3.UnitZ * -pos;
 			}
 			scene.Update();
+			if (animator != null) {
+				if (animator.Playing) {
+					animationCodeChange = true;
+					(Form as ModelForm).animationTracker.MarkerPosition = animator.Time;
+					animationCodeChange = false;
+				}
+			}
 		}
 
 		/// <summary>
@@ -402,6 +412,16 @@ namespace SpriteBoy.Components.Editors {
 		}
 
 		/// <summary>
+		/// Смена кадра
+		/// </summary>
+		/// <param name="frame">Кадр</param>
+		public void AnimatorFrameChanged(float frame) {
+			if (animator!=null) {
+				animator.StopWithFrame(frame);
+			}
+		}
+
+		/// <summary>
 		/// Вхождение перетаскивания текстуры
 		/// </summary>
 		public void TextureDragEntered(Project.Entry file) {
@@ -462,6 +482,7 @@ namespace SpriteBoy.Components.Editors {
 				surfaces[i].Texture = surfData[i].tex;
 				surfaces[i].Diffuse = surfData[i].tint;
 				surfaces[i].Blending = surfData[i].blend;
+				surfaces[i].Unlit = surfData[i].unlit;
 			}
 		}
 

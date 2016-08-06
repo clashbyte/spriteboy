@@ -7,13 +7,15 @@ using System.Text;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using SpriteBoy.Engine.Pipeline;
+using SpriteBoy.Data.Shaders;
+using OpenTK.Graphics;
 
 namespace SpriteBoy.Engine.Components.Rendering {
 
 	/// <summary>
 	/// Геометрический компонент
 	/// </summary>
-	public abstract class MeshComponent : EntityComponent, IRenderable {
+	public class MeshComponent : EntityComponent, IRenderable {
 
 		/// <summary>
 		/// Вершины
@@ -66,9 +68,12 @@ namespace SpriteBoy.Engine.Components.Rendering {
 					cull.Min = min;
 					cull.Max = max;
 					RebuildParentCull();
+					vertexCount = vertices.Length;
 				} else {
 					vertices = null;
+					vertexCount = 0;
 				}
+				needVertexBuffer = true;
 			}
 		}
 
@@ -106,6 +111,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 				} else {
 					normals = null;
 				}
+				needNormalBuffer = true;
 			}
 		}
 
@@ -140,6 +146,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 				} else {
 					uv = null;
 				}
+				needTexCoordBuffer = true;
 			}
 		}
 
@@ -168,9 +175,15 @@ namespace SpriteBoy.Engine.Components.Rendering {
 						indices[i + 1] = value[i + 1];
 						indices[i + 2] = value[i + 0];
 					}
+					indexCount = indices.Length;
 				} else {
 					indices = null;
+					indexCount = 0;
 				}
+				needIndexBuffer = true;
+				needVertexBuffer = true;
+				needNormalBuffer = true;
+				needTexCoordBuffer = true;
 			}
 		}
 
@@ -186,6 +199,14 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// Диффузный цвет
 		/// </summary>
 		public Color Diffuse {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Неосвещённый меш
+		/// </summary>
+		public bool Unlit {
 			get;
 			set;
 		}
@@ -242,12 +263,31 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			}
 		}
 
+		// Множитель для визуального затенения
+		protected const float LIGHT_MULT = 0.8f;
+
 		// Скрытые переменные
 		protected float[] vertices;
 		protected float[] normals;
 		protected float[] uv;
 		protected ushort[] indices;
 		protected CullBox cull;
+
+		// Количество вершин и индексов
+		protected int vertexCount;
+		protected int indexCount;
+
+		// Буфферы для нового рендера
+		protected int vertexBuffer;
+		protected int normalBuffer;
+		protected int textureBuffer;
+		protected int indexBuffer;
+
+		// Флаги для перестройки буфферов
+		protected bool needVertexBuffer;
+		protected bool needNormalBuffer;
+		protected bool needTexCoordBuffer;
+		protected bool needIndexBuffer;
 
 		/// <summary>
 		/// Статический меш
@@ -259,24 +299,20 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		}
 
 		/// <summary>
-		/// Метод, вызываемый до рендера
-		/// </summary>
-		protected virtual void BeforeRender() { }
-
-		/// <summary>
-		/// Метод, вызываемый после рендера
-		/// </summary>
-		protected virtual void AfterRender() { }
-
-		/// <summary>
 		/// Отрисовка меша
 		/// </summary>
 		internal override void Render() {
-
-			// Не рисуем если меш отключен
-			if (!Enabled) {
-				return;
+			if (GraphicalCaps.ShaderPipeline) {
+				ModernRender();
+			} else {
+				LegacyRender();
 			}
+		}
+
+		/// <summary>
+		/// Устаревший рендерер
+		/// </summary>
+		protected virtual void LegacyRender() {
 
 			// Поиск вершин и индексов
 			float[] va = SearchVertices();
@@ -286,10 +322,16 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			if (va != null && ia != null) {
 				if (va.Length > 0 && ia.Length > 0) {
 
-					// Установка данных
-					BeforeRender();
-
-					// Установка цвета
+					// Установка цвета и освещения, если требуется
+					if (!Unlit) {
+						GL.ShadeModel(ShadingModel.Smooth);
+						GL.Enable(EnableCap.Lighting);
+						GL.Enable(EnableCap.Light0);
+						GL.LightModel(LightModelParameter.LightModelAmbient, new float[] { LIGHT_MULT, LIGHT_MULT, LIGHT_MULT, 1f });
+						GL.Light(LightName.Light0, LightParameter.Position, new OpenTK.Vector4(0f, 1f, 0f, 1f));
+						GL.Enable(EnableCap.ColorMaterial);
+						GL.ColorMaterial(MaterialFace.Front, ColorMaterialParameter.AmbientAndDiffuse);
+					}
 					GL.Color3(Diffuse);
 
 					// Загрузка вершин
@@ -324,12 +366,120 @@ namespace SpriteBoy.Engine.Components.Rendering {
 					GL.DisableClientState(ArrayCap.NormalArray);
 					GL.DisableClientState(ArrayCap.TextureCoordArray);
 					GL.DisableClientState(ArrayCap.VertexArray);
+					GL.Disable(EnableCap.Light0);
+					GL.Disable(EnableCap.Lighting);
 
-					// Отключение значений
-					AfterRender();
 				}
 			}
+		}
 
+		/// <summary>
+		/// Новый рендер
+		/// </summary>
+		protected virtual void ModernRender() {
+
+			// Проверка буфферов
+			CheckBuffers();
+
+			int vCount = GetVertexCount();
+			int iCount = GetIndexCount();
+
+			// Рендер
+			if (iCount > 0 && vCount > 0) {
+
+				// Установка текстуры
+				if (Texture != null) {
+					Texture.Bind();
+				} else {
+					Texture.BindEmpty();
+				}
+
+				// Отрисовка
+				MeshShader shader = MeshShader.Shader;
+				shader.DiffuseColor = Diffuse;
+				shader.LightMultiplier = Unlit ? 1f : LIGHT_MULT;
+				shader.Bind();
+				GL.BindBuffer(BufferTarget.ArrayBuffer, SearchVertexBuffer());
+				GL.VertexAttribPointer(shader.VertexBufferLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+				GL.BindBuffer(BufferTarget.ArrayBuffer, SearchNormalBuffer());
+				GL.VertexAttribPointer(shader.NormalBufferLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+				GL.BindBuffer(BufferTarget.ArrayBuffer, SearchTexCoordBuffer());
+				GL.VertexAttribPointer(shader.TexCoordBufferLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+				GL.BindBuffer(BufferTarget.ElementArrayBuffer, SearchIndexBuffer());
+				GL.DrawElements(BeginMode.Triangles, iCount, DrawElementsType.UnsignedShort, 0);
+				shader.Unbind();
+			}
+
+		}
+
+		/// <summary>
+		/// Проверка буфферов
+		/// </summary>
+		protected virtual void CheckBuffers() {
+
+			// Индексный буффер
+			if (needIndexBuffer) {
+				ushort[] ia = SearchIndices();
+				if (ia == null) {
+					ia = new ushort[0];
+				}
+				if (indexBuffer == 0) {
+					indexBuffer = GL.GenBuffer();
+				}
+				GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBuffer);
+				GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(ia.Length * 2), ia, BufferUsageHint.StaticDraw);
+				GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+			}
+
+			// Вершинный буффер
+			if (needVertexBuffer) {
+				float[] va = SearchVertices();
+				if (va == null) {
+					va = new float[vertexCount * 3];
+				}
+				if (vertexBuffer == 0) {
+					vertexBuffer = GL.GenBuffer();
+				}
+				GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(va.Length * 4), va, BufferUsageHint.StaticDraw);
+				GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+				needVertexBuffer = false;
+			}
+
+			// Буффер нормалей
+			if (needNormalBuffer) {
+				float[] na = SearchNormals();
+				if (na == null) {
+					na = new float[vertexCount * 3];
+				}
+				if (normalBuffer == 0) {
+					normalBuffer = GL.GenBuffer();
+				}
+				GL.BindBuffer(BufferTarget.ArrayBuffer, normalBuffer);
+				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(na.Length * 4), na, BufferUsageHint.StaticDraw);
+				GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+				needNormalBuffer = false;
+			}
+
+			// Текстурный буффер
+			if (needTexCoordBuffer) {
+				float[] ta = SearchTexCoords();
+				if (ta == null) {
+					ta = new float[vertexCount * 2];
+				}
+				if (textureBuffer == 0) {
+					textureBuffer = GL.GenBuffer();
+				}
+				GL.BindBuffer(BufferTarget.ArrayBuffer, textureBuffer);
+				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(ta.Length * 4), ta, BufferUsageHint.StaticDraw);
+				GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+				needTexCoordBuffer = false;
+			}
+
+			// Проверка родителя
+			if (Proxy != null) {
+				Proxy.CheckBuffers();
+			}
 		}
 
 		/// <summary>
@@ -344,7 +494,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// Поиск вершин среди прокси-объектов
 		/// </summary>
 		/// <returns>Массив вершин</returns>
-		float[] SearchVertices() {
+		protected float[] SearchVertices() {
 			MeshComponent mc = this;
 			float[] va = vertices;
 			while (va == null) {
@@ -362,7 +512,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// Поиск нормалей среди прокси-объектов
 		/// </summary>
 		/// <returns>Массив нормалей</returns>
-		float[] SearchNormals() {
+		protected float[] SearchNormals() {
 			MeshComponent mc = this;
 			float[] na = normals;
 			while (na == null) {
@@ -380,7 +530,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// Поиск текстурных координат среди прокси-объектов
 		/// </summary>
 		/// <returns>Массив текстурных координат</returns>
-		float[] SearchTexCoords() {
+		protected float[] SearchTexCoords() {
 			MeshComponent mc = this;
 			float[] ta = uv;
 			while (ta == null) {
@@ -398,7 +548,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// Поиск индексов треугольников
 		/// </summary>
 		/// <returns></returns>
-		ushort[] SearchIndices() {
+		protected ushort[] SearchIndices() {
 			MeshComponent mc = this;
 			ushort[] ia = indices;
 			while (ia == null) {
@@ -410,6 +560,114 @@ namespace SpriteBoy.Engine.Components.Rendering {
 				ia = mc.indices;
 			}
 			return ia;
+		}
+
+		/// <summary>
+		/// Поиск вершинного буффера
+		/// </summary>
+		/// <returns>Индекс вершинного буффера</returns>
+		protected int SearchVertexBuffer() {
+			MeshComponent mc = this;
+			int buffer = vertexBuffer;
+			while (buffer == 0) {
+				if (mc.Proxy != null) {
+					mc = mc.Proxy;
+				} else {
+					break;
+				}
+				buffer = mc.vertexBuffer;
+			}
+			return buffer;
+		}
+
+		/// <summary>
+		/// Поиск буффера нормалей
+		/// </summary>
+		/// <returns>Индекс буффера нормалей</returns>
+		protected int SearchNormalBuffer() {
+			MeshComponent mc = this;
+			int buffer = normalBuffer;
+			while (buffer == 0) {
+				if (mc.Proxy != null) {
+					mc = mc.Proxy;
+				} else {
+					break;
+				}
+				buffer = mc.normalBuffer;
+			}
+			return buffer;
+		}
+
+		/// <summary>
+		/// Поиск буффера текстурных координат
+		/// </summary>
+		/// <returns>Индекс буффера текстурных координат</returns>
+		protected int SearchTexCoordBuffer() {
+			MeshComponent mc = this;
+			int buffer = textureBuffer;
+			while (buffer == 0) {
+				if (mc.Proxy != null) {
+					mc = mc.Proxy;
+				} else {
+					break;
+				}
+				buffer = mc.textureBuffer;
+			}
+			return buffer;
+		}
+
+		/// <summary>
+		/// Поиск индексного буффера
+		/// </summary>
+		/// <returns>Индексный буффер</returns>
+		protected int SearchIndexBuffer() {
+			MeshComponent mc = this;
+			int buffer = indexBuffer;
+			while (buffer == 0) {
+				if (mc.Proxy != null) {
+					mc = mc.Proxy;
+				} else {
+					break;
+				}
+				buffer = mc.indexBuffer;
+			}
+			return buffer;
+		}
+
+		/// <summary>
+		/// Поиск количества вершин
+		/// </summary>
+		/// <returns>Количество вершин</returns>
+		protected int GetVertexCount() {
+			MeshComponent mc = this;
+			int count = vertexCount;
+			while (count == 0) {
+				if (mc.Proxy != null) {
+					mc = mc.Proxy;
+				} else {
+					break;
+				}
+				count = mc.vertexCount;
+			}
+			return count;
+		}
+
+		/// <summary>
+		/// Поиск количества индексов
+		/// </summary>
+		/// <returns>Количество индексов</returns>
+		protected int GetIndexCount() {
+			MeshComponent mc = this;
+			int count = indexCount;
+			while (count == 0) {
+				if (mc.Proxy != null) {
+					mc = mc.Proxy;
+				} else {
+					break;
+				}
+				count = mc.indexCount;
+			}
+			return count;
 		}
 	}
 }

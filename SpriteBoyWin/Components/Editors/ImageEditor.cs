@@ -95,10 +95,10 @@ namespace SpriteBoy.Components.Editors {
 
 			if (singleQuad == null) {
 				singleQuad = new Entity();
-				singleQuad.AddComponent(new StaticMeshComponent());
+				singleQuad.AddComponent(new MeshComponent());
 				scene.Entities.Add(singleQuad);
 			}
-			StaticMeshComponent singleMesh = singleQuad.GetComponent<StaticMeshComponent>();
+			MeshComponent singleMesh = singleQuad.GetComponent<MeshComponent>();
 			singleMesh.Vertices = new Vec3[]{
 				new Vec3(-halfX,  halfY, 0),
 				new Vec3( halfX,  halfY, 0),
@@ -119,10 +119,10 @@ namespace SpriteBoy.Components.Editors {
 
 			if (wrapQuad == null) {
 				wrapQuad = new Entity();
-				wrapQuad.AddComponent(new StaticMeshComponent());
+				wrapQuad.AddComponent(new MeshComponent());
 				scene.Entities.Add(wrapQuad);
 			}
-			StaticMeshComponent wrapMesh = wrapQuad.GetComponent<StaticMeshComponent>();
+			MeshComponent wrapMesh = wrapQuad.GetComponent<MeshComponent>();
 			wrapMesh.Vertices = new Vec3[]{
 				new Vec3(-halfX*3,  halfY*3, 0),
 				new Vec3( halfX*3,  halfY*3, 0),

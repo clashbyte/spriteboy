@@ -6,6 +6,9 @@ using System.Text;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 using SpriteBoy.Data.Types;
+using SpriteBoy.Engine.Pipeline;
+using SpriteBoy.Data.Shaders;
+using SpriteBoy.Data;
 
 namespace SpriteBoy.Engine.Components.Rendering {
 
@@ -126,8 +129,12 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		CullSphere cull;
 
 		// Скрытые буфферы
-		float[] vertexBuffer;
-		byte[] colorBuffer;
+		float[] vertexArray;
+		float[] colorArray;
+		
+		// Скрытые буфферы
+		int vertexBuffer;
+		int colorBuffer;
 
 		/// <summary>
 		/// Конструктор
@@ -164,18 +171,30 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			}
 
 			GL.LineWidth(WireWidth);
-
 			GL.BindTexture(TextureTarget.Texture2D, 0);
-			GL.EnableClientState(ArrayCap.VertexArray);
-			GL.EnableClientState(ArrayCap.ColorArray);
 
-			GL.VertexPointer(3, VertexPointerType.Float, 0, vertexBuffer);
-			GL.ColorPointer(3, ColorPointerType.UnsignedByte, 0, colorBuffer);
+			if (GraphicalCaps.ShaderPipeline) {
 
-			GL.DrawArrays(BeginMode.Lines, 0, vertexBuffer.Length/3);
+				ShaderSystem.CheckVertexBuffer(ref vertexBuffer, vertexArray, BufferUsageHint.StaticDraw);
+				ShaderSystem.CheckVertexBuffer(ref colorBuffer, colorArray, BufferUsageHint.StaticDraw);
 
-			GL.DisableClientState(ArrayCap.ColorArray);
-			GL.DisableClientState(ArrayCap.VertexArray);
+				WireGridShader shader = WireGridShader.Shader;
+				shader.Bind();
+				GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+				GL.VertexAttribPointer(shader.VertexBufferLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+				GL.BindBuffer(BufferTarget.ArrayBuffer, colorBuffer);
+				GL.VertexAttribPointer(shader.ColorBufferLocation, 4, VertexAttribPointerType.Float, false, 0, 0);
+				GL.DrawArrays(BeginMode.Lines, 0, vertexArray.Length / 3);
+				shader.Unbind();
+			} else {
+				GL.EnableClientState(ArrayCap.VertexArray);
+				GL.EnableClientState(ArrayCap.ColorArray);
+				GL.VertexPointer(3, VertexPointerType.Float, 0, vertexArray);
+				GL.ColorPointer(4, ColorPointerType.Float, 0, colorArray);
+				GL.DrawArrays(BeginMode.Lines, 0, vertexArray.Length / 3);
+				GL.DisableClientState(ArrayCap.ColorArray);
+				GL.DisableClientState(ArrayCap.VertexArray);
+			}
 		}
 
 		/// <summary>
@@ -183,12 +202,18 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// </summary>
 		void RebuildBuffer() {
 
+			if (GraphicalCaps.ShaderPipeline) {
+				GL.DeleteBuffer(vertexBuffer);
+				GL.DeleteBuffer(colorBuffer);
+			}
+
 			int count = (cellCount * 2 + 1) * 4;
-			vertexBuffer = new float[count*3];
-			colorBuffer = new byte[count*3];
+			vertexArray = new float[count*3];
+			colorArray = new float[count*4];
 
 			float maxPos = (float)cellCount * cellSize;
 			int idx = 0;
+			int cidx = 0;
 			for (int i = 0; i <= cellCount; i++) {
 
 				bool isAccent = false;
@@ -204,24 +229,26 @@ namespace SpriteBoy.Engine.Components.Rendering {
 
 					// Вершинный буффер
 					float ps = (float)i * cellSize;
-					vertexBuffer[idx + 0] = ps * mul;
-					vertexBuffer[idx + 2] = maxPos;
-					vertexBuffer[idx + 3] = ps * mul;
-					vertexBuffer[idx + 5] = -maxPos;
+					vertexArray[idx + 0] = ps * mul;
+					vertexArray[idx + 2] = maxPos;
+					vertexArray[idx + 3] = ps * mul;
+					vertexArray[idx + 5] = -maxPos;
 
-					vertexBuffer[idx + 6] = maxPos;
-					vertexBuffer[idx + 8] = ps * mul;
-					vertexBuffer[idx + 9] = -maxPos;
-					vertexBuffer[idx + 11] = ps * mul;
+					vertexArray[idx + 6] = maxPos;
+					vertexArray[idx + 8] = ps * mul;
+					vertexArray[idx + 9] = -maxPos;
+					vertexArray[idx + 11] = ps * mul;
 
 					// Цвета
-					for (int cl = 0; cl < 12; cl += 3) {
-						colorBuffer[idx + cl + 0] = isAccent ? accentColor.R : mainColor.R;
-						colorBuffer[idx + cl + 1] = isAccent ? accentColor.G : mainColor.G;
-						colorBuffer[idx + cl + 2] = isAccent ? accentColor.B : mainColor.B;
+					for (int cl = 0; cl < 16; cl += 4) {
+						colorArray[cidx + cl + 0] = isAccent ? (float)accentColor.R / 255f : (float)mainColor.R / 255f;
+						colorArray[cidx + cl + 1] = isAccent ? (float)accentColor.G / 255f : (float)mainColor.G / 255f;
+						colorArray[cidx + cl + 2] = isAccent ? (float)accentColor.B / 255f : (float)mainColor.B / 255f;
+						colorArray[cidx + cl + 3] = isAccent ? (float)accentColor.A / 255f : (float)mainColor.A / 255f;
 					}
 
 					idx += 12;
+					cidx += 16;
 				}
 			}
 

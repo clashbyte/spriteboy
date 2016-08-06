@@ -228,7 +228,6 @@ namespace SpriteBoy.Engine.World {
 				GL.Disable(EnableCap.Blend);
 			}
 			
-
 			// Отключение состояний
 			GL.Disable(EnableCap.DepthTest);
 		}

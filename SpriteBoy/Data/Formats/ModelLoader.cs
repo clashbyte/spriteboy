@@ -34,7 +34,7 @@ namespace SpriteBoy.Data.Formats {
 					return MD2Loader.Load(name);
 
 				case ".md3":
-					return S3DLoader.Load(name);
+					return MD3Loader.Load(name);
 
 			}
 			return null;

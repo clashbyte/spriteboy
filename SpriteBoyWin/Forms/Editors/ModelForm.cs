@@ -237,6 +237,13 @@ namespace SpriteBoy.Forms.Editors {
 		}
 
 		/// <summary>
+		/// Смена анимации у трекера
+		/// </summary>
+		private void animationTracker_FrameChanged(object sender) {
+			(FileEditor as ModelEditor).AnimatorFrameChanged(animationTracker.MarkerPosition);
+		}
+
+		/// <summary>
 		/// Перестройка колонок списка поверхностей
 		/// </summary>
 		private void AdjustSurfaceColumns() {

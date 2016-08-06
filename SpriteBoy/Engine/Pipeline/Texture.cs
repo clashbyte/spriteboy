@@ -11,6 +11,8 @@ using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using SpriteBoy.Data;
+using OpenTK;
 
 namespace SpriteBoy.Engine.Pipeline {
 
@@ -18,6 +20,11 @@ namespace SpriteBoy.Engine.Pipeline {
 	/// Текстурный объект
 	/// </summary>
 	public class Texture : IDisposable {
+
+		/// <summary>
+		/// Пустая текстура
+		/// </summary>
+		static int emptyGLTexture;
 
 		/// <summary>
 		/// Имя файла во внутренней файловой системе
@@ -242,6 +249,24 @@ namespace SpriteBoy.Engine.Pipeline {
 				} else {
 					GL.BindTexture(TextureTarget.Texture2D, 0);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Установка однопиксельной непрозрачной текстуры в конвейер
+		/// </summary>
+		internal static void BindEmpty() {
+			if (GraphicalCaps.ShaderPipeline) {
+				if (emptyGLTexture == 0) {
+					emptyGLTexture = GL.GenTexture();
+					GL.BindTexture(TextureTarget.Texture2D, emptyGLTexture);
+					GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Four, 1, 1, 0, OpenTK.Graphics.OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, new byte[]{255,255,255,255});
+				} else {
+					GL.BindTexture(TextureTarget.Texture2D, emptyGLTexture);
+				}
+				ShaderSystem.TextureMatrix = Matrix4.Identity;
+			} else {
+				GL.BindTexture(TextureTarget.Texture2D, 0);
 			}
 		}
 

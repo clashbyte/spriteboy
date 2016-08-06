@@ -13,9 +13,9 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// <summary>
 		/// Длина анимации
 		/// </summary>
-		public int AnimationLength {
+		public float AnimationLength {
 			get {
-				int ln = 0;
+				float ln = 0;
 				Frame[] fr = Frames;
 				if (fr!=null) {
 					foreach (Frame f in fr) {
@@ -31,13 +31,15 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// <summary>
 		/// Кадры меша
 		/// </summary>
-		public Frame[] Frames {
+		public virtual Frame[] Frames {
 			get {
 				Frame[] fr = frames;
 				MeshComponent me = this;
 				while (fr == null) {
 					if (me.Proxy != null) {
 						me = me.Proxy;
+					} else {
+						break;
 					}
 					if (me is AnimatedMeshComponent) {
 						fr = (me as AnimatedMeshComponent).frames;
@@ -47,7 +49,6 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			}
 			set {
 				frames = value;
-				CurrentFrame = null;
 			}
 		}
 
@@ -57,43 +58,6 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		Frame[] frames;
 
 		/// <summary>
-		/// Необходимо сделать переходящий буффер
-		/// </summary>
-		internal bool needTransitionCache;
-		/// <summary>
-		/// Необходимо пересчитать данные
-		/// </summary>
-		internal bool frameRefresh;
-		/// <summary>
-		/// Переходное значение буффера
-		/// </summary>
-		internal float frameDelta;
-		/// <summary>
-		/// Первый кадр (-1 - интерполяция)
-		/// </summary>
-		protected int frameOne;
-		/// <summary>
-		/// Второй кадр
-		/// </summary>
-		protected int frameTwo;
-
-		/// <summary>
-		/// Текущее состояние меша
-		/// </summary>
-		internal virtual Frame CurrentFrame {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Переходной кадр
-		/// </summary>
-		internal virtual Frame TransitionFrame {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// Кадр меша
 		/// </summary>
 		public abstract class Frame {
@@ -101,7 +65,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			/// <summary>
 			/// Время кадра
 			/// </summary>
-			public int Time {
+			public float Time {
 				get;
 				set;
 			}
@@ -109,42 +73,65 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		}
 
 		/// <summary>
-		/// Установка необходимых вершинных данных в самом начале отрисовки
-		/// </summary>
-		protected virtual void SetupVertexData() { }
-
-		/// <summary>
-		/// Отрисовка меша
+		/// Обновление анимации и рендер
 		/// </summary>
 		internal override void Render() {
-
-			// Установка текущего кадра, если он пуст
-			if (CurrentFrame == null) {
-				Frame[] frm = Frames;
-				if (frm!=null) {
-					CurrentFrame = InterpolateFrame(frm[0], frm[0], 0);
-				}
+			// Обновление переходного кадра
+			if (queuedTransitionUpdate != null) {
+				UpdateTransition();
+				queuedTransitionUpdate = null;
 			}
 
-			// Установка вершин
-			SetupVertexData();
+			// Обновление анимации
+			if (queuedUpdate != null) {
+				UpdateAnimation();
+				queuedUpdate = null;
+			}
 
-			// Отрисовка
+			// Рендер
 			base.Render();
 		}
 
 		/// <summary>
-		/// Интерполяция кадров
+		/// Требуется ли обновление анимации
 		/// </summary>
-		/// <param name="f1">Первый кадр</param>
-		/// <param name="f2">Второй кадр</param>
-		/// <param name="delta">Интерполяция между кадрами</param>
-		internal abstract Frame InterpolateFrame(Frame f1, Frame f2, float delta);
+		internal QueuedMeshUpdate queuedUpdate;
+
+		/// <summary>
+		/// Требуется ли сохранение перехода
+		/// </summary>
+		internal QueuedMeshUpdate queuedTransitionUpdate;
 
 		/// <summary>
 		/// Создание копии текущего кадра для интерполяции
 		/// </summary>
-		internal abstract void SnapshotTransition();
+		protected abstract void UpdateTransition();
 
+		/// <summary>
+		/// Обновление анимации
+		/// </summary>
+		protected abstract void UpdateAnimation();
+
+		/// <summary>
+		/// Внутреннее запланированное обновление меша
+		/// </summary>
+		internal class QueuedMeshUpdate {
+			/// <summary>
+			/// Первый кадр
+			/// </summary>
+			public float FirstFrame;
+			/// <summary>
+			/// Последний кадр
+			/// </summary>
+			public float LastFrame;
+			/// <summary>
+			/// Текущий кадр
+			/// </summary>
+			public float Time;
+			/// <summary>
+			/// Анимация круговая
+			/// </summary>
+			public bool IsLooping;
+		}
 	}
 }

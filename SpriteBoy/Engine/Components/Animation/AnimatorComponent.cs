@@ -17,11 +17,20 @@ namespace SpriteBoy.Engine.Components.Animation {
 		/// </summary>
 		public int FrameCount {
 			get {
+				return (int)Math.Ceiling(MaxTime);
+			}
+		}
+
+		/// <summary>
+		/// Максимальное время
+		/// </summary>
+		public float MaxTime {
+			get {
 				AnimatedMeshComponent[] ms = Parent.GetComponents<AnimatedMeshComponent>();
-				int sz = 0;
+				float sz = 0;
 				foreach (AnimatedMeshComponent m in ms) {
 					float l = m.AnimationLength;
-					if (l>sz) {
+					if (l > sz) {
 						sz = l;
 					}
 				}
@@ -65,8 +74,12 @@ namespace SpriteBoy.Engine.Components.Animation {
 		/// Скорость проигрывания
 		/// </summary>
 		public float Speed {
-			get;
-			set;
+			get {
+				return speed;
+			}
+			set {
+				speed = value;
+			}
 		}
 
 		/// <summary>
@@ -82,6 +95,9 @@ namespace SpriteBoy.Engine.Components.Animation {
 		/// </summary>
 		public float Time {
 			get {
+				if (IsTransition) {
+					return -time / transLength;
+				}
 				if (Speed > 0) {
 					return (float)FirstFrame + time;
  				}
@@ -95,6 +111,26 @@ namespace SpriteBoy.Engine.Components.Animation {
 		float time;
 
 		/// <summary>
+		/// Первый кадр
+		/// </summary>
+		float firstFrame;
+
+		/// <summary>
+		/// Последний кадр
+		/// </summary>
+		float lastFrame;
+
+		/// <summary>
+		/// Скорость проигрывания
+		/// </summary>
+		float speed;
+
+		/// <summary>
+		/// Длина перехода
+		/// </summary>
+		float transLength;
+
+		/// <summary>
 		/// Анимированные меши
 		/// </summary>
 		AnimatedMeshComponent[] meshes;
@@ -105,73 +141,109 @@ namespace SpriteBoy.Engine.Components.Animation {
 		internal override void Update() {
 			if (Playing) {
 
-				// Кадры для смешивания
-				AnimatedMeshComponent.Frame fr1 = null, fr2 = null;
-				float delta = 0f;
+				// Рассчёт текущих значений
+				float currentTime = 0f;
+				if (IsTransition) {
+					currentTime = -time / transLength;
+				} else {
+					if (speed < 0) {
+						currentTime = lastFrame - time;
+					} else {
+						currentTime = firstFrame + time;
+					}
+				}
 
 				// Установка анимации
 				foreach (AnimatedMeshComponent mc in meshes) {
-
-					if (trans) {
-						delta = (transTime + time) / transTime;
-					}else{
-						float t = 0;
-						if (speed < 0) {
-							t = end - time;
-
-						} else {
-							t = start + time;
-							fr1 = SearchFrameBackward(mc, t);
-							fr2 = SearchFrameForward(mc, t);
-						}
-						if (fr1 != null && fr2 != null) {
-							if (fr1.Time != fr2.Time) {
-								delta = (t - fr1.Time) / (fr2.Time - fr1.Time);
-							}
-						}
-					}
-					
-					// Применение кадров
-					if (fr1 != null && fr2 != null) {
-						mc.CurrentFrame = mc.InterpolateFrame(fr1, fr2, delta);
-					}else if(fr1 != null){
-						mc.CurrentFrame = mc.InterpolateFrame(fr1, fr1, delta);
-					}else if(fr2 != null){
-						mc.CurrentFrame = mc.InterpolateFrame(fr2, fr2, delta);
-					}
+					AnimatedMeshComponent.QueuedMeshUpdate qu = new AnimatedMeshComponent.QueuedMeshUpdate();
+					qu.FirstFrame = firstFrame;
+					qu.LastFrame = lastFrame;
+					qu.IsLooping = Mode == AnimationMode.Loop;
+					qu.Time = currentTime;
+					mc.queuedUpdate = qu;
 				}
 
 				// Обвновление логики
-				if (trans) {
-
+				if (IsTransition) {
+					time += 1f;
+					if (time > 0) {
+						IsTransition = false;
+					}
 				}else{
-					time += Math.Abs(speed);
-					if (time > end - start) {
-						switch (loopmode) {
-							case AnimationMode.OneShot:
-								time = end;
-								playing = false;
-								break;
-							case AnimationMode.Loop:
-								time = time % (end - start);
-								break;
-							case AnimationMode.PingPongLoop:
-								time = time % (end - start);
-								speed *= -1;
-								break;
+					if (speed == 0 || firstFrame == lastFrame) {
+						Playing = false;
+					} else {
+						time += Math.Abs(speed);
+						if (time > lastFrame - firstFrame) {
+							switch (Mode) {
+								case AnimationMode.OneShot:
+									time = lastFrame;
+									Playing = false;
+									break;
+								case AnimationMode.Loop:
+									time = time % (lastFrame - firstFrame + 1f);
+									break;
+								case AnimationMode.PingPongLoop:
+									time = time % (lastFrame - firstFrame);
+									speed *= -1;
+									break;
+							}
 						}
 					}
 				}
-
 			}
 		}
 
 		/// <summary>
 		/// Установка кадра без анимирования 
 		/// </summary>
-		/// <param name="frame"></param>
-		public void SetFrame(float frame) {
+		/// <param name="frame">Время для установки</param>
+		public void StopWithFrame(float frame) {
+			Stop();
+			if (meshes == null) {
+				meshes = Parent.GetComponents<AnimatedMeshComponent>();
+			}
+			if (meshes != null) {
+				foreach (AnimatedMeshComponent m in meshes) {
+					AnimatedMeshComponent.QueuedMeshUpdate qu = new AnimatedMeshComponent.QueuedMeshUpdate();
+					qu.FirstFrame = 0;
+					qu.LastFrame = MaxTime;
+					qu.IsLooping = false;
+					qu.Time = 0;
+					if (qu.LastFrame > 0) {
+						qu.Time = frame % qu.LastFrame;
+					}
+					m.queuedUpdate = qu;
+				}
+			}
+		}
 
+		/// <summary>
+		/// Остановка анимации
+		/// </summary>
+		public void Stop() {
+			float currentTime = 0f;
+			if (IsTransition) {
+				currentTime = time / transLength;
+			} else {
+				if (speed < 0) {
+					currentTime = lastFrame - time;
+				} else {
+					currentTime = firstFrame + time;
+				}
+			}
+			if (meshes!=null) {
+				foreach (AnimatedMeshComponent m in meshes) {
+					AnimatedMeshComponent.QueuedMeshUpdate qu = new AnimatedMeshComponent.QueuedMeshUpdate();
+					qu.FirstFrame = firstFrame;
+					qu.LastFrame = lastFrame;
+					qu.IsLooping = Mode == AnimationMode.Loop;
+					qu.Time = currentTime;
+					m.queuedUpdate = qu;
+				}
+			}
+			
+			Playing = false;
 		}
 
 		/// <summary>
@@ -186,81 +258,55 @@ namespace SpriteBoy.Engine.Components.Animation {
 			if (meshes!=null) {
 
 				// Установка общих значений
+				float oldFirstFrame = firstFrame;
+				float oldLastFrame = lastFrame;
+				float currentTime = 0f;
+				if (IsTransition) {
+					currentTime = time / transLength;
+				} else {
+					if (speed < 0) {
+						currentTime = oldLastFrame - time;
+					} else {
+						currentTime = oldFirstFrame + time;
+					}
+				}
+				bool allowRepeat = Mode == AnimationMode.Loop;
+
 				speed = spd;
-				start = from;
-				end = to;
-				loopmode = mode;
+				firstFrame = from;
+				lastFrame = to;
+				Mode = mode;
+				IsTransition = false;
+				if (firstFrame>lastFrame) {
+					float d = firstFrame;
+					firstFrame = lastFrame;
+					lastFrame = d;
+				}
+				float maxFrame = MaxTime;
+				if (firstFrame < 0) {
+					firstFrame = 0;
+				}
+				if (lastFrame > maxFrame) {
+					lastFrame = maxFrame;
+				}
 
 				if (transition > 0) {
 					time = -transition;
-					transTime = transition;
+					transLength = transition;
 					foreach (AnimatedMeshComponent m in meshes) {
-						m.SnapshotTransition();
+						AnimatedMeshComponent.QueuedMeshUpdate qu = new AnimatedMeshComponent.QueuedMeshUpdate();
+						qu.FirstFrame = oldFirstFrame;
+						qu.LastFrame = oldLastFrame;
+						qu.IsLooping = allowRepeat;
+						qu.Time = currentTime;
+						m.queuedTransitionUpdate = qu;
 					}
-					trans = true;
+					IsTransition = true;
 				}else{
 					time = 0f;
 				}
-				playing = true;
+				Playing = true;
 			}
-		}
-
-		/// <summary>
-		/// Поиск кадра впереди
-		/// </summary>
-		/// <param name="m">Меш</param>
-		/// <param name="time">Время</param>
-		/// <param name="allowLoop">Разрешить поиск с другой стороны</param>
-		/// <returns>Кадр</returns>
-		AnimatedMeshComponent.Frame SearchFrameForward(AnimatedMeshComponent m, float time) {
-			AnimatedMeshComponent.Frame[] frames = m.Frames;
-			if (frames!=null && frames.Length>0) {
-				// Поиск после
-				for (int i = 0; i < frames.Length; i++) {
-					if (frames[i].Time > time && frames[i].Time <= end) {
-						return frames[i];
-					}
-				}
-
-				// Поиск сзади
-				if (loopmode == AnimationMode.Loop) {
-					for (int i = 0; i < frames.Length; i++) {
-						if (frames[i].Time >= start) {
-							return frames[i];
-						}
-					}
-				}
-			}
-			return null;
-		}
-
-		/// <summary>
-		/// Поиск кадра сзади
-		/// </summary>
-		/// <param name="m">Меш</param>
-		/// <param name="time">Время</param>
-		/// <param name="allowLoop">Разрешить поиск с другой стороны</param>
-		/// <returns>Кадр</returns>
-		AnimatedMeshComponent.Frame SearchFrameBackward(AnimatedMeshComponent m, float time) {
-			AnimatedMeshComponent.Frame[] frames = m.Frames;
-			if (frames != null && frames.Length > 0) {
-				// Поиск после
-				for (int i = frames.Length-1; i >= 0; i--) {
-					if (frames[i].Time < time && frames[i].Time >= start) {
-						return frames[i];
-					}
-				}
-
-				// Поиск сзади
-				if (loopmode == AnimationMode.Loop) {
-					for (int i = frames.Length - 1; i >= 0; i--) {
-						if (frames[i].Time <= end) {
-							return frames[i];
-						}
-					}
-				}
-			}
-			return null;
 		}
 
 		/// <summary>

@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using SpriteBoy.Data;
 using SpriteBoy.Data.Rendering;
 using System.Drawing.Drawing2D;
+using SpriteBoy.Engine.Pipeline;
 
 namespace SpriteBoy.Engine.World {
 	
@@ -177,29 +178,38 @@ namespace SpriteBoy.Engine.World {
 				RebuildProjection();
 			}
 			
-			// Загрузка данныз
-			ShaderSystem.ProjectionMatrix = proj;
+			// Загрузка данных
 			GL.Viewport(0, 0, (int)size.X, (int)size.Y);
-			GL.MatrixMode(MatrixMode.Projection);
-			GL.LoadMatrix(ref proj);
+			if (GraphicalCaps.ShaderPipeline) {
+				ShaderSystem.ProjectionMatrix = proj;
+			} else {
+				GL.MatrixMode(MatrixMode.Projection);
+				GL.LoadMatrix(ref proj);
+			}
 		}
 
 		/// <summary>
 		/// Загрузка матрицы неба
 		/// </summary>
 		internal void LoadSkyMatrix() {
-			ShaderSystem.CameraMatrix = skymat;
-			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadMatrix(ref skymat);
+			if (GraphicalCaps.ShaderPipeline) {
+				ShaderSystem.CameraMatrix = skymat;
+			} else {
+				GL.MatrixMode(MatrixMode.Modelview);
+				GL.LoadMatrix(ref skymat);
+			}
 		}
 
 		/// <summary>
 		/// Загрузка обычной матрицы
 		/// </summary>
 		internal void LoadMatrix() {
-			ShaderSystem.CameraMatrix = invmat;
-			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadMatrix(ref invmat);
+			if (GraphicalCaps.ShaderPipeline) {
+				ShaderSystem.CameraMatrix = invmat;
+			} else {
+				GL.MatrixMode(MatrixMode.Modelview);
+				GL.LoadMatrix(ref invmat);
+			}
 
 			// Настройка фрустума
 			Frustum.Setup(proj, invmat);

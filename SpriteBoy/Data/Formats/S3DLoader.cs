@@ -32,6 +32,7 @@ namespace SpriteBoy.Data.Formats {
 				int verts = f.ReadUInt16() * 3;
 
 				Vec3[] positions = new Vec3[verts];
+				Vec3[] normals   = new Vec3[verts];
 				Vec2[] texcoords = new Vec2[verts];
 				ushort[] indices = new ushort[verts];
 
@@ -43,7 +44,8 @@ namespace SpriteBoy.Data.Formats {
 					pos.Y = f.ReadSingle() * 0.015f;
 					pos.Z = f.ReadSingle() * 0.015f;
 					positions[t] = pos;
-					
+
+					normals[t] = Vec3.UnitY;
 
 					Vec2 uv = new Vec2();
 					uv.X = f.ReadSingle();
@@ -57,10 +59,11 @@ namespace SpriteBoy.Data.Formats {
 				}
 
 				// Сохранение поверхности
-				StaticMeshComponent mc = new StaticMeshComponent();
+				MeshComponent mc = new MeshComponent();
 				mc.Indices = indices;
 				mc.Vertices = positions;
 				mc.TexCoords = texcoords;
+				mc.Normals = normals;
 				e.AddComponent(mc);
 			}
 

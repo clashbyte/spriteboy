@@ -7,6 +7,9 @@ using SpriteBoy.Data.Types;
 using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using SpriteBoy.Engine.Pipeline;
+using SpriteBoy.Data;
+using SpriteBoy.Data.Shaders;
 
 namespace SpriteBoy.Engine.Components.Rendering {
 
@@ -73,6 +76,10 @@ namespace SpriteBoy.Engine.Components.Rendering {
 		/// </summary>
 		float[] vertexArray;
 
+		// Скрытые переменные буфферов
+		int vertexBuffer;
+		int indexBuffer;
+
 		/// <summary>
 		/// Конструктор компонента
 		/// </summary>
@@ -109,6 +116,11 @@ namespace SpriteBoy.Engine.Components.Rendering {
 				float halfX = size.X / 2f;
 				float halfY = size.Y / 2f;
 				float halfZ = size.Z / 2f;
+
+				if (vertexBuffer > 0 || indexBuffer > 0) {
+					GL.DeleteBuffer(vertexBuffer);
+					GL.DeleteBuffer(indexBuffer);
+				}
 
 				// Вершины
 				vertexArray = new float[]{
@@ -185,12 +197,27 @@ namespace SpriteBoy.Engine.Components.Rendering {
 
 			// Отрисовка куба, без текстуры
 			GL.BindTexture(TextureTarget.Texture2D, 0);
-			GL.LineWidth(WireWidth);
-			GL.Color3(WireColor);
-			GL.EnableClientState(ArrayCap.VertexArray);
-			GL.VertexPointer(3, VertexPointerType.Float, 0, vertexArray);
-			GL.DrawElements(BeginMode.Lines, indexArray.Length, DrawElementsType.UnsignedShort, indexArray);
-			GL.DisableClientState(ArrayCap.VertexArray);
+			if (GraphicalCaps.ShaderPipeline) {
+
+				ShaderSystem.CheckVertexBuffer(ref vertexBuffer, vertexArray, BufferUsageHint.StaticDraw);
+				ShaderSystem.CheckIndexBuffer(ref indexBuffer, indexArray, BufferUsageHint.StaticDraw);
+
+				WireCubeShader shader = WireCubeShader.Shader;
+				shader.DiffuseColor = WireColor;
+				shader.Bind();
+				GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+				GL.VertexAttribPointer(shader.VertexBufferLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+				GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBuffer);
+				GL.DrawElements(BeginMode.Lines, indexArray.Length, DrawElementsType.UnsignedShort, 0);
+				shader.Unbind();
+			} else {
+				GL.LineWidth(WireWidth);
+				GL.Color3(WireColor);
+				GL.EnableClientState(ArrayCap.VertexArray);
+				GL.VertexPointer(3, VertexPointerType.Float, 0, vertexArray);
+				GL.DrawElements(BeginMode.Lines, indexArray.Length, DrawElementsType.UnsignedShort, indexArray);
+				GL.DisableClientState(ArrayCap.VertexArray);
+			}
 		}
 
 	}
