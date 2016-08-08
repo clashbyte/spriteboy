@@ -429,6 +429,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 				GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBuffer);
 				GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(ia.Length * 2), ia, BufferUsageHint.StaticDraw);
 				GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+				needIndexBuffer = false;
 			}
 
 			// Вершинный буффер

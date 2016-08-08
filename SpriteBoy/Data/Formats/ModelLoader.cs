@@ -1,9 +1,4 @@
-﻿using SpriteBoy.Engine;
-using SpriteBoy.Engine.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using SpriteBoy.Engine.World;
 
 namespace SpriteBoy.Data.Formats {
 

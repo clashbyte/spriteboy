@@ -157,6 +157,49 @@ namespace SpriteBoy {
         ///   Looks up a localized string similar to #version 120
         ///
         ///uniform vec4 diffuseColor;
+        ///uniform sampler2D texture;
+        ///varying vec2 texCoord;
+        ///
+        ///void main() {
+        ///	gl_FragColor = texture2D(texture, texCoord) * diffuseColor;
+        ///}.
+        /// </summary>
+        internal static string SkyFragment {
+            get {
+                return ResourceManager.GetString("SkyFragment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #version 120
+        ///
+        ///attribute vec3 inPosition;
+        ///attribute vec2 inTexCoord;
+        ///
+        ///uniform mat4 projectionMatrix;
+        ///uniform mat4 cameraMatrix;
+        ///uniform mat4 entityMatrix;
+        ///uniform mat4 textureMatrix;
+        ///
+        ///varying vec2 texCoord;
+        ///
+        ///void main() {
+        ///	mat4 m = projectionMatrix * cameraMatrix * entityMatrix;
+        ///	vec4 v = vec4(inPosition, 1.0);
+        ///	texCoord = (textureMatrix * vec4(inTexCoord, 0.0, 0.0)).xy;
+        ///	gl_Position = m * v;
+        ///}.
+        /// </summary>
+        internal static string SkyVertex {
+            get {
+                return ResourceManager.GetString("SkyVertex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #version 120
+        ///
+        ///uniform vec4 diffuseColor;
         ///
         ///void main() {
         ///	gl_FragColor = diffuseColor;

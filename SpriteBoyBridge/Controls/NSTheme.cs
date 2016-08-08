@@ -3466,7 +3466,7 @@ namespace SpriteBoy.Controls {
 
 			}
 			if (marker>=0) {
-				if (marker >= framesOffset && marker <= framesOffset + visibleFrames * frameSkip) {
+				if (marker >= framesOffset - frameCellOffset / 2f && marker <= framesOffset + visibleFrames * frameSkip) {
 					SolidBrush shade = new SolidBrush(Color.FromArgb(100, 0, 0, 0));
 					int dx = (int)((marker - framesOffset) * (framesSize / (float)frameSkip) + orig + frameCellOffset / 2f + framesPixelOffset);
 					G.FillRectangle(shade, dx, 0, 2, Height - 28);
@@ -6409,6 +6409,11 @@ namespace SpriteBoy.Controls {
 			GB1 = new LinearGradientBrush(R1, Color.FromArgb(60, 60, 60), Color.FromArgb(55, 55, 55), 90f);
 			G.FillRectangle(GB1, R1);
 			G.DrawRectangle(P3, 1, 1, Width - 22, ItemHeight - 2);
+			StringFormat SF = new StringFormat() { 
+				Alignment = StringAlignment.Near,
+				LineAlignment = StringAlignment.Near, 
+				Trimming = StringTrimming.EllipsisCharacter
+			};
 
 			int LH = Math.Min(VS.Maximum + ItemHeight - Offset, Height);
 
@@ -6416,12 +6421,18 @@ namespace SpriteBoy.Controls {
 			for (int I = 0; I <= _Columns.Count - 1; I++) {
 				CC = Columns[I];
 
-				H = G.MeasureString(CC.Text, Font).Height;
-				Y = Convert.ToInt32((ItemHeight / 2) - (H / 2));
-				X = ColumnOffsets[I];
+				if (CC.Width-3>0) {
+					SizeF MSZ = G.MeasureString(CC.Text, Font);
+					SizeF SZ = G.MeasureString(CC.Text, Font, CC.Width - 3);
+					Y = Convert.ToInt32((ItemHeight / 2) - (MSZ.Height / 2));
+					X = ColumnOffsets[I];
 
-				G.DrawString(CC.Text, Font, Brushes.Black, X + 1, Y + 1);
-				G.DrawString(CC.Text, Font, Brushes.White, X, Y);
+					RectangleF HR = new RectangleF(X, Y, SZ.Width, MSZ.Height);
+					RectangleF SHR = new RectangleF(X + 1, Y + 1, SZ.Width, MSZ.Height);
+					G.DrawString(CC.Text, Font, Brushes.Black, SHR, SF);
+					G.DrawString(CC.Text, Font, Brushes.White, HR, SF);
+				}
+				
 
 				G.DrawLine(P2, X - 3, 0, X - 3, LH);
 				G.DrawLine(P3, X - 2, 0, X - 2, ItemHeight);

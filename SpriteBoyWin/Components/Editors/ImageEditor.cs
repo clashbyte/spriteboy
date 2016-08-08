@@ -115,6 +115,7 @@ namespace SpriteBoy.Components.Editors {
 				0, 1, 2,
 				1, 3, 2
 			};
+			singleMesh.Unlit = true;
 			singleMesh.Texture = tex;
 
 			if (wrapQuad == null) {
@@ -140,6 +141,7 @@ namespace SpriteBoy.Components.Editors {
 				1, 3, 2
 			};
 			wrapMesh.Texture = tex;
+			wrapMesh.Unlit = true;
 			wrapQuad.Visible = false;
 
 

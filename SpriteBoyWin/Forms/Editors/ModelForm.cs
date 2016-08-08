@@ -244,6 +244,13 @@ namespace SpriteBoy.Forms.Editors {
 		}
 
 		/// <summary>
+		/// Остановка анимации
+		/// </summary>
+		private void animationStop_Click(object sender, EventArgs e) {
+			(FileEditor as ModelEditor).AnimatorStop();
+		}
+
+		/// <summary>
 		/// Перестройка колонок списка поверхностей
 		/// </summary>
 		private void AdjustSurfaceColumns() {

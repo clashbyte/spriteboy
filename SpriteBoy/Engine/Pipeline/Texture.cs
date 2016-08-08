@@ -247,7 +247,7 @@ namespace SpriteBoy.Engine.Pipeline {
 				if (Proxy != null) {
 					Proxy.Bind();
 				} else {
-					GL.BindTexture(TextureTarget.Texture2D, 0);
+					BindEmpty();
 				}
 			}
 		}

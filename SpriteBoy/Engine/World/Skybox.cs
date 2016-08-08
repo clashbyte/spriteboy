@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SpriteBoy.Engine.Data;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using System.Drawing;
-using SpriteBoy.Data.Types;
+using SpriteBoy.Data;
+using SpriteBoy.Data.Shaders;
+using SpriteBoy.Engine.Data;
 using SpriteBoy.Engine.Pipeline;
+using System;
+using System.Drawing;
 
 namespace SpriteBoy.Engine.World {
 
@@ -21,25 +19,18 @@ namespace SpriteBoy.Engine.World {
 		/// </summary>
 		Texture[] textures;
 
-		/// <summary>
-		/// Вершины
-		/// </summary>
+		// Скрытые массивы для рендера
 		static float[] vertices;
-
-		/// <summary>
-		/// Текстурные координаты
-		/// </summary>
 		static float[] coords;
-
-		/// <summary>
-		/// Индексы
-		/// </summary>
 		static ushort[] indices;
 
-		/// <summary>
-		/// Матрицы для каждой стороны
-		/// </summary>
+		// Матрицы для каждой стороны
 		static Matrix4[] matrices;
+
+		// Вершинные буфферы
+		static int vertexBuffer;
+		static int texCoordBuffer;
+		static int indexBuffer;
 
 		/// <summary>
 		/// Создание нового скайбокса
@@ -55,6 +46,7 @@ namespace SpriteBoy.Engine.World {
 				matrices[4] = Matrix4.CreateRotationX(MathHelper.PiOver2);
 				matrices[5] = Matrix4.CreateRotationX(-MathHelper.PiOver2);
 			}
+			Diffuse = Color.White;
 		}
 
 		/// <summary>
@@ -69,6 +61,14 @@ namespace SpriteBoy.Engine.World {
 			set {
 				textures[(int)side] = value;
 			}
+		}
+
+		/// <summary>
+		/// Цвет диффуза
+		/// </summary>
+		public Color Diffuse {
+			get;
+			set;
 		}
 
 		/// <summary>
@@ -100,30 +100,88 @@ namespace SpriteBoy.Engine.World {
 					2, 1, 0,
 					2, 3, 1
 				};
-			}
 
-			// Установка данных
-			GL.EnableClientState(ArrayCap.VertexArray);
-			GL.EnableClientState(ArrayCap.TextureCoordArray);
+				// Проверка буфферов
+				if (GraphicalCaps.ShaderPipeline) {
 
-			GL.VertexPointer(3, VertexPointerType.Float, 0, vertices);
-			GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, coords);
+					// Индексный буффер
+					if (indexBuffer == 0) {
+						indexBuffer = GL.GenBuffer();
+						GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBuffer);
+						GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * 2), indices, BufferUsageHint.StaticDraw);
+						GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+					}
 
-			// Отрисовка сторон
-			GL.Color3(Color.White);
-			for (int i = 0; i < 6; i++) {
-				if (textures[i]!=null) {
-					textures[i].Bind();
-					GL.PushMatrix();
-					GL.MultMatrix(ref matrices[i]);
-					GL.DrawElements(BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedShort, indices);
-					GL.PopMatrix();
+					// Вершинный буффер
+					if (vertexBuffer == 0) {
+						vertexBuffer = GL.GenBuffer();
+						GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+						GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * 4), vertices, BufferUsageHint.StaticDraw);
+						GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+					}
+
+					// Координатный буффер
+					if (texCoordBuffer == 0) {
+						texCoordBuffer = GL.GenBuffer();
+						GL.BindBuffer(BufferTarget.ArrayBuffer, texCoordBuffer);
+						GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(coords.Length * 4), coords, BufferUsageHint.StaticDraw);
+						GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+					}
 				}
 			}
 
-			// Отключение массивов
-			GL.DisableClientState(ArrayCap.TextureCoordArray);
-			GL.DisableClientState(ArrayCap.VertexArray);
+			// Установка данных
+			if (GraphicalCaps.ShaderPipeline) {
+
+				// Включение шейдера
+				SkyboxShader shader = SkyboxShader.Shader;
+				shader.DiffuseColor = Diffuse;
+				shader.Bind();
+
+				// Включение буфферов
+				GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+				GL.VertexAttribPointer(shader.VertexBufferLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+				GL.BindBuffer(BufferTarget.ArrayBuffer, texCoordBuffer);
+				GL.VertexAttribPointer(shader.TexCoordBufferLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+				GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBuffer);
+
+				for (int i = 0; i < 6; i++) {
+					if (textures[i] != null) {
+						ShaderSystem.EntityMatrix = matrices[i];
+						textures[i].Bind();
+						shader.Bind();
+						GL.DrawElements(BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedShort, 0);
+					}
+				}
+
+				// Отключение шейдера
+				shader.Unbind();
+
+			} else {
+				// Включение массивов
+				GL.EnableClientState(ArrayCap.VertexArray);
+				GL.EnableClientState(ArrayCap.TextureCoordArray);
+
+				GL.VertexPointer(3, VertexPointerType.Float, 0, vertices);
+				GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, coords);
+
+				// Отрисовка сторон
+				GL.Color3(Diffuse);
+				for (int i = 0; i < 6; i++) {
+					if (textures[i] != null) {
+						textures[i].Bind();
+						GL.PushMatrix();
+						GL.MultMatrix(ref matrices[i]);
+						GL.DrawElements(BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedShort, indices);
+						GL.PopMatrix();
+					}
+				}
+
+				// Отключение массивов
+				GL.DisableClientState(ArrayCap.TextureCoordArray);
+				GL.DisableClientState(ArrayCap.VertexArray);
+			}
+			
 		}
 
 		/// <summary>

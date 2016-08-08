@@ -1,31 +1,31 @@
 ﻿using System.Drawing;
 
 namespace SpriteBoy.Data.Shaders {
-
+	
 	/// <summary>
-	/// Базовый шейдер для меша
+	/// Шейдер скайбокса
 	/// </summary>
-	internal class MeshShader : ShaderBase {
+	internal class SkyboxShader : ShaderBase {
 
 		/// <summary>
 		/// Синглтон шейдера
 		/// </summary>
-		public static MeshShader Shader {
+		public static SkyboxShader Shader {
 			get {
 				if (sh == null) {
-					sh = new MeshShader();
+					sh = new SkyboxShader();
 				}
 				return sh;
 			}
 		}
-		static MeshShader sh;
+		static SkyboxShader sh;
 		
 		/// <summary>
 		/// Фрагментный шейдер
 		/// </summary>
 		protected override string FragmentProgram {
 			get {
-				return ShaderSources.MeshFragment;
+				return ShaderSources.SkyFragment;
 			}
 		}
 
@@ -34,7 +34,7 @@ namespace SpriteBoy.Data.Shaders {
 		/// </summary>
 		protected override string VertexProgram {
 			get {
-				return ShaderSources.MeshVertex;
+				return ShaderSources.SkyVertex;
 			}
 		}
 
@@ -44,15 +44,6 @@ namespace SpriteBoy.Data.Shaders {
 		public int VertexBufferLocation {
 			get {
 				return vertexAttrib.Handle;
-			}
-		}
-
-		/// <summary>
-		/// Расположение буффера нормалей
-		/// </summary>
-		public int NormalBufferLocation {
-			get {
-				return normalAttrib.Handle;
 			}
 		}
 
@@ -77,30 +68,6 @@ namespace SpriteBoy.Data.Shaders {
 			}
 		}
 
-		/// <summary>
-		/// Основной цвет
-		/// </summary>
-		public float LightMultiplier {
-			get {
-				return lightMultiplier.Value;
-			}
-			set {
-				lightMultiplier.Value = value;
-			}
-		}
-
-		/// <summary>
-		/// Основной цвет
-		/// </summary>
-		public bool AlphaTestPass {
-			get {
-				return alphaPass.Value;
-			}
-			set {
-				alphaPass.Value = value;
-			}
-		}
-
 		// Скрытые параметры
 		TextureUniform textureUniform;
 		ColorUniform diffuseColor;
@@ -112,14 +79,10 @@ namespace SpriteBoy.Data.Shaders {
 		VertexAttribute texCoordAttrib;
 
 		// Конструктор
-		protected MeshShader() : base() {
+		protected SkyboxShader() : base() {
 			if (vertexAttrib == null) {
 				vertexAttrib = new VertexAttribute("inPosition");
 				attribs.Add(vertexAttrib);
-			}
-			if (normalAttrib == null) {
-				normalAttrib = new VertexAttribute("inNormal");
-				attribs.Add(normalAttrib);
 			}
 			if (texCoordAttrib == null) {
 				texCoordAttrib = new VertexAttribute("inTexCoord");
@@ -133,14 +96,6 @@ namespace SpriteBoy.Data.Shaders {
 				diffuseColor = new ColorUniform("diffuseColor");
 				uniforms.Add(diffuseColor);
 			}
-			if (alphaPass == null) {
-				alphaPass = new BoolUniform("discardPass");
-				uniforms.Add(alphaPass);
-			}
-			if (lightMultiplier == null) {
-				lightMultiplier = new FloatUniform("lightMult");
-				uniforms.Add(lightMultiplier);
-			}
 			if (textureMatrix == null) {
 				textureMatrix = new MatrixUniform("textureMatrix");
 				uniforms.Add(textureMatrix);
@@ -152,8 +107,8 @@ namespace SpriteBoy.Data.Shaders {
 		/// </summary>
 		public override void Bind() {
 			textureMatrix.Matrix = ShaderSystem.TextureMatrix;
-			alphaPass.Value = ShaderSystem.IsAlphaTest;
 			base.Bind();
 		}
+
 	}
 }

@@ -28,13 +28,13 @@
 			SpriteBoy.Controls.NSLabel nsLabel5;
 			SpriteBoy.Controls.NSLabel nsLabel4;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModelForm));
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader11 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader12 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader13 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader14 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader8 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader9 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
-			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader10 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader25 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader26 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader27 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader28 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader22 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader23 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
+			SpriteBoy.Controls.NSListView.NSListViewColumnHeader nsListViewColumnHeader24 = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader();
 			this.toolPanel = new System.Windows.Forms.Panel();
 			this.toolCursor = new SpriteBoy.Controls.NSRadioIconicButton();
 			this.utilPanel = new System.Windows.Forms.Panel();
@@ -216,19 +216,19 @@
 			// 
 			// surfacesList
 			// 
-			nsListViewColumnHeader11.Text = "№";
-			nsListViewColumnHeader11.Width = 30;
-			nsListViewColumnHeader12.Text = "Texture";
-			nsListViewColumnHeader12.Width = 100;
-			nsListViewColumnHeader13.Text = "Verts";
-			nsListViewColumnHeader13.Width = 50;
-			nsListViewColumnHeader14.Text = "Tris";
-			nsListViewColumnHeader14.Width = 50;
+			nsListViewColumnHeader25.Text = "№";
+			nsListViewColumnHeader25.Width = 30;
+			nsListViewColumnHeader26.Text = "Texture";
+			nsListViewColumnHeader26.Width = 100;
+			nsListViewColumnHeader27.Text = "Verts";
+			nsListViewColumnHeader27.Width = 50;
+			nsListViewColumnHeader28.Text = "Tris";
+			nsListViewColumnHeader28.Width = 50;
 			this.surfacesList.Columns = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader[] {
-        nsListViewColumnHeader11,
-        nsListViewColumnHeader12,
-        nsListViewColumnHeader13,
-        nsListViewColumnHeader14};
+        nsListViewColumnHeader25,
+        nsListViewColumnHeader26,
+        nsListViewColumnHeader27,
+        nsListViewColumnHeader28};
 			this.surfacesList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.surfacesList.Items = new SpriteBoy.Controls.NSListView.NSListViewItem[0];
 			this.surfacesList.Location = new System.Drawing.Point(3, 3);
@@ -360,8 +360,8 @@
 			this.animationAdd.Corners.BottomRight = false;
 			this.animationAdd.Corners.TopLeft = true;
 			this.animationAdd.Corners.TopRight = false;
-			this.animationAdd.IconImage = null;
-			this.animationAdd.IconSize = new System.Drawing.Size(0, 0);
+			this.animationAdd.IconImage = ((System.Drawing.Image)(resources.GetObject("animationAdd.IconImage")));
+			this.animationAdd.IconSize = new System.Drawing.Size(13, 13);
 			this.animationAdd.Large = false;
 			this.animationAdd.Location = new System.Drawing.Point(201, 5);
 			this.animationAdd.Name = "animationAdd";
@@ -376,8 +376,8 @@
 			this.animationRemove.Corners.TopLeft = false;
 			this.animationRemove.Corners.TopRight = true;
 			this.animationRemove.Enabled = false;
-			this.animationRemove.IconImage = null;
-			this.animationRemove.IconSize = new System.Drawing.Size(0, 0);
+			this.animationRemove.IconImage = ((System.Drawing.Image)(resources.GetObject("animationRemove.IconImage")));
+			this.animationRemove.IconSize = new System.Drawing.Size(13, 13);
 			this.animationRemove.Large = false;
 			this.animationRemove.Location = new System.Drawing.Point(225, 5);
 			this.animationRemove.Name = "animationRemove";
@@ -390,13 +390,14 @@
 			this.animationStop.Corners.BottomRight = true;
 			this.animationStop.Corners.TopLeft = false;
 			this.animationStop.Corners.TopRight = true;
-			this.animationStop.IconImage = null;
-			this.animationStop.IconSize = new System.Drawing.Size(0, 0);
+			this.animationStop.IconImage = ((System.Drawing.Image)(resources.GetObject("animationStop.IconImage")));
+			this.animationStop.IconSize = new System.Drawing.Size(17, 17);
 			this.animationStop.Large = true;
 			this.animationStop.Location = new System.Drawing.Point(37, 3);
 			this.animationStop.Name = "animationStop";
 			this.animationStop.Size = new System.Drawing.Size(35, 30);
 			this.animationStop.TabIndex = 1;
+			this.animationStop.Click += new System.EventHandler(this.animationStop_Click);
 			// 
 			// animationPlay
 			// 
@@ -405,8 +406,8 @@
 			this.animationPlay.Corners.BottomRight = false;
 			this.animationPlay.Corners.TopLeft = true;
 			this.animationPlay.Corners.TopRight = false;
-			this.animationPlay.IconImage = null;
-			this.animationPlay.IconSize = new System.Drawing.Size(0, 0);
+			this.animationPlay.IconImage = ((System.Drawing.Image)(resources.GetObject("animationPlay.IconImage")));
+			this.animationPlay.IconSize = new System.Drawing.Size(17, 17);
 			this.animationPlay.Large = true;
 			this.animationPlay.Location = new System.Drawing.Point(3, 3);
 			this.animationPlay.Name = "animationPlay";
@@ -415,16 +416,16 @@
 			// 
 			// animationList
 			// 
-			nsListViewColumnHeader8.Text = "Name";
-			nsListViewColumnHeader8.Width = 102;
-			nsListViewColumnHeader9.Text = "Start";
-			nsListViewColumnHeader9.Width = 40;
-			nsListViewColumnHeader10.Text = "End";
-			nsListViewColumnHeader10.Width = 40;
+			nsListViewColumnHeader22.Text = "Name";
+			nsListViewColumnHeader22.Width = 102;
+			nsListViewColumnHeader23.Text = "Start";
+			nsListViewColumnHeader23.Width = 40;
+			nsListViewColumnHeader24.Text = "End";
+			nsListViewColumnHeader24.Width = 40;
 			this.animationList.Columns = new SpriteBoy.Controls.NSListView.NSListViewColumnHeader[] {
-        nsListViewColumnHeader8,
-        nsListViewColumnHeader9,
-        nsListViewColumnHeader10};
+        nsListViewColumnHeader22,
+        nsListViewColumnHeader23,
+        nsListViewColumnHeader24};
 			this.animationList.Dock = System.Windows.Forms.DockStyle.Right;
 			this.animationList.Items = new SpriteBoy.Controls.NSListView.NSListViewItem[0];
 			this.animationList.Location = new System.Drawing.Point(253, 0);

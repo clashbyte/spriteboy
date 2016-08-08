@@ -416,9 +416,25 @@ namespace SpriteBoy.Components.Editors {
 		/// </summary>
 		/// <param name="frame">Кадр</param>
 		public void AnimatorFrameChanged(float frame) {
-			if (animator!=null) {
+			if (animator!=null && !animationCodeChange) {
 				animator.StopWithFrame(frame);
 			}
+		}
+
+		/// <summary>
+		/// Изменение состояния проигрывания
+		/// </summary>
+		public void AnimatorPlayStateChanged() {
+			if (!animationCodeChange) {
+				
+			}
+		}
+
+		/// <summary>
+		/// Остановка проигрывания
+		/// </summary>
+		public void AnimatorStop() {
+			animator.Animate(97, 105, 0.05f, AnimatorComponent.AnimationMode.PingPongLoop, 20);
 		}
 
 		/// <summary>
@@ -427,6 +443,7 @@ namespace SpriteBoy.Components.Editors {
 		public void TextureDragEntered(Project.Entry file) {
 			draggingFile = file;
 			draggingTexture = new Texture(file.ProjectPath, Texture.LoadingMode.Queued);
+			draggingTexture.ApplyMetaConfig(draggingFile.Meta);
 		}
 
 		/// <summary>
@@ -522,6 +539,18 @@ namespace SpriteBoy.Components.Editors {
 				}
 			}
 			return idx;
+		}
+
+		/// <summary>
+		/// Событие изменения файла
+		/// </summary>
+		/// <param name="en">Файл</param>
+		/// <param name="ev">Событие</param>
+		public override void ProjectEntryEvent(Project.Entry en, Project.FileEvent ev) {
+			base.ProjectEntryEvent(en, ev);
+			if (closed) {
+				return;
+			}
 		}
 
 		/// <summary>

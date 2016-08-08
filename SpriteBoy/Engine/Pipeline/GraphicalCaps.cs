@@ -72,7 +72,6 @@ namespace SpriteBoy.Engine.Pipeline {
 				} else {
 					System.Diagnostics.Debug.WriteLine("[Engine] Using legacy renderer on GPU " + gpu);
 				}
-				shaderPipeline = false;
 
 				// Поиск расширений
 				string[] exts = GL.GetString(StringName.Extensions).Split(' ');

@@ -272,7 +272,7 @@ namespace SpriteBoy.Engine.Components.Rendering {
 			if (frms != null) {
 				QueuedMeshUpdate q = queuedTransitionUpdate;
 				MorphFrame f1, f2;
-				float d;
+				float d = 0;
 				if (q.Time<0) {
 					if (transitionFrame == null) {
 						// WTF
@@ -284,8 +284,16 @@ namespace SpriteBoy.Engine.Components.Rendering {
 				}else{
 					f1 = GetFrameBackward(q.Time, q.IsLooping, q.FirstFrame, q.LastFrame);
 					f2 = GetFrameForward(q.Time, q.IsLooping, q.FirstFrame, q.LastFrame);
-					d = (q.Time - f1.Time) / (f2.Time / f1.Time);
-					if (d<0) {
+					if (f2 == null) {
+						f2 = f1;
+					} else if (f1 == null) {
+						f1 = f2;
+					} else {
+						if (f1.Time != f2.Time) {
+							d = (q.Time - f1.Time) / (f2.Time - f1.Time);
+						}
+					}
+					if (d < 0) {
 						d = 1f + d;
 					}
 				}

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OpenTK;
+﻿using OpenTK;
 using SpriteBoy.Data.Types;
-using OpenTK.Graphics.OpenGL;
 
 namespace SpriteBoy.Data.Rendering {
 
